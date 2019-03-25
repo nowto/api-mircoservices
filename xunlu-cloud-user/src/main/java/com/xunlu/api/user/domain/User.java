@@ -1,11 +1,14 @@
 package com.xunlu.api.user.domain;
 
+import com.xunlu.api.user.infrastructure.BaseCodeEnum;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 用户model类
+ *
  * @author liweibo
  */
 public class User {
@@ -42,50 +45,41 @@ public class User {
      */
     private String password;
     /**
-     * //TODO 使用枚举实现
      * 自然景观偏好，10.一般，20.亲近，30.大爱
      */
-    private Byte preferNatural;
+    private Natural preferNatural;
     /**
-     * TODO 使用枚举实现
      * 人文景观偏好，10.一般，20.亲近，30.大爱
      */
-    private Byte preferHuman;
+    private Natural preferHuman;
     /**
-     * TODO 使用枚举实现
      * 奔波系数偏好，10.城区为主，20.覆盖近郊，30.不畏远郊
      */
-    private Byte preferRunning;
+    private Running preferRunning;
     /**
-     * TODO 使用枚举实现
      * 日间游玩时长，10.小半天，20.大半天，30.全天
      */
-    private Byte preferPlayTime;
+    private PlayTime preferPlayTime;
     /**
-     * TODO 使用枚举实现
      * 夜间游玩偏好，10.酒店休息，20.
      */
-    private Byte preferNightPlay;
+    private NightPlay preferNightPlay;
     /**
-     * TODO 使用枚举实现
      * 10-最优   20-综合
      */
-    private Byte preferPubTransFirst;
+    private PubTransFirst preferPubTransFirst;
     /**
-     * TODO 使用枚举实现
      * 酒店类型偏好，10.民居客栈，20.2-3星，30.4-5星
      */
-    private Byte preferHotelLevel;
+    private HotelLevel preferHotelLevel;
     /**
-     * TODO 枚举
      * 旅行人数:10-独行侠  20-伴侣  30-一家三口  40-很多朋友
      */
-    private Byte preferTripNumber;
+    private TripNumber preferTripNumber;
     /**
-     * TODO 枚举
      * 航班偏好:10-高效直飞  20-低价中转
      */
-    private Byte preferFlight;
+    private Flight preferFlight;
     /**
      * 创建时间
      */
@@ -97,7 +91,7 @@ public class User {
     /**
      * TODO 待定
      */
-    private Integer liked=0;
+    private Integer liked = 0;
     /**
      * 第三方用户id
      */
@@ -106,12 +100,11 @@ public class User {
     /**
      * TODO 待定
      */
-    private Map<String,Object> extraInfo;
+    private Map<String, Object> extraInfo;
 
-    public void setExtraInfo(String key,Object value)
-    {
-        if(extraInfo==null) {
-            extraInfo=new HashMap<>();
+    public void setExtraInfo(String key, Object value) {
+        if (extraInfo == null) {
+            extraInfo = new HashMap<>(16);
         }
         extraInfo.put(key, value);
     }
@@ -127,7 +120,6 @@ public class User {
 
     @Override
     public String toString() {
-        //new Gson().toJson(this);
         return "";
     }
 
@@ -195,75 +187,75 @@ public class User {
         this.password = password;
     }
 
-    public Byte getPreferNatural() {
+    public Natural getPreferNatural() {
         return preferNatural;
     }
 
-    public void setPreferNatural(Byte preferNatural) {
+    public void setPreferNatural(Natural preferNatural) {
         this.preferNatural = preferNatural;
     }
 
-    public Byte getPreferHuman() {
+    public Natural getPreferHuman() {
         return preferHuman;
     }
 
-    public void setPreferHuman(Byte preferHuman) {
+    public void setPreferHuman(Natural preferHuman) {
         this.preferHuman = preferHuman;
     }
 
-    public Byte getPreferRunning() {
+    public Running getPreferRunning() {
         return preferRunning;
     }
 
-    public void setPreferRunning(Byte preferRunning) {
+    public void setPreferRunning(Running preferRunning) {
         this.preferRunning = preferRunning;
     }
 
-    public Byte getPreferPlayTime() {
+    public PlayTime getPreferPlayTime() {
         return preferPlayTime;
     }
 
-    public void setPreferPlayTime(Byte preferPlayTime) {
+    public void setPreferPlayTime(PlayTime preferPlayTime) {
         this.preferPlayTime = preferPlayTime;
     }
 
-    public Byte getPreferNightPlay() {
+    public NightPlay getPreferNightPlay() {
         return preferNightPlay;
     }
 
-    public void setPreferNightPlay(Byte preferNightPlay) {
+    public void setPreferNightPlay(NightPlay preferNightPlay) {
         this.preferNightPlay = preferNightPlay;
     }
 
-    public Byte getPreferPubTransFirst() {
+    public PubTransFirst getPreferPubTransFirst() {
         return preferPubTransFirst;
     }
 
-    public void setPreferPubTransFirst(Byte preferPubTransFirst) {
+    public void setPreferPubTransFirst(PubTransFirst preferPubTransFirst) {
         this.preferPubTransFirst = preferPubTransFirst;
     }
 
-    public Byte getPreferHotelLevel() {
+    public HotelLevel getPreferHotelLevel() {
         return preferHotelLevel;
     }
 
-    public void setPreferHotelLevel(Byte preferHotelLevel) {
+    public void setPreferHotelLevel(HotelLevel preferHotelLevel) {
         this.preferHotelLevel = preferHotelLevel;
     }
 
-    public Byte getPreferTripNumber() {
+    public TripNumber getPreferTripNumber() {
         return preferTripNumber;
     }
 
-    public void setPreferTripNumber(Byte preferTripNumber) {
+    public void setPreferTripNumber(TripNumber preferTripNumber) {
         this.preferTripNumber = preferTripNumber;
     }
 
-    public Byte getPreferFlight() {
+    public Flight getPreferFlight() {
         return preferFlight;
     }
 
-    public void setPreferFlight(Byte preferFlight) {
+    public void setPreferFlight(Flight preferFlight) {
         this.preferFlight = preferFlight;
     }
 
@@ -297,5 +289,284 @@ public class User {
 
     public void setTimIdentifier(String timIdentifier) {
         this.timIdentifier = timIdentifier;
+    }
+
+    /**
+     * 自然景观枚举，10.一般，20.亲近，30.大爱
+     */
+    public enum Natural implements BaseCodeEnum<Natural> {
+        /**
+         * 一般
+         */
+        PLAIN(10, "一般"),
+        /**
+         * 亲近
+         */
+        CLOSE(20, "亲近"),
+        /**
+         * 大爱
+         */
+        ULTIMATE_PURSUIT(30, "大爱");
+
+        private int code;
+        private String meaning;
+
+        Natural(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
+    }
+
+    /**
+     * 奔波系数枚举，10.城区为主，20.覆盖近郊，30.不畏远郊
+     */
+    public enum Running implements BaseCodeEnum<Running> {
+        /**
+         * 城区为主
+         */
+        URBAN_DOMINATED(10, "城区为主"),
+        /**
+         * 覆盖近郊
+         */
+        COVER_SUBURBS(20, "覆盖近郊"),
+        /**
+         * 不畏远郊
+         */
+        FEARLESS_OUTER_SUBURBS(30, "不畏远郊");
+        private int code;
+        private String meaning;
+
+        Running(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
+    }
+
+    /**
+     * 日间游玩时长枚举，10.小半天，20.大半天，30.全天
+     */
+    public enum PlayTime implements BaseCodeEnum<PlayTime> {
+        /**
+         * 小半天
+         */
+        SMALL_HALF_DAY(10, "小半天"),
+        /**
+         * 大半天
+         */
+        BIG_HALF_DAY(20, "大半天"),
+        /**
+         * 全天
+         */
+        WHOLE_DAY(30, "全天")
+        ;
+        private int code;
+        private String meaning;
+
+        PlayTime(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
+    }
+
+    /**
+     * 夜间游玩
+     */
+    public enum NightPlay implements BaseCodeEnum<NightPlay> {
+        /**
+         * 酒店休息
+         */
+        REST_IN_HOTEL(10, "酒店休息"),
+        /**
+         * 为止
+         */
+        UNKNOW(20, "为止")
+        ;
+        private int code;
+        private String meaning;
+
+        NightPlay(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
+    }
+
+    /**
+     * 10-最优   20-综合
+     */
+    public enum PubTransFirst implements BaseCodeEnum<PubTransFirst> {
+        /**
+         * 最优
+         */
+        OPTIMAL(10, "最优"),
+        /**
+         * 综合
+         */
+        SYNTHETICAL(20, "综合")
+        ;
+        private int code;
+        private String meaning;
+
+        PubTransFirst(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
+    }
+
+    /**
+     * 酒店级别枚举，10.民居客栈，20.2-3星，30.4-5星
+     */
+    public enum HotelLevel implements BaseCodeEnum<HotelLevel> {
+        /**
+         * 民居客栈
+         */
+        RESIDENCE_INN(10, "民居客栈"),
+        /**
+         * 2-3星
+         */
+        TWO_THREE_STAR(20, "2-3星"),
+        /**
+         * 4-5星
+         */
+        FOUR_FIVE_STAR(30, "4-5星")
+        ;
+        private int code;
+        private String meaning;
+
+        HotelLevel(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+    }
+
+    /**
+     * 旅行人数枚举:10-独行侠  20-伴侣  30-一家三口  40-很多朋友
+     */
+    public enum TripNumber implements BaseCodeEnum<TripNumber> {
+        /**
+         * 独行侠
+         */
+        LONE_RANGER(10, "独行侠"),
+        /**
+         * 伴侣
+         */
+        MATE(20, "伴侣"),
+        /**
+         * 一家三口
+         */
+        A_FAMILY_OF_THREE(30, "一家三口"),
+        /**
+         * 很多朋友
+         */
+        MANY_FRIENDS(40, "很多朋友")
+        ;
+        private int code;
+        private String meaning;
+
+        TripNumber(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
+    }
+
+    /**
+     * 航班偏好枚举:10-高效直飞  20-低价中转
+     */
+    public enum Flight implements BaseCodeEnum<Flight> {
+        /**
+         * 高效直飞
+         */
+        EFFICIENT_DIRECT(10, "高效直飞"),
+        /**
+         * 低价中转
+         */
+        CHEAP_TRANSFER(20, "低价中转")
+        ;
+        private int code;
+        private String meaning;
+
+        Flight(int code, String meaning) {
+            this.code = code;
+            this.meaning = meaning;
+        }
+
+        @Override
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String getMeaning() {
+            return meaning;
+        }
     }
 }
