@@ -1,0 +1,7 @@
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.xunlu.api.user.domain
+spring:
+  profiles:
+    active: dev
