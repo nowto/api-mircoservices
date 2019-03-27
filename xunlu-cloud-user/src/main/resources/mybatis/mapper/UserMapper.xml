@@ -1,40 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xunlu.api.user.mapper.UserMapper">
-    <resultMap id="BaseResultMap" type="User">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
-        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
-        <result column="person_sign" property="personSign" jdbcType="VARCHAR"/>
-        <result column="photo" property="photo" jdbcType="VARCHAR"/>
-        <result column="email" property="email" jdbcType="VARCHAR"/>
-        <result column="phone" property="phone" jdbcType="VARCHAR"/>
-        <result column="password" property="password" jdbcType="VARCHAR"/>
-        <result column="prefer_natural" property="preferNatural" jdbcType="TINYINT"/>
-        <result column="prefer_human" property="preferHuman" jdbcType="TINYINT"/>
-        <result column="prefer_running" property="preferRunning" jdbcType="TINYINT"/>
-        <result column="prefer_play_time" property="preferPlayTime" jdbcType="TINYINT"/>
-        <result column="prefer_night_play" property="preferNightPlay" jdbcType="TINYINT"/>
-        <result column="prefer_pub_trans_first" property="preferPubTransFirst" jdbcType="TINYINT"/>
-        <result column="prefer_hotel_level" property="preferHotelLevel" jdbcType="TINYINT"/>
-        <result column="prefer_trip_number" property="preferTripNumber" jdbcType="TINYINT"/>
-        <result column="prefer_flight" property="preferFlight" jdbcType="TINYINT"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="tim_identifier" property="timIdentifier" jdbcType="VARCHAR"/>
-    </resultMap>
-
-    <sql id="full_column_list">
-        u.id,
-        u.user_name,
-        u.nick_name,
-        u.photo,
-        u.email,
-        u.phone,
-        u.password,
-        u.tim_identifier,
-        u.create_time
-    </sql>
-    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="User">
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" >
         insert into tb_user
         (
         user_name,
@@ -54,140 +21,23 @@
         #{email, jdbcType=VARCHAR},
         #{phone, jdbcType=VARCHAR},
         #{password, jdbcType=VARCHAR},
-        #{createTime, jdbcType=TIMESTAMP},
+        now(),
         #{areaCode, jdbcType=VARCHAR}
         )
     </insert>
-    <select id="findList" resultMap="BaseResultMap" parameterType="User">
-        select
-        <include refid="full_column_list"/>
-        from tb_user u
-        where
-        1=1
-        <if test="userName != null">
-            and user_name = #{userName}
-        </if>
-        <if test="nickName != null">
-            and nick_name = #{nickName}
-        </if>
-        <if test="email != null">
-            and email = #{email}
-        </if>
-        <if test="phone != null">
-            and phone = #{phone}
-        </if>
-    </select>
-    <select id="findOne" resultMap="BaseResultMap" parameterType="User">
-        select
-        u.id,
-        u.user_name,
-        u.nick_name,
-        u.person_sign,
-        u.photo,
-        u.email,
-        u.phone,
-        u.tim_identifier,
-        password
-        from tb_user u
-        where
-        1=1
-        <if test="id != null">
-            and id = #{id}
-        </if>
-        <if test="userName != null">
-            and user_name = #{userName}
-        </if>
-        <if test="nickName != null">
-            and nick_name = #{nickName}
-        </if>
-        <if test="email != null">
-            and email = #{email}
-        </if>
-        <if test="phone != null">
-            and phone = #{phone}
-        </if>
-    </select>
 
-    <select id="findUserPrefer" resultMap="BaseResultMap">
-        select
-        id,
-        prefer_natural,
-        prefer_human,
-        prefer_running,
-        prefer_play_time,
-        prefer_night_play,
-        prefer_pub_trans_first,
-        prefer_hotel_level,
-        prefer_trip_number,
-        prefer_flight
-        from tb_user
-        where
-        id=#{userId}
-    </select>
-
-    <update id="updateUser" parameterType="User">
+    <update id="updateTIMIdentifier">
         update tb_user
         <set>
-            <if test="preferNatural != null">
-                prefer_natural=#{preferNatural},
-            </if>
-            <if test="preferHuman != null">
-                prefer_human=#{preferHuman},
-            </if>
-            <if test="preferRunning !=null">
-                prefer_running=#{preferRunning},
-            </if>
-            <if test="preferPlayTime != null">
-                prefer_play_time=#{preferPlayTime},
-            </if>
-            <if test="preferNightPlay != null">
-                prefer_night_play=#{preferNightPlay},
-            </if>
-            <if test="preferPubTransFirst != null">
-                prefer_pub_trans_first=#{preferPubTransFirst},
-            </if>
-            <if test="preferHotelLevel">
-                prefer_hotel_level=#{preferHotelLevel},
-            </if>
-            <if test="preferTripNumber">
-                prefer_trip_number=#{preferTripNumber},
-            </if>
-            <if test="preferFlight">
-                prefer_flight=#{preferFlight}
-            </if>
+            <choose>
+                <when test="identifier != null">
+                    tim_identifier = #{identifier}, tim_sync = 1
+                </when>
+                <otherwise>
+                    tim_identifier = null, tim_sync = 0
+                </otherwise>
+            </choose>
         </set>
-        where
-        id=#{id}
-    </update>
-
-    <select id="findPassword" resultType="string">
-        select
-        password
-        from tb_user
-        where
-        id=#{userId}
-    </select>
-
-    <update id="updatePassword">
-        update tb_user set password=#{password}
-        where
-        id=#{userId}
-    </update>
-
-    <update id="updateNickName">
-        update tb_user set nick_name=#{nickName}
-        where
-        id=#{userId}
-    </update>
-
-    <update id="updatePersonSign">
-        update tb_user set person_sign=#{personSign}
-        where
-        id=#{userId}
-    </update>
-
-    <update id="updatePhoto" >
-        update tb_user set photo=#{photo}
-        where id=#{userId}
+        where id = #{id}
     </update>
 </mapper>

@@ -3,31 +3,30 @@ package com.xunlu.api.user.mapper;
 import com.xunlu.api.user.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 /**
+ * Mybatis UserMapper
  * @author liweibo
  */
 @Mapper
 public interface UserMapper {
-    Integer addUser(User user);
+    /**
+     * 添加用户
+     * @param user
+     * @return
+     */
+    boolean addUser(User user);
 
-    List<User> findList(User user);
-
-    User findOne(User user);
-
-    User findUserPrefer(Integer userId);
-
-    int updateUser(User user);
-
-    String findPassword(Integer userId);
-
-    void updatePassword(@Param("userId")Integer userId, @Param("password")String password);
-
-    void updateNickName(@Param("userId")Integer userId, @Param("nickName")String nickName);
-
-    void updatePersonSign(@Param("userId")Integer userId, @Param("personSign")String personSign);
-
-    void updatePhoto(@Param("userId")Integer userId, @Param("photo")String photo);
+    /**
+     * 设置云通信的用户标识.
+     * 如果identifier不为null,tim_sync会置为1,
+     * identifier允许为null, 如果identifier为null, tim_sync会置为0.
+     * @param id
+     * @param identifier
+     * @return
+     */
+    boolean updateTIMIdentifier(@Param("id") int id, @Nullable @Param("identifier") String identifier);
 }
