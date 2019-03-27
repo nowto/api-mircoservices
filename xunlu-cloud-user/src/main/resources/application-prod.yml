@@ -5,4 +5,5 @@ spring:
     password: xunlu2018
 # 将自有帐号导入云通信ＩＭ时生成Identifier时的前缀
 tencent-im-service:
-  make-identifier-prefix: dev
+  make-identifier-prefix: prod
+

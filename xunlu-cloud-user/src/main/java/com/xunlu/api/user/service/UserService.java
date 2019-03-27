@@ -7,7 +7,12 @@ import com.xunlu.api.user.domain.User;
  * @author liweibo
  */
 public interface UserService {
-    void addUser(User user) throws Exception;
+    /**
+     * 添加一个新用户.
+     * 同时也会将这个帐号导入到腾讯云通信IM, 如果可以成功导入的话
+     * @param user 新用户
+     */
+    void addUser(User user);
     User getUser(Integer id);
 
     User findByPhone(String phone);
@@ -27,12 +32,5 @@ public interface UserService {
 
     void updatePhoto(Integer userId, String photo);
     User findById(Integer userId);
-    /**
-     * 用jdbc直接插入user，返回新生成的user ID
-     * @param user
-     * @return
-     * @throws Exception
-     */
-    public Integer insertUser(final User user) throws Exception;
     Integer checkLiked(Integer userId, Integer uid);
 }

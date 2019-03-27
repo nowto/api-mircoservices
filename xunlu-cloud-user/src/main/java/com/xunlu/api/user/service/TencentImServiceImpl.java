@@ -70,7 +70,7 @@ public class TencentImServiceImpl implements TencentIMService {
 
     private static final int IDENTIFIER_MAX_LENGTH = 40;
     @Override
-    public String makeIdentifier(String prefix, Integer id) {
+    public String makeIdentifier(String prefix, int id) {
         String digest = DigestUtils.md5DigestAsHex((prefix+":"+id).getBytes(StandardCharsets.UTF_8));
         if(digest.length() > IDENTIFIER_MAX_LENGTH) {
             digest = digest.substring(0, IDENTIFIER_MAX_LENGTH);

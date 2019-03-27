@@ -46,7 +46,7 @@ public interface TencentIMService {
 	 * @param id id
 	 * @return Identifer
 	 */
-	String makeIdentifier(String prefix, Integer id);
+	String makeIdentifier(String prefix, int id);
 
 	//region 对云通信 帐号管理 REST API 的调用
 
