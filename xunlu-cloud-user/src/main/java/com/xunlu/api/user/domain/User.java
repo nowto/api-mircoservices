@@ -71,6 +71,8 @@ public class User {
      */
     private Map<String, Object> extraInfo;
 
+    public User() { }
+
     public void setExtraInfo(String key, Object value) {
         if (extraInfo == null) {
             extraInfo = new HashMap<>(16);

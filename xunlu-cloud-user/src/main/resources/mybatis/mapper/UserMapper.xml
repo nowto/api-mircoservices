@@ -4,6 +4,9 @@
     <resultMap id="userResultMap" type="User">
         <id column="id" property="id"/>
         <association property="prefer" resultMap="preferResultMap"/>
+        <discriminator javaType="int" column="third_user_type">
+            <case value="1" resultType="ThirdUser"/>
+        </discriminator>
     </resultMap>
     <resultMap id="preferResultMap" type="com.xunlu.api.user.domain.User$Prefer">
         <id column="id" property="userId"/>
@@ -51,92 +54,97 @@
 
     <select id="findOne" resultMap="userResultMap">
         select
-        id,
-        user_name,
-        nick_name,
-        person_sign,
-        photo,
-        email,
-        phone,
-        password,
-        prefer_natural,
-        prefer_human,
-        prefer_running,
-        prefer_play_time,
-        prefer_night_play,
-        prefer_pub_trans_first,
-        prefer_hotel_level,
-        create_time,
-        prefer_trip_number,
-        prefer_flight,
-        area_code,
-        tim_sync,
-        tim_identifier,
-        is_spider
+        u.id as id,
+        u.user_name as user_name,
+        ifnull(u.nick_name, tu.nick_name) as nick_name,
+        u.person_sign as person_sign,
+        ifnull(u.photo, tu.img) as photo,
+        u.email as email,
+        u.phone as phone,
+        u.password as password,
+        u.prefer_natural as prefer_natural,
+        u.prefer_human as prefer_human,
+        u.prefer_running as prefer_running,
+        u.prefer_play_time as prefer_play_time,
+        u.prefer_night_play as prefer_night_play,
+        u.prefer_pub_trans_first as prefer_pub_trans_first,
+        u.prefer_hotel_level as prefer_hotel_level,
+        u.create_time as create_time,
+        u.prefer_trip_number as prefer_trip_number,
+        u.prefer_flight as prefer_flight,
+        u.area_code as area_code,
+        u.tim_sync as tim_sync,
+        u.tim_identifier as tim_identifier,
+        u.is_spider as is_spider,
+
+        tu.user_id is not null as third_user_type,
+        tu.type as type,
+        tu.openid as openid
         from
-        xunlu.tb_user
+        tb_user as u
+        left join tb_third_user as tu on  tu.user_id = u.id
         <where>
             <if test="id != null">
-                id = #{id}
+                u.id = #{id}
             </if>
             <if test="userName != null">
-                and user_name = #{userName}
+                and u.user_name = #{userName}
             </if>
             <if test="nickName != null">
-                and nick_name = #{nickName}
+                and u.nick_name = #{nickName}
             </if>
             <if test="personSign != null">
-                and person_sign = #{personSign}
+                and u.person_sign = #{personSign}
             </if>
             <if test="photo != null">
-                and photo = #{photo}
+                and u.photo = #{photo}
             </if>
             <if test="email != null">
-                and email = #{email}
+                and u.email = #{email}
             </if>
             <if test="phone != null">
-                and phone = #{phone}
+                and u.phone = #{phone}
             </if>
             <if test="password != null">
-                and password = #{password}
+                and u.password = #{password}
             </if>
             <if test="prefer != null">
                 <if test="prefer.preferNatural != null">
-                    and prefer_natural = #{preferNatural}
+                    and u.prefer_natural = #{preferNatural}
                 </if>
                 <if test="prefer.preferHuman != null">
-                    and prefer_human = #{preferHuman}
+                    and u.prefer_human = #{preferHuman}
                 </if>
                 <if test="prefer.preferRunning != null">
-                    and prefer_running = #{preferRunning}
+                    and u.prefer_running = #{preferRunning}
                 </if>
                 <if test="prefer.preferPlayTime != null">
-                    and prefer_play_time = #{preferPlayTime}
+                    and u.prefer_play_time = #{preferPlayTime}
                 </if>
                 <if test="prefer.preferNightPlay != null">
-                    and prefer_night_play = #{preferNightPlay}
+                    and u.prefer_night_play = #{preferNightPlay}
                 </if>
                 <if test="prefer.preferPubTransFirst != null">
-                    and prefer_pub_trans_first = #{preferPubTransFirst}
+                    and u.prefer_pub_trans_first = #{preferPubTransFirst}
                 </if>
                 <if test="prefer.preferHotelLevel!= null">
-                    and prefer_hotel_level = #{preferHotelLevel}
+                    and u.prefer_hotel_level = #{preferHotelLevel}
                 </if>
                 <if test="prefer.preferTripNumber!= null">
-                    and prefer_trip_number = #{preferTripNumber}
+                    and u.prefer_trip_number = #{preferTripNumber}
                 </if>
                 <if test="prefer.preferFlight!= null">
-                    and prefer_flight = #{preferFlight}
+                    and u.prefer_flight = #{preferFlight}
                 </if>
             </if>
             <if test="areaCode!= null">
-                and area_code = #{areaCode}
+                and u.area_code = #{areaCode}
             </if>
             <if test="createTime!= null">
-                and create_time = #{createTime}
+                and u.create_time = #{createTime}
             </if>
             <if test="timIdentifier!= null">
-                and tim_identifier = #{timIdentifier}
+                and u.tim_identifier = #{timIdentifier}
             </if>
         </where>
         limit 1

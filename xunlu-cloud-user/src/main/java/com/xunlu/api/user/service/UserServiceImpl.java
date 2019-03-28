@@ -104,11 +104,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Integer userId) {
-        return null;
-    }
-
-    @Override
     public Integer checkLiked(Integer userId, Integer uid) {
         return null;
     }

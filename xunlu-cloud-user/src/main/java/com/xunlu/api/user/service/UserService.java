@@ -30,6 +30,10 @@ public interface UserService {
      */
     User findByPhone(@NonNull String phone) throws IllegalArgumentException;
 
+    String findPassword(Integer userId);
+
+    Integer checkLiked(Integer userId, Integer uid);
+
     /**
      * 根据用户id获取用户偏好
      * @param id 用户id
@@ -39,16 +43,12 @@ public interface UserService {
 
     int updateUser(User user);
 
-    String findPassword(Integer userId);
+
 
     void updatePassword(Integer userId, String password);
 
 
     void updateNickName(Integer userId, String nickName);
-
     void updatePersonSign(Integer userId, String personSign);
-
     void updatePhoto(Integer userId, String photo);
-    User findById(Integer userId);
-    Integer checkLiked(Integer userId, Integer uid);
 }

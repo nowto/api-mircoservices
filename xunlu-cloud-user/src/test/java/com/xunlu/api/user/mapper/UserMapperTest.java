@@ -1,5 +1,6 @@
 package com.xunlu.api.user.mapper;
 
+import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,9 +57,34 @@ public class UserMapperTest {
         user.setId(id);
         User findUser = userMapper.findOne(user);
 
+        Assert.assertTrue(findUser instanceof User);
         Assert.assertNotNull(findUser);
         Assert.assertEquals(findUser.getId(), id);
         Assert.assertEquals(findUser.getPrefer().getUserId(), id);
+    }
+
+    @Test
+    @Sql(statements = {"INSERT INTO xunlu.tb_user\n" +
+            "(id, user_name, nick_name, person_sign, photo, email, phone, password, prefer_natural, prefer_human, prefer_running, prefer_play_time, prefer_night_play, prefer_pub_trans_first, prefer_hotel_level, create_time, prefer_trip_number, prefer_flight, area_code, tim_sync, tim_identifier, is_spider)\n" +
+            "VALUES("+Integer.MAX_VALUE+", '"+ USER_NAME +"', '小丸子', '', NULL, NULL, NULL, NULL, 20, 20, 20, 20, 10, 20, 20, '2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n",
+    "INSERT INTO xunlu.tb_third_user\n" +
+            "(user_id, `type`, nick_name, img, openid, create_time)\n" +
+            "VALUES("+Integer.MAX_VALUE+", 3, '石沉海', 'http://test.com/test.jpg', 'D644049F4091B90CA941C5CAF3290C14', '2015-08-31 23:17:25.000');\n"})
+    public void testFindOneThirdUser() {
+        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+
+        User user = new User();
+        user.setId(id);
+        User findUser = userMapper.findOne(user);
+
+        Assert.assertNotNull(findUser);
+        Assert.assertEquals(id, findUser.getId());
+        Assert.assertEquals(id, findUser.getPrefer().getUserId());
+
+        Assert.assertTrue(findUser instanceof ThirdUser);
+        Assert.assertEquals("D644049F4091B90CA941C5CAF3290C14", ((ThirdUser) findUser).getOpenid());
+        Assert.assertEquals(ThirdUser.Type.WEIBO, ((ThirdUser) findUser).getType());
+        Assert.assertEquals("http://test.com/test.jpg", findUser.getPhoto());
     }
 
     @Test
