@@ -51,4 +51,13 @@ public interface UserMapper {
      * @return
      */
     boolean updateTIMIdentifier(@Param("id") int id, @Nullable @Param("identifier") String identifier);
+
+    /**
+     * 更新用户的偏好.
+     * 只会更新prefer中不为null的属性
+     * @param id 欲更新用户的用户id
+     * @param prefer 用户偏好
+     * @return true 更新成功, false 更新失败
+     */
+    boolean updatePrefer(@Param("id") Integer id, @Param("prefer") User.Prefer prefer);
 }

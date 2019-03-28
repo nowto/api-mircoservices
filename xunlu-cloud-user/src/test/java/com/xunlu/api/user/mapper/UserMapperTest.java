@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -216,5 +217,24 @@ public class UserMapperTest {
         map = jdbcTemplate.queryForMap("select * from tb_user where id = " + id);
         Assert.assertEquals(null, map.get("tim_identifier"));
         Assert.assertEquals(0, map.get("tim_sync"));
+    }
+
+    @Test
+    @Sql(statements = "insert into tb_user (user_name, nick_name, create_time) values ('"+USER_NAME+"', 'testnickname', now())")
+    public void testUpdatePrefer() {
+        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+
+        User.Prefer prefer = new User.Prefer();
+        prefer.setPreferFlight(User.Prefer.Flight.CHEAP_TRANSFER);
+
+        boolean testUpdatePreferRet = userMapper.updatePrefer(null, prefer);
+        Assert.assertFalse(testUpdatePreferRet);
+
+        testUpdatePreferRet = userMapper.updatePrefer(-11, prefer);
+        Assert.assertFalse(testUpdatePreferRet);
+
+        testUpdatePreferRet = userMapper.updatePrefer(id, prefer);
+        Assert.assertTrue(testUpdatePreferRet);
+
     }
 }

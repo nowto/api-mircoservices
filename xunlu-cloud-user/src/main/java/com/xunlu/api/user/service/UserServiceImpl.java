@@ -82,8 +82,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUser(User user) {
-        return 0;
+    public boolean updatePrefer(Integer id, User.Prefer prefer) {
+        if (id == null) {
+            return false;
+        }
+
+        return userMapper.updatePrefer(id, prefer);
     }
 
     @Override
