@@ -1,7 +1,26 @@
 mybatis:
-  config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.xunlu.api.user.domain
+  type-handlers-package: com.xunlu.api.user.infrastructure
+  configuration:
+    # 全局映射器启用缓存
+    cache-enabled: true
+    # 查询时，关闭关联对象即时加载以提高性能
+    lazy-loading-enabled: true
+    # 设置关联对象加载的形态，此处为按需加载字段(加载字段由SQL指 定)，不会加载关联表的所有字段，以提高性能
+    aggressive-lazy-loading: false
+    # 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果
+    multiple-result-sets-enabled: true
+    # 允许使用列标签代替列名
+    use-column-label: true
+    # 允许使用自定义的主键值(比如由程序生成的UUID 32位编码作为键值)，数据表的PK生成策略将被覆盖
+    use-generated-keys: true
+    # 不予支持内嵌resultMap的自动映射
+    auto-mapping-behavior: partial
+    # 数据库超过25000秒仍未响应则超时
+    default-statement-timeout: 25000
+    # 自动映射: 数据库列命user_name映射到java对象成员变量名userName
+    map-underscore-to-camel-case: true
 spring:
   profiles:
     active: dev

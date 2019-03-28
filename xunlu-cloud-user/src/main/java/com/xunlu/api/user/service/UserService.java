@@ -13,6 +13,12 @@ public interface UserService {
      * @param user 新用户
      */
     void addUser(User user);
+
+    /**
+     * 根据用户id获取用户
+     * @param id 用户id
+     * @return 用户,如果指定id用户不存在,返回null
+     */
     User getUser(Integer id);
 
     User findByPhone(String phone);

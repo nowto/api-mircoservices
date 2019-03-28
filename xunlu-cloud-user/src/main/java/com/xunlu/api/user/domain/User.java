@@ -31,7 +31,7 @@ public class User {
     /**
      * 头像
      */
-    private String photo = "";
+    private String photo;
     /**
      * 邮箱
      */

@@ -1,7 +1,10 @@
 package com.xunlu.api.user.infrastructure;
 
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
+import org.apache.ibatis.type.MappedTypes;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -12,6 +15,8 @@ import java.sql.SQLException;
  * 由于Mybatis的EnumTypeHandler、EnumOrdinalTypeHandler不符合业务上枚举类型映射的要求，故创建该类完成枚举类型的数据库映射
  * @author liweibo
  */
+@MappedJdbcTypes({JdbcType.TINYINT, JdbcType.SMALLINT, JdbcType.BIGINT, JdbcType.INTEGER})
+@MappedTypes(BaseCodeEnum.class)
 public class CodeEnumTypeHandler<E extends Enum<E> & BaseCodeEnum> extends BaseTypeHandler<E> {
     private final Class<E> type;
 

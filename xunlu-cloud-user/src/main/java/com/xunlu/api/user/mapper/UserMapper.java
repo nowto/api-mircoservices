@@ -29,4 +29,12 @@ public interface UserMapper {
      * @return
      */
     boolean updateTIMIdentifier(@Param("id") int id, @Nullable @Param("identifier") String identifier);
+
+    /**
+     * 查找一个用户.
+     * 将使用example的每个不为null的属性做等值条件查询, 如果查找到多个,将只返回第一个
+     * @param example 条件
+     * @return
+     */
+    User findOne(User example);
 }

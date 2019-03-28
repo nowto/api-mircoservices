@@ -40,4 +40,97 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="findOne" resultType="User">
+        SELECT
+        id,
+        user_name,
+        nick_name,
+        person_sign,
+        photo,
+        email,
+        phone,
+        password,
+        prefer_natural,
+        prefer_human,
+        prefer_running,
+        prefer_play_time,
+        prefer_night_play,
+        prefer_pub_trans_first,
+        prefer_hotel_level,
+        create_time,
+        prefer_trip_number,
+        prefer_flight,
+        area_code,
+        tim_sync,
+        tim_identifier,
+        is_spider
+        FROM
+        xunlu.tb_user
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="userName != null">
+                and user_name = #{userName}
+            </if>
+            <if test="nickName != null">
+                and nick_name = #{nickName}
+            </if>
+            <if test="personSign != null">
+                and person_sign = #{personSign}
+            </if>
+            <if test="photo != null">
+                and photo = #{photo}
+            </if>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+            <if test="phone != null">
+                and phone = #{phone}
+            </if>
+            <if test="password != null">
+                and password = #{password}
+            </if>
+            <if test="preferNatural != null">
+                and prefer_natural = #{preferNatural}
+            </if>
+            <if test="preferHuman != null">
+                and prefer_human = #{preferHuman}
+            </if>
+            <if test="preferRunning != null">
+                and prefer_running = #{preferRunning}
+            </if>
+            <if test="preferPlayTime != null">
+                and prefer_play_time = #{preferPlayTime}
+            </if>
+            <if test="preferNightPlay != null">
+                and prefer_night_play = #{preferNightPlay}
+            </if>
+            <if test="preferPubTransFirst != null">
+                and prefer_pub_trans_first = #{preferPubTransFirst}
+            </if>
+            <if test="preferHotelLevel!= null">
+                and prefer_hotel_level = #{preferHotelLevel}
+            </if>
+            <if test="createTime!= null">
+                and create_time = #{createTime}
+            </if>
+            <if test="preferTripNumber!= null">
+                and prefer_trip_number = #{preferTripNumber}
+            </if>
+            <if test="preferFlight!= null">
+                and prefer_flight = #{preferFlight}
+            </if>
+            <if test="areaCode!= null">
+                and area_code = #{areaCode}
+            </if>
+            <if test="timIdentifier!= null">
+                and tim_identifier = #{timIdentifier}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+
 </mapper>

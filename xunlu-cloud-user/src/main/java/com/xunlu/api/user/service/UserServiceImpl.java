@@ -24,6 +24,14 @@ public class UserServiceImpl implements UserService {
         this.tencentIMService = tencentIMService;
     }
 
+    /**
+     * protected method for test
+     * @param timPrefix
+     */
+    protected void setTimPrefix(String timPrefix) {
+        this.timPrefix = timPrefix;
+    }
+
     @Override
     public void addUser(User user) {
         if (!userMapper.addUser(user)) {
@@ -33,14 +41,6 @@ public class UserServiceImpl implements UserService {
         if (tencentIMService.accountImport(identifier, null, null)) {
             userMapper.updateTIMIdentifier(user.getId(), identifier);
         }
-    }
-
-    /**
-     * protected method for test
-     * @param timPrefix
-     */
-    protected void setTimPrefix(String timPrefix) {
-        this.timPrefix = timPrefix;
     }
 
     @Override
