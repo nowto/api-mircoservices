@@ -122,4 +122,29 @@ public class UserServiceImplTest {
         User exceptNull = userService.findByPhone("notFound");
         Assert.assertNull(exceptNull);
     }
+
+    @Test
+    public void getUserPrefer() {
+        mockUserMapper = mock(UserMapper.class);
+        User.Prefer prefer = new User.Prefer();
+        prefer.setUserId(1111);
+        prefer.setPreferFlight(User.Prefer.Flight.CHEAP_TRANSFER);
+        when(mockUserMapper.getUserPrefer(1111)).thenReturn(prefer);
+
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        User.Prefer exceptNonNull = userService.getUserPrefer(1111);
+
+        Assert.assertNotNull(exceptNonNull);
+        Assert.assertEquals(1111, exceptNonNull.getUserId().intValue());
+        Assert.assertEquals(User.Prefer.Flight.CHEAP_TRANSFER, exceptNonNull.getPreferFlight());
+
+        //-------
+        when(mockUserMapper.getUserPrefer(2222)).thenReturn(null);
+        User exceptNull = userService.getUser(2222);
+        Assert.assertNull(exceptNull);
+
+        exceptNull = userService.getUser(null);
+        Assert.assertNull(exceptNull);
+    }
 }

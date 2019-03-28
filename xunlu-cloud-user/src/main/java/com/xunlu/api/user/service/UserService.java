@@ -30,7 +30,12 @@ public interface UserService {
      */
     User findByPhone(@NonNull String phone) throws IllegalArgumentException;
 
-    User findUserPrefer(Integer userId);
+    /**
+     * 根据用户id获取用户偏好
+     * @param id 用户id
+     * @return 用户的偏好, 如果指定id用户不存在,返回null
+     */
+    User.Prefer getUserPrefer(Integer id);
 
     int updateUser(User user);
 

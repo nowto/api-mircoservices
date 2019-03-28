@@ -66,8 +66,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserPrefer(Integer userId) {
-        return null;
+    public User.Prefer getUserPrefer(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        return userMapper.getUserPrefer(id);
     }
 
     @Override
