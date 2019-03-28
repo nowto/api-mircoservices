@@ -66,6 +66,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String findPassword(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        return userMapper.findPassword(id);
+    }
+
+    @Override
     public User.Prefer getUserPrefer(Integer id) {
         if (id == null) {
             return null;
@@ -76,11 +84,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUser(User user) {
         return 0;
-    }
-
-    @Override
-    public String findPassword(Integer userId) {
-        return null;
     }
 
     @Override

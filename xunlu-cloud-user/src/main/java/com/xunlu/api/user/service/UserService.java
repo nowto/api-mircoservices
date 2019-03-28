@@ -30,7 +30,12 @@ public interface UserService {
      */
     User findByPhone(@NonNull String phone) throws IllegalArgumentException;
 
-    String findPassword(Integer userId);
+    /**
+     * 根据用户id获取用户密码
+     * @param id 用户id
+     * @return 用户密码, 如果指定id用户不存在或密码为null,返回null
+     */
+    String findPassword(Integer id);
 
     Integer checkLiked(Integer userId, Integer uid);
 

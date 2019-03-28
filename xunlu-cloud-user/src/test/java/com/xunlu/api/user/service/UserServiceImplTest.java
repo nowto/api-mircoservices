@@ -147,4 +147,21 @@ public class UserServiceImplTest {
         exceptNull = userService.getUser(null);
         Assert.assertNull(exceptNull);
     }
+
+    @Test
+    public void findPassword() {
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.findPassword(11)).thenReturn("testtest");
+        when(mockUserMapper.findPassword(22)).thenReturn(null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+
+        String findPassword = userService.findPassword(null);
+        Assert.assertNull(findPassword);
+
+        findPassword = userService.findPassword(11);
+        Assert.assertEquals("testtest", findPassword);
+
+        findPassword = userService.findPassword(22);
+        Assert.assertNull(findPassword);
+    }
 }
