@@ -50,7 +50,7 @@
     </update>
 
     <select id="findOne" resultMap="userResultMap">
-        SELECT
+        select
         id,
         user_name,
         nick_name,
@@ -73,7 +73,7 @@
         tim_sync,
         tim_identifier,
         is_spider
-        FROM
+        from
         xunlu.tb_user
         <where>
             <if test="id != null">
@@ -142,5 +142,21 @@
         limit 1
     </select>
 
+    <select id="getUserPrefer" resultMap="preferResultMap">
+        select
+        id,
+        prefer_natural,
+        prefer_human,
+        prefer_running,
+        prefer_play_time,
+        prefer_night_play,
+        prefer_pub_trans_first,
+        prefer_hotel_level,
+        prefer_trip_number,
+        prefer_flight
+        from tb_user
+        where
+        id=#{id}
 
+    </select>
 </mapper>
