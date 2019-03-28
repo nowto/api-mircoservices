@@ -3,6 +3,7 @@ package com.xunlu.api.user.service;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 /**
@@ -55,8 +56,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByPhone(String phone) {
-        return null;
+    public User findByPhone(@NonNull String phone) {
+        if (phone == null) {
+            throw new IllegalArgumentException("手机号不能是null");
+        }
+        User user = new User();
+        user.setPhone(phone);
+        return userMapper.findOne(user);
     }
 
     @Override

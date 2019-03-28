@@ -4,11 +4,7 @@ import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.mapper.UserMapper;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.Objects;
 
@@ -78,10 +74,6 @@ public class UserServiceImplTest {
 
     @Test
     public void getUser() {
-        User user = new User();
-        user.setId(111);
-        user.setUserName("testname");
-
         mockUserMapper = mock(UserMapper.class);
         doAnswer(invocation -> {
             User u = invocation.getArgument(0);
@@ -101,6 +93,33 @@ public class UserServiceImplTest {
         Assert.assertNull(exceptNull);
 
         exceptNull = userService.getUser(null);
+        Assert.assertNull(exceptNull);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void findByPhoneShoudThrowExceptionWhenParamNull() {
+        UserServiceImpl userService = new UserServiceImpl(null, null);
+        userService.findByPhone(null);
+    }
+
+    @Test
+    public void findByPhonNonException() {
+        mockUserMapper = mock(UserMapper.class);
+        doAnswer(invocation -> {
+            User u = invocation.getArgument(0);
+            if (Objects.equals("110", u.getPhone())) {
+                return u;
+            }
+            return null;
+        }).when(mockUserMapper).findOne(any());
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        User exceptNonNull = userService.findByPhone("110");
+
+        Assert.assertNotNull(exceptNonNull);
+        Assert.assertEquals("110", exceptNonNull.getPhone());
+
+        User exceptNull = userService.findByPhone("notFound");
         Assert.assertNull(exceptNull);
     }
 }

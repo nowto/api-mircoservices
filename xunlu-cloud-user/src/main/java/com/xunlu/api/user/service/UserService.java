@@ -1,6 +1,7 @@
 package com.xunlu.api.user.service;
 
 import com.xunlu.api.user.domain.User;
+import org.springframework.lang.NonNull;
 
 /**
  * 用户{@link com.xunlu.api.user.domain.User}类 服务接口
@@ -21,7 +22,13 @@ public interface UserService {
      */
     User getUser(Integer id);
 
-    User findByPhone(String phone);
+    /**
+     * 根据手机号获取用户
+     * @param phone 手机号,不可以为null
+     * @return 用户,如果指定phone用户不存的,返回null
+     * @throws IllegalArgumentException 如果传参为null
+     */
+    User findByPhone(@NonNull String phone) throws IllegalArgumentException;
 
     User findUserPrefer(Integer userId);
 
