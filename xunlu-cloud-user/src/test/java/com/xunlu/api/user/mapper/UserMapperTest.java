@@ -28,6 +28,10 @@ public class UserMapperTest {
     @Test
     public void testAddUserShoudSuccessWhenUserNoId() {
         User userNoId = new User();
+
+        User.Prefer prefer = new User.Prefer();
+        prefer.setPreferFlight(User.Prefer.Flight.CHEAP_TRANSFER);
+        userNoId.setPrefer(prefer);
         userNoId.setEmail("liweibor@163.com");
         userNoId.setNickName("liweibor");
         userNoId.setUserName("liweibor");
@@ -35,6 +39,7 @@ public class UserMapperTest {
         boolean ret = userMapper.addUser(userNoId);
         Assert.assertTrue(ret);
         Assert.assertNotNull(userNoId.getId());
+        Assert.assertEquals(User.Prefer.Flight.CHEAP_TRANSFER, userNoId.getPrefer().getPreferFlight());
     }
 
     private static final String USER_NAME = "testUpdateTIMIdentifier";
@@ -74,6 +79,7 @@ public class UserMapperTest {
 
         Assert.assertNotNull(findUser);
         Assert.assertEquals(findUser.getId(), id);
+        Assert.assertEquals(findUser.getPrefer().getUserId(), id);
     }
 
     @Test
@@ -109,18 +115,20 @@ public class UserMapperTest {
         user.setNickName("小丸子");
         user.setPersonSign("");
         user.setPhoto("http://wx.qlogo.cn/mmopen/nibxxlib1VaPfA0MxaGnppIyX5D30vgaUykqe1sJ8icWcFvUO376eDUIbqWcM72tHwdPBwygJm69BcL1VOQSt1BtA/0");
-        user.setPreferTripNumber(User.TripNumber.LONE_RANGER);
-        user.setPreferFlight(User.Flight.EFFICIENT_DIRECT);
 
 
         user.setTimIdentifier("fc17719aa31c31875461eeb9cbea6777");
-        user.setPreferNatural(User.Natural.CLOSE);
-        user.setPreferHuman(User.Natural.CLOSE);
-        user.setPreferRunning(User.Running.COVER_SUBURBS);
-        user.setPreferPlayTime(User.PlayTime.BIG_HALF_DAY);
-        user.setPreferNightPlay(User.NightPlay.REST_IN_HOTEL);
-        user.setPreferPubTransFirst(User.PubTransFirst.SYNTHETICAL);
-        user.setPreferHotelLevel(User.HotelLevel.TWO_THREE_STAR);
+
+        User.Prefer prefer = new User.Prefer();
+        prefer.setPreferTripNumber(User.Prefer.TripNumber.LONE_RANGER);
+        prefer.setPreferFlight(User.Prefer.Flight.EFFICIENT_DIRECT);
+        prefer.setPreferNatural(User.Prefer.Natural.CLOSE);
+        prefer.setPreferHuman(User.Prefer.Natural.CLOSE);
+        prefer.setPreferRunning(User.Prefer.Running.COVER_SUBURBS);
+        prefer.setPreferPlayTime(User.Prefer.PlayTime.BIG_HALF_DAY);
+        prefer.setPreferNightPlay(User.Prefer.NightPlay.REST_IN_HOTEL);
+        prefer.setPreferPubTransFirst(User.Prefer.PubTransFirst.SYNTHETICAL);
+        prefer.setPreferHotelLevel(User.Prefer.HotelLevel.TWO_THREE_STAR);
         User findUser = userMapper.findOne(user);
 
         Assert.assertNotNull(findUser);
