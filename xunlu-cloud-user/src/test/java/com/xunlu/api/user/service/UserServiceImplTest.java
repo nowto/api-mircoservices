@@ -4,7 +4,13 @@ import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.mapper.UserMapper;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import java.util.Objects;
 
 import static org.mockito.Mockito.*;
 
@@ -68,5 +74,33 @@ public class UserServiceImplTest {
 
         Assert.assertEquals(generatedKey, user.getId().intValue());
         verify(mockUserMapper, times(0)).updateTIMIdentifier(anyInt(), anyString());
+    }
+
+    @Test
+    public void getUser() {
+        User user = new User();
+        user.setId(111);
+        user.setUserName("testname");
+
+        mockUserMapper = mock(UserMapper.class);
+        doAnswer(invocation -> {
+            User u = invocation.getArgument(0);
+            if (Objects.equals(1111, u.getId())) {
+                return u;
+            }
+            return null;
+        }).when(mockUserMapper).findOne(any());
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        User exceptNonNull = userService.getUser(1111);
+
+        Assert.assertNotNull(exceptNonNull);
+        Assert.assertEquals(1111, exceptNonNull.getId().intValue());
+
+        User exceptNull = userService.getUser(2222);
+        Assert.assertNull(exceptNull);
+
+        exceptNull = userService.getUser(null);
+        Assert.assertNull(exceptNull);
     }
 }

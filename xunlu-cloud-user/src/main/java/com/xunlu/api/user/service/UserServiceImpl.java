@@ -45,7 +45,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(Integer id) {
-        return null;
+        if (id == null) {
+            return null;
+        }
+
+        User user = new User();
+        user.setId(id);
+        return userMapper.findOne(user);
     }
 
     @Override
