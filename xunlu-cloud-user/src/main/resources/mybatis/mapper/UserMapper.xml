@@ -150,6 +150,14 @@
         limit 1
     </select>
 
+    <select id="findPassword" resultType="string">
+        select
+        password
+        from tb_user
+        where
+        id=#{id}
+    </select>
+
     <select id="getUserPrefer" resultMap="preferResultMap">
         select
         id,

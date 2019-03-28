@@ -29,6 +29,13 @@ public interface UserMapper {
     User findOne(User example);
 
     /**
+     * 获取用户密码,根据id
+     * @param id
+     * @return 用户密码, 如果指定id用户不存在或密码为null,返回null
+     */
+    String findPassword(Integer id);
+
+    /**
      * 获取用户偏好根据用户id
      * @param id 用户id
      * @return 用户偏好,如果不存在,返回null

@@ -141,6 +141,20 @@ public class UserMapperTest {
     }
 
     @Test
+    @Sql(statements = "insert into xunlu.tb_user (user_name, password, create_time) values ('"+USER_NAME+"', 'testtest', now())")
+    public void testFindPassword() {
+        String findPassword = userMapper.findPassword(null);
+        Assert.assertNull(findPassword);
+
+        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        findPassword = userMapper.findPassword(id);
+        Assert.assertEquals("testtest", findPassword);
+
+        findPassword = userMapper.findPassword(-22);
+        Assert.assertNull(findPassword);
+    }
+
+    @Test
     @Sql(statements = "INSERT INTO xunlu.tb_user\n" +
             "(user_name, nick_name, person_sign, photo, email, phone, password, \n" +
             //region enum clomn
