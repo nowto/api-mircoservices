@@ -233,5 +233,10 @@
         set person_sign = #{personSign}
         where id = #{id}
     </update>
+    <update id="updatePhoto">
+        update tb_user
+        set photo = #{photo}
+        where id = #{id}
+    </update>
 
 </mapper>

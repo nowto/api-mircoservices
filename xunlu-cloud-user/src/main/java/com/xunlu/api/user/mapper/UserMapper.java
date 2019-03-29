@@ -91,8 +91,16 @@ public interface UserMapper {
     /**
      * 更新用户的personSign.
      * @param id 欲更新用户的用户id
-     * @param personSign 注意, 如果传入null,会将昵称更新为null
+     * @param personSign 注意, 如果传入null,会将personSign更新为null
      * @return ture 更新成功, false 更新失败
      */
     boolean updatePersonSign(@Param("id") Integer id, @Param("personSign") String personSign);
+
+    /**
+     * 更新用户的头像
+     * @param id 欲更新用户的用户id
+     * @param photo 更新后头像. 注意, 如果传入null,会将personSign更新为null
+     * @return ture 更新成功, false 更新失败
+     */
+    boolean updatePhoto(@Param("id") Integer id, @Param("photo") String photo);
 }

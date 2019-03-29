@@ -112,8 +112,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePhoto(Integer userId, String photo) {
-
+    public boolean updatePhoto(Integer id, String photo) {
+        return userMapper.updatePhoto(id, photo);
     }
 
     @Override

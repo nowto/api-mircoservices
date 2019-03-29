@@ -66,7 +66,7 @@ public interface UserService {
     /**
      * 更新用户的昵称
      * @param id 欲更新用户的用户id
-     * @param nickName 更新有的昵称, 注意, 如果传入null, 会将密码更新为null
+     * @param nickName 更新后的昵称, 注意, 如果传入null, 会将昵称更新为null
      * @return true 更新成功, false 更新失败
      */
     boolean updateNickName(Integer id, String nickName);
@@ -74,9 +74,15 @@ public interface UserService {
     /**
      * 更新用户的personSign
      * @param id 欲更新用户的用户id
-     * @param personSign 注意, 如果传入null, 会将密码更新为null
+     * @param personSign 注意, 如果传入null, 会将personSign更新为null
      */
     boolean updatePersonSign(Integer id, String personSign);
 
-    void updatePhoto(Integer userId, String photo);
+    /**
+     * 更新用户的头像
+     * @param id 欲更新用户的用户id
+     * @param photo 更新后的头像, 注意, 如果传入null, 会将头像更新为null
+     * @return true 更新成功, false 更新失败
+     */
+    boolean updatePhoto(Integer id, String photo);
 }
