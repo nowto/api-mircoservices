@@ -276,4 +276,31 @@ public class UserServiceImplTest {
         ret = userService.updatePersonSign(null, null);
         Assert.assertFalse(ret);
     }
+
+    @Test
+    public void testUpdatePhoto() {
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.updatePhoto(1, "http://test.com/test.jpg")).thenReturn(true);
+        when(mockUserMapper.updatePhoto(2, "http://test.com/test.jpg")).thenReturn(false);
+        when(mockUserMapper.updatePhoto(null, "http://test.com/test.jpg")).thenReturn(false);
+        when(mockUserMapper.updatePhoto(1, null)).thenReturn(true);
+        when(mockUserMapper.updatePhoto(null, null)).thenReturn(false);
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+
+        boolean ret = userService.updatePhoto(1, "http://test.com/test.jpg");
+        Assert.assertTrue(ret);
+
+        ret = userService.updatePhoto(2, "http://test.com/test.jpg");
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePhoto(null, "http://test.com/test.jpg");
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePhoto(1, null);
+        Assert.assertTrue(ret);
+
+        ret = userService.updatePhoto(null, null);
+        Assert.assertFalse(ret);
+    }
 }
