@@ -70,6 +70,13 @@ public interface UserService {
      * @return true 更新成功, false 更新失败
      */
     boolean updateNickName(Integer id, String nickName);
-    void updatePersonSign(Integer userId, String personSign);
+
+    /**
+     * 更新用户的personSign
+     * @param id 欲更新用户的用户id
+     * @param personSign 注意, 如果传入null, 会将密码更新为null
+     */
+    boolean updatePersonSign(Integer id, String personSign);
+
     void updatePhoto(Integer userId, String photo);
 }

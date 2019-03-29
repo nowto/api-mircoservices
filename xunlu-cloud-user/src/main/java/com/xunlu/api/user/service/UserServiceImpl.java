@@ -107,8 +107,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePersonSign(Integer userId, String personSign) {
-
+    public boolean updatePersonSign(Integer id, String personSign) {
+        return userMapper.updatePersonSign(id, personSign);
     }
 
     @Override

@@ -282,6 +282,28 @@ public class UserMapperTest {
         Assert.assertNull(exceptedNickName);
     }
 
+    @Test
+    @Sql(statements = "insert into tb_user (user_name, nick_name, create_time) values ('"+USER_NAME+"', 'nnnnnn', now())")
+    public void testUpdatePersonSign() {
+        Integer id = getIdUserNameEqual(USER_NAME);
+
+        userMapper.updatePersonSign(id, "testpersonsign");
+
+        String exceptedPersonSign = getColumnValueById(id, "person_sign", String.class);
+        Assert.assertEquals("testpersonsign", exceptedPersonSign );
+
+        boolean ret = userMapper.updatePersonSign(null, "testpersonsign");
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updatePersonSign(null, null);
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updatePersonSign(id, null);
+        exceptedPersonSign  = getColumnValueById(id, "person_sign", String.class);
+        Assert.assertTrue(ret);
+        Assert.assertNull(exceptedPersonSign );
+    }
+
     private Integer getIdUserNameEqual(String userName) {
         return jdbcTemplate.queryForObject("select id from tb_user where user_name='" + userName + "'", Integer.class);
     }

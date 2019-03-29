@@ -228,4 +228,10 @@
         where id = #{id}
     </update>
 
+    <update id="updatePersonSign">
+        update tb_user
+        set person_sign = #{personSign}
+        where id = #{id}
+    </update>
+
 </mapper>

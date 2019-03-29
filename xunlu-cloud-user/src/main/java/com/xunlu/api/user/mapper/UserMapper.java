@@ -87,4 +87,12 @@ public interface UserMapper {
      * @return ture 更新成功, false 更新失败
      */
     boolean updateNickName(@Param("id") Integer id, @Param("nickName") String nickName);
+
+    /**
+     * 更新用户的personSign.
+     * @param id 欲更新用户的用户id
+     * @param personSign 注意, 如果传入null,会将昵称更新为null
+     * @return ture 更新成功, false 更新失败
+     */
+    boolean updatePersonSign(@Param("id") Integer id, @Param("personSign") String personSign);
 }
