@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.constraints.AssertTrue;
 import java.util.Map;
+import java.util.Objects;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
@@ -52,7 +53,7 @@ public class UserMapperTest {
             "(user_name, nick_name, person_sign, photo, email, phone, password, prefer_natural, prefer_human, prefer_running, prefer_play_time, prefer_night_play, prefer_pub_trans_first, prefer_hotel_level, create_time, prefer_trip_number, prefer_flight, area_code, tim_sync, tim_identifier, is_spider)\n" +
             "VALUES('"+ USER_NAME +"', '小丸子', '', 'http://wx.qlogo.cn/mmopen/nibxxlib1VaPfA0MxaGnppIyX5D30vgaUykqe1sJ8icWcFvUO376eDUIbqWcM72tHwdPBwygJm69BcL1VOQSt1BtA/0', NULL, NULL, NULL, 20, 20, 20, 20, 10, 20, 20, '2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n")
     public void testFindOneById() {
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
 
         User user = new User();
         user.setId(id);
@@ -72,7 +73,7 @@ public class UserMapperTest {
             "(user_id, `type`, nick_name, img, openid, create_time)\n" +
             "VALUES("+Integer.MAX_VALUE+", 3, '石沉海', 'http://test.com/test.jpg', 'D644049F4091B90CA941C5CAF3290C14', '2015-08-31 23:17:25.000');\n"})
     public void testFindOneThirdUser() {
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
 
         User user = new User();
         user.setId(id);
@@ -113,7 +114,7 @@ public class UserMapperTest {
             //endregion
             "'2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n")
     public void testFindOneByAllValue() {
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
 
         User user = new User();
         user.setId(id);
@@ -147,7 +148,7 @@ public class UserMapperTest {
         String findPassword = userMapper.findPassword(null);
         Assert.assertNull(findPassword);
 
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
         findPassword = userMapper.findPassword(id);
         Assert.assertEquals("testtest", findPassword);
 
@@ -182,7 +183,7 @@ public class UserMapperTest {
     public void testGetUserPrefer() {
         Assert.assertNull(userMapper.getUserPrefer(null));
 
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
 
         User.Prefer getUserPreferRet = userMapper.getUserPrefer(id);
         Assert.assertEquals(getUserPreferRet.getPreferTripNumber(),  User.Prefer.TripNumber.LONE_RANGER);
@@ -202,7 +203,7 @@ public class UserMapperTest {
             "VALUES('"+ USER_NAME +"', '小丸子', '', 'http://wx.qlogo.cn/mmopen/nibxxlib1VaPfA0MxaGnppIyX5D30vgaUykqe1sJ8icWcFvUO376eDUIbqWcM72tHwdPBwygJm69BcL1VOQSt1BtA/0', NULL, NULL, NULL, 20, 20, 20, 20, 10, 20, 20, '2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n")
     public void testUpdateTIMIdentifier() {
         // identifier  is not null
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
 
         userMapper.updateTIMIdentifier(id, "helloworld");
 
@@ -222,7 +223,7 @@ public class UserMapperTest {
     @Test
     @Sql(statements = "insert into tb_user (user_name, nick_name, create_time) values ('"+USER_NAME+"', 'testnickname', now())")
     public void testUpdatePrefer() {
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
 
         User.Prefer prefer = new User.Prefer();
         prefer.setPreferFlight(User.Prefer.Flight.CHEAP_TRANSFER);
@@ -240,11 +241,11 @@ public class UserMapperTest {
     @Test
     @Sql(statements = "insert into tb_user (user_name, nick_name, create_time) values ('"+USER_NAME+"', 'testnickname', now())")
     public void testUpdatePassword() {
-        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+        Integer id = getIdUserNameEqual(USER_NAME);
 
         userMapper.updatePassword(id, "password");
 
-        String exceptedPassword = jdbcTemplate.queryForObject("select password from tb_user where id = " + id, String.class);
+        String exceptedPassword = getColumnValueById(id, "password", String.class);
         Assert.assertEquals("password", exceptedPassword);
 
         boolean ret = userMapper.updatePassword(null, "password");
@@ -254,8 +255,38 @@ public class UserMapperTest {
         Assert.assertFalse(ret);
 
         ret = userMapper.updatePassword(id, null);
-        exceptedPassword = jdbcTemplate.queryForObject("select password from tb_user where id = " + id, String.class);
+        exceptedPassword = getColumnValueById(id, "password", String.class);
         Assert.assertTrue(ret);
         Assert.assertNull(exceptedPassword);
+    }
+
+    @Test
+    @Sql(statements = "insert into tb_user (user_name, nick_name, create_time) values ('"+USER_NAME+"', 'nnnnnn', now())")
+    public void testUpdateNickName() {
+        Integer id = getIdUserNameEqual(USER_NAME);
+
+        userMapper.updateNickName(id, "testnickname");
+
+        String exceptedNickName = getColumnValueById(id, "nick_name", String.class);
+        Assert.assertEquals("testnickname", exceptedNickName);
+
+        boolean ret = userMapper.updateNickName(null, "testnickname");
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updateNickName(null, null);
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updateNickName(id, null);
+        exceptedNickName = getColumnValueById(id, "nick_name", String.class);
+        Assert.assertTrue(ret);
+        Assert.assertNull(exceptedNickName);
+    }
+
+    private Integer getIdUserNameEqual(String userName) {
+        return jdbcTemplate.queryForObject("select id from tb_user where user_name='" + userName + "'", Integer.class);
+    }
+
+    private  <T> T getColumnValueById(Integer id, String column, Class<T> columnClass) {
+        return jdbcTemplate.queryForObject("select "+column+" from tb_user where id = " + id, columnClass);
     }
 }

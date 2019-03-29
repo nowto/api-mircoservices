@@ -221,4 +221,32 @@ public class UserServiceImplTest {
         ret = userService.updatePassword(null, null);
         Assert.assertFalse(ret);
     }
+
+    @Test
+    public void testUpdateNickName() {
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.updateNickName(1, "nickname")).thenReturn(true);
+        when(mockUserMapper.updateNickName(2, "nickname")).thenReturn(false);
+        when(mockUserMapper.updateNickName(null, "nickname")).thenReturn(false);
+        when(mockUserMapper.updateNickName(1, null)).thenReturn(true);
+        when(mockUserMapper.updateNickName(null, null)).thenReturn(false);
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+
+        boolean ret = userService.updateNickName(1, "nickname");
+        Assert.assertTrue(ret);
+
+        ret = userService.updateNickName(2, "nickname");
+        Assert.assertFalse(ret);
+
+        ret = userService.updateNickName(null, "nickname");
+        Assert.assertFalse(ret);
+
+        ret = userService.updateNickName(1, null);
+        Assert.assertTrue(ret);
+
+        ret = userService.updateNickName(null, null);
+        Assert.assertFalse(ret);
+
+    }
 }

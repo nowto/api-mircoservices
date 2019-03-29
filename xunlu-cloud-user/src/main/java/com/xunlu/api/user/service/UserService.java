@@ -58,13 +58,18 @@ public interface UserService {
     /**
      * 更新用户的密码.
      * @param id 欲更新用户的用户id
-     * @param password 欲更新后的密码. 注意, 如果传入null,会将密码更新为null
+     * @param password 更新后的密码. 注意, 如果传入null, 会将密码更新为null
      * @return ture 更新成功, false 更新失败
      */
     boolean updatePassword(Integer id, String password);
 
-
-    void updateNickName(Integer userId, String nickName);
+    /**
+     * 更新用户的昵称
+     * @param id 欲更新用户的用户id
+     * @param nickName 更新有的昵称, 注意, 如果传入null, 会将密码更新为null
+     * @return true 更新成功, false 更新失败
+     */
+    boolean updateNickName(Integer id, String nickName);
     void updatePersonSign(Integer userId, String personSign);
     void updatePhoto(Integer userId, String photo);
 }
