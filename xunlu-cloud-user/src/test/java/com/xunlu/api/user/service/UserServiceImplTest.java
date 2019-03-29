@@ -164,4 +164,17 @@ public class UserServiceImplTest {
         findPassword = userService.findPassword(22);
         Assert.assertNull(findPassword);
     }
+
+    @Test
+    public void updatePrefer() {
+        User.Prefer prefer = new User.Prefer();
+        prefer.setPreferFlight(User.Prefer.Flight.CHEAP_TRANSFER);
+
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.updatePrefer(1, prefer)).thenReturn(true);
+        when(mockUserMapper.updatePrefer(2, prefer)).thenReturn(false);
+        when(mockUserMapper.updatePrefer(null, prefer)).thenReturn(false);
+        when(mockUserMapper.updatePrefer(1, null)).thenReturn(false);
+
+    }
 }

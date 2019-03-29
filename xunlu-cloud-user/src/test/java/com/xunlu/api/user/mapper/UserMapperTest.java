@@ -235,6 +235,25 @@ public class UserMapperTest {
 
         testUpdatePreferRet = userMapper.updatePrefer(id, prefer);
         Assert.assertTrue(testUpdatePreferRet);
+    }
 
+    @Test
+    @Sql(statements = "insert into tb_user (user_name, nick_name, create_time) values ('"+USER_NAME+"', 'testnickname', now())")
+    public void testUpdatePassword() {
+        Integer id = jdbcTemplate.queryForObject("select id from tb_user where user_name='" + USER_NAME + "'", Integer.class);
+
+        userMapper.updatePassword(id, "password");
+
+        String exceptedPassword = jdbcTemplate.queryForObject("select password from tb_user where id = " + id, String.class);
+        Assert.assertEquals("password", exceptedPassword);
+
+        boolean ret = userMapper.updatePassword(null, "password");
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updatePassword(null, null);
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updatePassword(id, null);
+        Assert.assertTrue(ret);
     }
 }

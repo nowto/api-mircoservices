@@ -37,55 +37,7 @@
         )
     </insert>
 
-    <update id="updateTIMIdentifier">
-        update tb_user
-        <set>
-            <choose>
-                <when test="identifier != null">
-                    tim_identifier = #{identifier}, tim_sync = 1
-                </when>
-                <otherwise>
-                    tim_identifier = null, tim_sync = 0
-                </otherwise>
-            </choose>
-        </set>
-        where id = #{id}
-    </update>
 
-    <update id="updatePrefer">
-        update tb_user
-        <set>
-            <if test="prefer.preferNatural != null">
-                prefer_natural = #{prefer.preferNatural},
-            </if>
-            <if test="prefer.preferHuman != null">
-                prefer_human = #{prefer.preferHuman},
-            </if>
-            <if test="prefer.preferRunning !=null">
-                prefer_running = #{prefer.preferRunning},
-            </if>
-            <if test="prefer.preferPlayTime != null">
-                prefer_play_time = #{prefer.preferPlayTime},
-            </if>
-            <if test="prefer.preferNightPlay != null">
-                prefer_night_play = #{prefer.preferNightPlay},
-            </if>
-            <if test="prefer.preferPubTransFirst != null">
-                prefer_pub_trans_first = #{prefer.preferPubTransFirst},
-            </if>
-            <if test="prefer.preferHotelLevel != null">
-                prefer_hotel_level = #{prefer.preferHotelLevel},
-            </if>
-            <if test="prefer.preferTripNumber != null">
-                prefer_trip_number = #{prefer.preferTripNumber},
-            </if>
-            <if test="prefer.preferFlight != null">
-                prefer_flight = #{prefer.preferFlight}
-            </if>
-        </set>
-        where
-        id=#{id}
-    </update>
 
     <select id="findOne" resultMap="userResultMap">
         select
@@ -210,4 +162,64 @@
         id=#{id}
 
     </select>
+
+    <update id="updatePrefer">
+        update tb_user
+        <set>
+            <if test="prefer != null">
+                <if test="prefer.preferNatural != null">
+                    prefer_natural = #{prefer.preferNatural},
+                </if>
+                <if test="prefer.preferHuman != null">
+                    prefer_human = #{prefer.preferHuman},
+                </if>
+                <if test="prefer.preferRunning !=null">
+                    prefer_running = #{prefer.preferRunning},
+                </if>
+                <if test="prefer.preferPlayTime != null">
+                    prefer_play_time = #{prefer.preferPlayTime},
+                </if>
+                <if test="prefer.preferNightPlay != null">
+                    prefer_night_play = #{prefer.preferNightPlay},
+                </if>
+                <if test="prefer.preferPubTransFirst != null">
+                    prefer_pub_trans_first = #{prefer.preferPubTransFirst},
+                </if>
+                <if test="prefer.preferHotelLevel != null">
+                    prefer_hotel_level = #{prefer.preferHotelLevel},
+                </if>
+                <if test="prefer.preferTripNumber != null">
+                    prefer_trip_number = #{prefer.preferTripNumber},
+                </if>
+                <if test="prefer.preferFlight != null">
+                    prefer_flight = #{prefer.preferFlight}
+                </if>
+            </if>
+        </set>
+        <where>
+          id=#{id}
+        </where>
+    </update>
+
+    <update id="updateTIMIdentifier">
+        update tb_user
+        <set>
+            <choose>
+                <when test="identifier != null">
+                    tim_identifier = #{identifier}, tim_sync = 1
+                </when>
+                <otherwise>
+                    tim_identifier = null, tim_sync = 0
+                </otherwise>
+            </choose>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updatePassword">
+        update tb_user
+        set password = #{password}
+        where id = #{id}
+    </update>
+
 </mapper>

@@ -86,6 +86,12 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
             return false;
         }
+        if (prefer == null) {
+            return false;
+        }
+        if (!prefer.hasPrefer()) {
+            return false;
+        }
 
         return userMapper.updatePrefer(id, prefer);
     }

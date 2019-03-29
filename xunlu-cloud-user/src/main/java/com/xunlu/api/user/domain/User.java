@@ -240,6 +240,18 @@ public class User {
          */
         private Flight preferFlight;
 
+        public boolean hasPrefer() {
+            return preferNatural != null
+                    || preferHuman != null
+                    || preferRunning != null
+                    || preferPlayTime != null
+                    || preferNightPlay != null
+                    || preferPubTransFirst != null
+                    || preferHotelLevel != null
+                    || preferTripNumber != null
+                    || preferFlight != null;
+        }
+
         /**
          * 自然景观枚举，10.一般，20.亲近，30.大爱
          */

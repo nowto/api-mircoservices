@@ -3,6 +3,7 @@ package com.xunlu.api.user.mapper;
 import com.xunlu.api.user.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
@@ -56,8 +57,26 @@ public interface UserMapper {
      * 更新用户的偏好.
      * 只会更新prefer中不为null的属性
      * @param id 欲更新用户的用户id
-     * @param prefer 用户偏好
+     * @param prefer 用户偏好 不能为null,且其
+     *               preferNatural,
+     *               preferHuman,
+     *               preferRunning,
+     *               preferPlayTime,
+     *               preferNightPlay,
+     *               preferPubTransFirst,
+     *               preferHotelLevel,
+     *               preferTripNumber,
+     *               preferFlight
+     *               属性中,至少要有一个不为null
      * @return true 更新成功, false 更新失败
      */
-    boolean updatePrefer(@Param("id") Integer id, @Param("prefer") User.Prefer prefer);
+    boolean updatePrefer(@Param("id") Integer id, @NonNull @Param("prefer") User.Prefer prefer);
+
+    /**
+     * 更新用户的密码.
+     * @param id 欲更新用户的用户id
+     * @param password 欲更新后的密码. 注意, 如果传入null,会将密码更新为null
+     * @return ture 更新成功, false 更新失败
+     */
+    boolean updatePassword(@Param("id") Integer id, @Param("password") String password);
 }
