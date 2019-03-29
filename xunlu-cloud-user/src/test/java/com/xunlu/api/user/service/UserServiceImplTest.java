@@ -249,4 +249,31 @@ public class UserServiceImplTest {
         Assert.assertFalse(ret);
 
     }
+
+    @Test
+    public void testUpdatePersonSign() {
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.updatePersonSign(1, "personsign")).thenReturn(true);
+        when(mockUserMapper.updatePersonSign(2, "personsign")).thenReturn(false);
+        when(mockUserMapper.updatePersonSign(null, "personsign")).thenReturn(false);
+        when(mockUserMapper.updatePersonSign(1, null)).thenReturn(true);
+        when(mockUserMapper.updatePersonSign(null, null)).thenReturn(false);
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+
+        boolean ret = userService.updatePersonSign(1, "personsign");
+        Assert.assertTrue(ret);
+
+        ret = userService.updatePersonSign(2, "personsign");
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePersonSign(null, "personsign");
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePersonSign(1, null);
+        Assert.assertTrue(ret);
+
+        ret = userService.updatePersonSign(null, null);
+        Assert.assertFalse(ret);
+    }
 }
