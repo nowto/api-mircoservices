@@ -55,9 +55,13 @@ public interface UserService {
      */
     boolean updatePrefer(Integer id, User.Prefer prefer);
 
-
-
-    void updatePassword(Integer userId, String password);
+    /**
+     * 更新用户的密码.
+     * @param id 欲更新用户的用户id
+     * @param password 欲更新后的密码. 注意, 如果传入null,会将密码更新为null
+     * @return ture 更新成功, false 更新失败
+     */
+    boolean updatePassword(Integer id, String password);
 
 
     void updateNickName(Integer userId, String nickName);

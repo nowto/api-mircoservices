@@ -254,6 +254,8 @@ public class UserMapperTest {
         Assert.assertFalse(ret);
 
         ret = userMapper.updatePassword(id, null);
+        exceptedPassword = jdbcTemplate.queryForObject("select password from tb_user where id = " + id, String.class);
         Assert.assertTrue(ret);
+        Assert.assertNull(exceptedPassword);
     }
 }

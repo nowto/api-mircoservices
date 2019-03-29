@@ -97,8 +97,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(Integer userId, String password) {
-
+    public boolean updatePassword(Integer id, String password) {
+        return userMapper.updatePassword(id, password);
     }
 
     @Override

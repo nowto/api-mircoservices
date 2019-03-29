@@ -15,7 +15,7 @@ public class UserServiceImplTest {
     TencentIMService mockTencentIMService;
 
     @Test
-    public void addUserShouldUpdateIdentiferWhenAccountImportSuccess() {
+    public void testAddUserShouldUpdateIdentiferWhenAccountImportSuccess() {
         String identifier = "identifier";
         int generatedKey = 1111;
 
@@ -44,7 +44,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void addUserShouldNoUpdateIdentiferWhenAccountImportFail() {
+    public void testAddUserShouldNoUpdateIdentiferWhenAccountImportFail() {
         String identifier = "identifier";
         int generatedKey = 1111;
 
@@ -73,7 +73,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUser() {
+    public void testGetUser() {
         mockUserMapper = mock(UserMapper.class);
         doAnswer(invocation -> {
             User u = invocation.getArgument(0);
@@ -97,13 +97,13 @@ public class UserServiceImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void findByPhoneShoudThrowExceptionWhenParamNull() {
+    public void testFindByPhoneShoudThrowExceptionWhenParamNull() {
         UserServiceImpl userService = new UserServiceImpl(null, null);
         userService.findByPhone(null);
     }
 
     @Test
-    public void findByPhonNonException() {
+    public void testFindByPhonNonException() {
         mockUserMapper = mock(UserMapper.class);
         doAnswer(invocation -> {
             User u = invocation.getArgument(0);
@@ -124,7 +124,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getUserPrefer() {
+    public void testGetUserPrefer() {
         mockUserMapper = mock(UserMapper.class);
         User.Prefer prefer = new User.Prefer();
         prefer.setUserId(1111);
@@ -149,7 +149,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findPassword() {
+    public void testFindPassword() {
         mockUserMapper = mock(UserMapper.class);
         when(mockUserMapper.findPassword(11)).thenReturn("testtest");
         when(mockUserMapper.findPassword(22)).thenReturn(null);
@@ -166,7 +166,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void updatePrefer() {
+    public void testUpdatePrefer() {
         User.Prefer prefer = new User.Prefer();
         prefer.setPreferFlight(User.Prefer.Flight.CHEAP_TRANSFER);
 
@@ -175,6 +175,50 @@ public class UserServiceImplTest {
         when(mockUserMapper.updatePrefer(2, prefer)).thenReturn(false);
         when(mockUserMapper.updatePrefer(null, prefer)).thenReturn(false);
         when(mockUserMapper.updatePrefer(1, null)).thenReturn(false);
+        when(mockUserMapper.updatePrefer(null, null)).thenReturn(false);
 
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+
+        boolean ret = userService.updatePrefer(1, prefer);
+        Assert.assertTrue(ret);
+
+        ret = userService.updatePrefer(2, prefer);
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePrefer(null, prefer);
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePrefer(1, null);
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePrefer(null, null);
+        Assert.assertFalse(ret);
+    }
+
+    @Test
+    public void testUpdatePassword() {
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.updatePassword(1, "password")).thenReturn(true);
+        when(mockUserMapper.updatePassword(2, "password")).thenReturn(false);
+        when(mockUserMapper.updatePassword(null, "password")).thenReturn(false);
+        when(mockUserMapper.updatePassword(1, null)).thenReturn(true);
+        when(mockUserMapper.updatePassword(null, null)).thenReturn(false);
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+
+        boolean ret = userService.updatePassword(1, "password");
+        Assert.assertTrue(ret);
+
+        ret = userService.updatePassword(2, "password");
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePassword(null, "password");
+        Assert.assertFalse(ret);
+
+        ret = userService.updatePassword(1, null);
+        Assert.assertTrue(ret);
+
+        ret = userService.updatePassword(null, null);
+        Assert.assertFalse(ret);
     }
 }
