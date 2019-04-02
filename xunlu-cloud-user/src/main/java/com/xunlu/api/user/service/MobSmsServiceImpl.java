@@ -3,6 +3,7 @@ package com.xunlu.api.user.service;
 import com.xunlu.api.user.security.MobSmsClient;
 import com.xunlu.api.user.security.SmsClient;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map;
  * <a href="http://wiki.mob.com/%e9%aa%8c%e8%af%81%e7%a0%81%e6%9c%8d%e5%8a%a1%e5%99%a8%e6%a0%a1%e9%aa%8c%e6%8e%a5%e5%8f%a3/">验证码服务器校验接口</a>
  * @author liweibo
  */
+@Service
 public class MobSmsServiceImpl implements SmsService {
     /**
      * 丽江
@@ -39,6 +41,9 @@ public class MobSmsServiceImpl implements SmsService {
         appKey2MobAppKeyMap.put(APPKEY_MACAU, "1e84a5d2a2ef0");
         appKey2MobAppKeyMap.put(APPKEY_PANJIN, "2067c006d1348");
         appKey2MobAppKeyMap.put(APPKEY_XINJIANG, "29cb3fbfdb19e");
+    }
+
+    public MobSmsServiceImpl() {
     }
 
 
