@@ -3,7 +3,7 @@ package com.xunlu.api.user.domain;
 import com.xunlu.api.user.infrastructure.BaseCodeEnum;
 
 /**
- * 通过第三方登录注册的用户.
+ * 通过第三方登录注册的用户, 是{@link User}的一个特例.
  * 比如微信登录,微博登录等
  * @author liweibo
  */
