@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.ServletException;
@@ -28,6 +29,10 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         super(requiresAuthenticationRequestMatcher);
     }
 
+    public SmsCodeAuthenticationFilter() {
+        super(new AntPathRequestMatcher("/token", HttpMethod.POST.name()));
+    }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         if (!HttpMethod.POST.matches(request.getMethod())) {
@@ -49,7 +54,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         zone = zone.trim();
         phone = phone.trim();
         smsCode = smsCode.trim();
-        SmsCredentials smsCredentials = new SmsCredentials(appKey, zone, phone);
+        SmsCredentials smsCredentials = new SmsCredentials(appKey, zone, smsCode);
 
         SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(phone, smsCredentials);
         setDetails(request, authRequest);

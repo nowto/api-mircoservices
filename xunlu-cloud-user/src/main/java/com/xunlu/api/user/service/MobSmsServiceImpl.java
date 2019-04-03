@@ -35,7 +35,10 @@ public class MobSmsServiceImpl implements SmsService {
     public static final String DEFAULT_MOB_APPkEY = "1164e90a15fa8";
 
     private static final Map<String, SmsClient> appKey2smsClientMap = new HashMap<>();
-    //protected for unit test
+
+    /**
+     *protected for unit test
+     */
     protected static final Map<String, String> appKey2MobAppKeyMap = new HashMap<>();
 
     static {
