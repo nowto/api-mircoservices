@@ -1,5 +1,6 @@
 package com.xunlu.api.user.security;
 
+import com.xunlu.api.user.domain.User;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
@@ -35,7 +36,7 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
-        setAuthenticated(true);
+        super.setAuthenticated(true);
     }
 
     @Override
@@ -62,5 +63,17 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
     public void eraseCredentials() {
         super.eraseCredentials();
         credentials = null;
+    }
+
+    /**
+     * 覆盖，使用自定义的{@link com.xunlu.api.user.domain.User}对象,获取手机号
+     * @return
+     */
+    @Override
+    public String getName() {
+        if (this.getPrincipal() instanceof User) {
+            return ((User) this.getPrincipal()).getPhone();
+        }
+        return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
     }
 }

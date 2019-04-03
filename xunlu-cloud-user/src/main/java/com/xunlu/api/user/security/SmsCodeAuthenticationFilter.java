@@ -5,7 +5,6 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.ServletException;
@@ -23,6 +22,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
     public static final String SECURITY_ZONE = "zone";
     public static final String SECURITY_PHONE = "phone";
     public static final String SECURITY_SMSCODE = "smsCode";
+    public static final String SECURITY_APPKEY = "appKey";
 
     public SmsCodeAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
         super(requiresAuthenticationRequestMatcher);
@@ -33,7 +33,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         if (!HttpMethod.POST.matches(request.getMethod())) {
             throw new AuthenticationServiceException("认证不支持请求方法: " + request.getMethod());
         }
-
+        String appKey = obtainAppKey(request);
         String zone = obtainZone(request);
         String phone = obtainPhone(request);
         String smsCode = obtainSmsCode(request);
@@ -48,11 +48,21 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         }
         zone = zone.trim();
         phone = phone.trim();
-        Principal principal = new Principal(zone, phone);
+        smsCode = smsCode.trim();
+        SmsCredentials smsCredentials = new SmsCredentials(appKey, zone, phone);
 
-        SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(principal, smsCode);
+        SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(phone, smsCredentials);
         setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);
+    }
+
+    /**
+     * 从请求中获取手机号
+     * @param request 请求
+     * @return 手机号
+     */
+    private String obtainAppKey(HttpServletRequest request) {
+        return request.getParameter(SECURITY_APPKEY);
     }
 
     /**
