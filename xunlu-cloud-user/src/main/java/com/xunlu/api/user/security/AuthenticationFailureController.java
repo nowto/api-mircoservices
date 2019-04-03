@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *     smsCodeAuthenticationFilter.setAuthenticationFailureHandler(
  *          new ForwardAuthenticationFailureHandler(AUTHENTICATION_FAILURE_FORWARD_URL));
  * </code>
- * 会将认证失败的处理重定向该 Controller
+ * 会将认证失败的处理转发到该 Controller
  *
  * @see Config#configure(HttpSecurity)
+ * @see org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler
  * @author liweibo
  */
 @Controller
