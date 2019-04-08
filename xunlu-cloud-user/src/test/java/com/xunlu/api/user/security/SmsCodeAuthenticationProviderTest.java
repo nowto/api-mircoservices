@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 import javax.validation.constraints.AssertTrue;
@@ -50,9 +51,9 @@ public class SmsCodeAuthenticationProviderTest {
 
         try {
             provider.authenticate(token);
-            fail("Should have thrown InternalAuthenticationServiceException");
+            fail("Should have thrown AuthenticationException");
         }
-        catch (InternalAuthenticationServiceException expected) {
+        catch (AuthenticationException expected) {
 
         }
     }
@@ -64,9 +65,9 @@ public class SmsCodeAuthenticationProviderTest {
 
         try {
             provider.authenticate(token);
-            fail("Should have thrown InternalAuthenticationServiceException");
+            fail("Should have thrown AuthenticationException");
         }
-        catch (InternalAuthenticationServiceException expected) {
+        catch (AuthenticationException expected) {
 
         }
     }
@@ -201,6 +202,9 @@ public class SmsCodeAuthenticationProviderTest {
     private class MockSmsService implements SmsService {
         @Override
         public boolean verify(String appKey, String zone, String phone, String code) throws ServiceException {
+            if ("INVALID_PHONE".equals(phone)) {
+                throw new ServiceException();
+            }
             if ("1111".equals(code)) {
                 return true;
             }

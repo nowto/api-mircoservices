@@ -1,4 +1,4 @@
-package com.xunlu.api.user.mapper;
+package com.xunlu.api.user.repository.mapper;
 
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
@@ -13,9 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.constraints.AssertTrue;
 import java.util.Map;
-import java.util.Objects;
 
 @RunWith(SpringRunner.class)
 @MybatisTest

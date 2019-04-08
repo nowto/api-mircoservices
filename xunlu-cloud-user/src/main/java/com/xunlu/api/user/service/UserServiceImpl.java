@@ -1,10 +1,8 @@
 package com.xunlu.api.user.service;
 
 import com.xunlu.api.user.domain.User;
-import com.xunlu.api.user.mapper.UserMapper;
-import com.xunlu.api.user.security.Config;
+import com.xunlu.api.user.repository.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

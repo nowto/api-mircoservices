@@ -1,4 +1,4 @@
-package com.xunlu.api.user.mapper;
+package com.xunlu.api.user.repository.mapper;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

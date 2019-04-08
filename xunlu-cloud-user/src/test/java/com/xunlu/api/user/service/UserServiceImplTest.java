@@ -1,7 +1,7 @@
 package com.xunlu.api.user.service;
 
 import com.xunlu.api.user.domain.User;
-import com.xunlu.api.user.mapper.UserMapper;
+import com.xunlu.api.user.repository.mapper.UserMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

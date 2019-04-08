@@ -8,13 +8,13 @@ import static org.junit.Assert.*;
 
 public class AbstractTokenServiceTest {
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = TokenCreationException.class)
     public void shoudThrowExceptionWhenUserIsNull() {
         TestTokenServiceImpl tokenService = new TestTokenServiceImpl();
         tokenService.generateToken(null);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = TokenCreationException.class)
     public void shoudThrowExceptionWhenUserIdIsNull() {
         TestTokenServiceImpl tokenService = new TestTokenServiceImpl();
         User user = new User();
@@ -27,8 +27,9 @@ public class AbstractTokenServiceTest {
         TestTokenServiceImpl tokenService = new TestTokenServiceImpl();
         User user = new User();
         user.setId(1);
-        String token = tokenService.generateToken(user);
+        AccessToken token = tokenService.generateToken(user);
         assertNotNull(token);
+        assertNotNull(token.getToken());
     }
 
     static class TestTokenServiceImpl extends  AbstractTokenService {

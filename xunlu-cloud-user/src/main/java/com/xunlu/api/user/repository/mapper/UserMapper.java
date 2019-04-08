@@ -1,12 +1,10 @@
-package com.xunlu.api.user.mapper;
+package com.xunlu.api.user.repository.mapper;
 
 import com.xunlu.api.user.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-
-import java.util.List;
 
 /**
  * Mybatis UserMapper

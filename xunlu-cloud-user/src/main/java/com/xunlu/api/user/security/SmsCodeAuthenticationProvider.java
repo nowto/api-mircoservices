@@ -32,11 +32,17 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("手机验证码为空");
         }
 
+        //check sms code
+        String appKey = smsCredentials.getAppKey();
+        String zone = smsCredentials.getZone();
         String phone = authentication.getName();
+        String smsCode = smsCredentials.getCode();
+        if (smsCode == null) {
+            throw new BadCredentialsException("手机验证码为空");
+        }
+        checkSmsCode(appKey, zone, phone, smsCode);
 
         User user = userService.findByPhone(phone);
-        String zone = smsCredentials.getZone();
-        String smsCode = smsCredentials.getCode();
         if (user == null) {
             userService.addUser(User.newPhoneRegisterUser(phone, zone, smsCode));
             user = userService.findByPhone(phone);
@@ -44,13 +50,6 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         if (user == null) {
             throw new InternalAuthenticationServiceException("指定手机号[" + phone + "]获取不到用户信息");
         }
-
-        if (smsCode == null) {
-            throw new BadCredentialsException("手机验证码为空");
-        }
-
-        String appKey = smsCredentials.getAppKey();
-        checkSmsCode(appKey, zone, phone, smsCode);
 
         SmsCodeAuthenticationToken successToken = new SmsCodeAuthenticationToken(user, authentication.getCredentials(),
                 AuthorityUtils.createAuthorityList("ROLE_USER"));
