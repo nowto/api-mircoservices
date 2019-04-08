@@ -1,8 +1,11 @@
 package com.xunlu.api.user.domain;
 
 import com.xunlu.api.user.infrastructure.BaseCodeEnum;
+import com.xunlu.api.user.util.UserUtil;
+import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,10 +91,26 @@ public class User {
         this.extraInfo = extraInfo;
     }
 
+    /**
+     * 创建一个第一次手机号登录时默认注册时的一个用户
+     * @param phone 手机号
+     * @param areaCode 区号 例如中国:86
+     * @param password
+     * @return
+     */
+    public static final User newPhoneRegisterUser(String phone, String areaCode, String password) {
+        User user = new User();
+        user.setPhone(phone);
+        user.setAreaCode(areaCode);
+        user.setNickName(UserUtil.generateDefaultNickName());
+        user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        user.setCreateTime(LocalDateTime.now());
+        return user;
+    }
 
     @Override
     public String toString() {
-        return "";
+        return getUserName();
     }
 
     public Integer getId() {
@@ -240,6 +259,10 @@ public class User {
          */
         private Flight preferFlight;
 
+        /**
+         * 用户是否具有某项偏好
+         * @return true 有, false 没有
+         */
         public boolean hasPrefer() {
             return preferNatural != null
                     || preferHuman != null
