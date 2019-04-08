@@ -33,18 +33,23 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         }
 
         String phone = authentication.getName();
+
         User user = userService.findByPhone(phone);
+        String zone = smsCredentials.getZone();
+        String smsCode = smsCredentials.getCode();
+        if (user == null) {
+            userService.addUser(User.newPhoneRegisterUser(phone, zone, smsCode));
+            user = userService.findByPhone(phone);
+        }
         if (user == null) {
             throw new InternalAuthenticationServiceException("指定手机号[" + phone + "]获取不到用户信息");
         }
 
-        String smsCode = smsCredentials.getCode();
         if (smsCode == null) {
             throw new BadCredentialsException("手机验证码为空");
         }
 
         String appKey = smsCredentials.getAppKey();
-        String zone = smsCredentials.getZone();
         checkSmsCode(appKey, zone, phone, smsCode);
 
         SmsCodeAuthenticationToken successToken = new SmsCodeAuthenticationToken(user, authentication.getCredentials(),

@@ -10,6 +10,8 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import javax.validation.constraints.AssertTrue;
+
 import static org.junit.Assert.*;
 
 public class SmsCodeAuthenticationProviderTest {
@@ -115,13 +117,22 @@ public class SmsCodeAuthenticationProviderTest {
         assertEquals(result.getCredentials(), result2.getCredentials());
     }
 
+    @Test
+    public void testNewRegisterUserWhenFindPhoneNotExist() {
+        SmsCodeAuthenticationToken token = new SmsCodeAuthenticationToken("18888888888", new SmsCredentials("1111", "86", "1111"));
+        MockUserService mockUserService = new MockUserService();
+        SmsCodeAuthenticationProvider provider = new SmsCodeAuthenticationProvider(mockUserService, new MockSmsService());
+        Authentication t = provider.authenticate(token);
+        assertTrue(mockUserService.addUserIncoked);
+        assertTrue(t.getPrincipal() instanceof User);
+    }
 
 
     private class MockUserService implements UserService {
-
+        private boolean addUserIncoked = false;
         @Override
         public void addUser(User user) {
-
+            addUserIncoked = true;
         }
 
         @Override
@@ -134,6 +145,12 @@ public class SmsCodeAuthenticationProviderTest {
             if ("17777777777".equals(phone)) {
                 User user = new User();
                 user.setPhone("17777777777");
+                user.setId(1);
+                return user;
+            }
+            if (addUserIncoked) {
+                User user = new User();
+                user.setPhone("18888888888");
                 user.setId(1);
                 return user;
             }
