@@ -1,22 +1,38 @@
 package com.xunlu.api.user;
 
+import com.xunlu.api.user.infrastructure.StringToBaseCodeEnumConverterFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
+ * SpringBoot 启动类
  * @author liweibo
  */
 @SpringBootApplication
 public class UserMicroserviceApplication {
+	@EnableWebMvc
+	@Configuration
+	public static class WebConfig implements WebMvcConfigurer {
+		@Override
+		public void addFormatters(FormatterRegistry registry) {
+			registry.addConverterFactory(new StringToBaseCodeEnumConverterFactory<>());
+		}
+	}
+
 	@Bean
 	public RestTemplate basicRestTemplate(RestTemplateBuilder restTemplateBuilder) {
 		return restTemplateBuilder.build();
