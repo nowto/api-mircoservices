@@ -27,7 +27,7 @@ public class TokenServiceImpl extends AbstractTokenService implements TokenServi
 
         if (token == null) {
             token = generateToken(user);
-            tokenRepository.addToken(user, token);
+            tokenRepository.addToken(user, token.getToken());
         }
         return token;
     }

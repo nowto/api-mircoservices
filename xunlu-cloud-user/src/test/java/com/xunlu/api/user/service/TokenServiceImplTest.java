@@ -45,7 +45,7 @@ public class TokenServiceImplTest {
         AccessToken token = tokenService.getExistingOrGenerateNew(user);
         Assert.assertNotNull(token);
         Assert.assertNotNull(token.getToken());
-        verify(tokenRepository).addToken(eq(user), eq(token));
+        verify(tokenRepository).addToken(eq(user), eq(token.getToken()));
     }
 
     @Test(expected = UserNotExistException.class)

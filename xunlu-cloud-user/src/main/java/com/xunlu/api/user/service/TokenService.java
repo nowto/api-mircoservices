@@ -5,7 +5,8 @@ import com.xunlu.api.user.domain.User;
 import org.springframework.lang.NonNull;
 
 /**
- * {@link com.xunlu.api.user.domain.AccessToken}服务类
+ * {@link com.xunlu.api.user.domain.AccessToken}服务类.
+ * token除非用户主动取消登录, 永远不会自动过期. 且下次登录会重用
  * @author liweibo
  */
 public interface TokenService {
