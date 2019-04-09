@@ -4,6 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
@@ -32,6 +35,23 @@ public class UserMicroserviceApplication {
 					response.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
 					return response;
 				}).build();
+	}
+
+	/**
+	 * redisTemplate, key为string, value为json
+	 * @param redisConnectionFactory
+	 * @return
+	 */
+	@Bean
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		redisTemplate.setKeySerializer(RedisSerializer.string());
+		redisTemplate.setValueSerializer(RedisSerializer.json());
+		redisTemplate.setHashKeySerializer(RedisSerializer.string());
+		redisTemplate.setHashValueSerializer(RedisSerializer.json());
+		redisTemplate.afterPropertiesSet();
+		return redisTemplate;
 	}
 
 	public static void main(String[] args) {

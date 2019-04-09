@@ -5,6 +5,8 @@ import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.TokenRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * {@link TokenService}的实现
  * @author liweibo
@@ -23,10 +25,11 @@ public class TokenServiceImpl extends AbstractTokenService implements TokenServi
             throw new UserNotExistException("用户不存在");
         }
 
-        AccessToken token = tokenRepository.findOne(user);
+        String tokenStr = tokenRepository.findOne(user);
 
-        if (token == null) {
-            token = generateToken(user);
+        AccessToken token = tokenStr == null ? generateToken(user) : new AccessToken(tokenStr);
+
+        if (!Objects.equals(tokenStr, token.getToken())) {
             tokenRepository.addToken(user, token.getToken());
         }
         return token;

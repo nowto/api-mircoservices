@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,12 +25,11 @@ public class TokenServiceImplTest {
     public void testExisting() {
         User user = new User();
         user.setId(1);
-        AccessToken existingToken = new AccessToken("hello");
-        when(tokenRepository.findOne(user)).thenReturn(existingToken);
+        when(tokenRepository.findOne(user)).thenReturn("hello");
 
 
         AccessToken token = tokenService.getExistingOrGenerateNew(user);
-        Assert.assertEquals(existingToken, token);
+        Assert.assertEquals("hello", token.getToken());
         verify(tokenRepository, never()).addToken(any(), any());
     }
 

@@ -14,12 +14,18 @@ public interface TokenRepository {
      * @param user 要获取token的用户
      * @return token,
      */
-    @Nullable AccessToken findOne(User user);
+    @Nullable String findOne(User user);
 
     /**
      * 将{@code user}的{@code token}存入数据库
      * @param user token属主
      * @param token token
      */
-    void addToken(User user, AccessToken token);
+    void addToken(User user, String token);
+
+    /**
+     * 删除用户id为{@code userId}的token
+     * @param userId
+     */
+    void deleteToken(Integer userId);
 }
