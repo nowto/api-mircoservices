@@ -3,6 +3,11 @@ spring:
     url: jdbc:mysql://47.92.74.237:3306/xunlu?useUnicode=true&autoReconnect=true&characterEncoding=UTF8
     username: xunlu_dev
     password: xunlu2018
+  redis:
+    host: 47.92.74.237
+    port: 6379
+    password: _xunlun~6cache!
+    database: 1
 # 将自有帐号导入云通信ＩＭ时生成Identifier时的前缀
 tencent-im-service:
   make-identifier-prefix: dev
