@@ -4,6 +4,7 @@ import com.xunlu.api.user.infrastructure.BaseCodeEnum;
 import com.xunlu.api.user.util.UserUtil;
 import org.springframework.util.DigestUtils;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +15,8 @@ import java.util.Map;
  *
  * @author liweibo
  */
-public class User {
+public class User implements Serializable {
+
     /**
      * 用户id
      */
