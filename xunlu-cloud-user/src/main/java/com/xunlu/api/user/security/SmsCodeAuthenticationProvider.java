@@ -12,6 +12,9 @@ import org.springframework.security.core.authority.AuthorityUtils;
 
 /**
  * 一个AuthenticationProvider实现, 认证手机号、验证码登录.
+ * 与{@link SmsCodeAuthenticationFilter}、{@link SmsCodeAuthenticationToken} 配套使用
+ * @see SmsCodeAuthenticationFilter
+ * @see SmsCodeAuthenticationToken
  * @author liweibo
  */
 public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
@@ -40,7 +43,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         if (smsCode == null) {
             throw new BadCredentialsException("手机验证码为空");
         }
-        checkSmsCode(appKey, zone, phone, smsCode);
+//        checkSmsCode(appKey, zone, phone, smsCode);
 
         User user = userService.findByPhone(phone);
         if (user == null) {

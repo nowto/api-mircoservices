@@ -17,6 +17,9 @@ import java.io.IOException;
  * 处理短信验证码认证过滤器.
  * 登录请求必须具有两个参数:手机号(phone)、验证码（smsCode）.
  * 请求处理的URL{@code /token}, 仅支持POST请求.
+ * 与{@link SmsCodeAuthenticationProvider}、{@link SmsCodeAuthenticationToken} 配套使用
+ * @see SmsCodeAuthenticationProvider
+ * @see SmsCodeAuthenticationToken
  * @author liweibo
  */
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
