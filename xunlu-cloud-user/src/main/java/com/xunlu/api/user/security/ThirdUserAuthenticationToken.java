@@ -78,6 +78,9 @@ public class ThirdUserAuthenticationToken extends AbstractAuthenticationToken {
         if (this.getPrincipal() instanceof User) {
             return ((ThirdUser) this.getPrincipal()).getOpenid();
         }
+        if (this.getPrincipal() instanceof ThirdUserPrincipal) {
+            return ((ThirdUserPrincipal) this.getPrincipal()).getOpenid();
+        }
         return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
     }
 }
