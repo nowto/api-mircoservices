@@ -58,6 +58,43 @@
             )
     </insert>
 
+    <sql id="selectUserSql" >
+        select
+        u.id as id,
+        u.user_name as user_name,
+        ifnull(u.nick_name, tu.nick_name) as nick_name,
+        u.person_sign as person_sign,
+        ifnull(u.photo, tu.img) as photo,
+        u.email as email,
+        u.phone as phone,
+        u.password as password,
+        u.prefer_natural as prefer_natural,
+        u.prefer_human as prefer_human,
+        u.prefer_running as prefer_running,
+        u.prefer_play_time as prefer_play_time,
+        u.prefer_night_play as prefer_night_play,
+        u.prefer_pub_trans_first as prefer_pub_trans_first,
+        u.prefer_hotel_level as prefer_hotel_level,
+        u.create_time as create_time,
+        u.prefer_trip_number as prefer_trip_number,
+        u.prefer_flight as prefer_flight,
+        u.area_code as area_code,
+        u.tim_sync as tim_sync,
+        u.tim_identifier as tim_identifier,
+        u.is_spider as is_spider,
+
+        tu.user_id is not null as third_user_type,
+        tu.type as type,
+        tu.openid as openid
+        from
+        tb_user as u
+        left join tb_third_user as tu on  tu.user_id = u.id
+    </sql>
+
+    <select id="getById" resultMap="userResultMap">
+        <include refid="selectUserSql"/>
+        WHERE u.id = #{id} limit 1
+    </select>
 
     <select id="findOne" resultMap="userResultMap">
         select
@@ -179,7 +216,6 @@
         id=#{id}
 
     </select>
-
     <update id="updatePrefer">
         update tb_user
         <set>

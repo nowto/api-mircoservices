@@ -30,6 +30,12 @@ public interface UserMapper {
     boolean addThirdUser(ThirdUser user);
 
     /**
+     * 获取用户根据id
+     * @param id 用户id
+     * @return 用户
+     */
+    User getById(Integer id);
+    /**
      * 查找一个用户.
      * 将使用example的每个不为null的属性做等值条件查询, 如果查找到多个,将只返回第一个
      * @param example 条件

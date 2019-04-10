@@ -59,12 +59,11 @@ public class UserMapperTest {
     @Sql(statements = "INSERT INTO xunlu.tb_user\n" +
             "(user_name, nick_name, person_sign, photo, email, phone, password, prefer_natural, prefer_human, prefer_running, prefer_play_time, prefer_night_play, prefer_pub_trans_first, prefer_hotel_level, create_time, prefer_trip_number, prefer_flight, area_code, tim_sync, tim_identifier, is_spider)\n" +
             "VALUES('"+ USER_NAME +"', '小丸子', '', 'http://wx.qlogo.cn/mmopen/nibxxlib1VaPfA0MxaGnppIyX5D30vgaUykqe1sJ8icWcFvUO376eDUIbqWcM72tHwdPBwygJm69BcL1VOQSt1BtA/0', NULL, NULL, NULL, 20, 20, 20, 20, 10, 20, 20, '2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n")
-    public void testFindOneById() {
+    public void testGetById() {
         Integer id = getIdUserNameEqual(USER_NAME);
 
-        User user = new User();
-        user.setId(id);
-        User findUser = userMapper.findOne(user);
+
+        User findUser = userMapper.getById(id);
 
         Assert.assertTrue(findUser instanceof User);
         Assert.assertNotNull(findUser);
