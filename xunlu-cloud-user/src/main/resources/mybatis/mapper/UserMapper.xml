@@ -96,6 +96,11 @@
         WHERE u.id = #{id} limit 1
     </select>
 
+    <select id="findByPhone" resultMap="userResultMap">
+        <include refid="selectUserSql"/>
+        WHERE u.phone = #{phone} limit 1
+    </select>
+
     <select id="findOne" resultMap="userResultMap">
         select
         u.id as id,

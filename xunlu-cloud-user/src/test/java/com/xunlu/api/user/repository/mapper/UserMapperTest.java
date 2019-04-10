@@ -74,16 +74,14 @@ public class UserMapperTest {
     @Test
     @Sql(statements = {"INSERT INTO xunlu.tb_user\n" +
             "(id, user_name, nick_name, person_sign, photo, email, phone, password, prefer_natural, prefer_human, prefer_running, prefer_play_time, prefer_night_play, prefer_pub_trans_first, prefer_hotel_level, create_time, prefer_trip_number, prefer_flight, area_code, tim_sync, tim_identifier, is_spider)\n" +
-            "VALUES("+Integer.MAX_VALUE+", '"+ USER_NAME +"', '小丸子', '', NULL, NULL, NULL, NULL, 20, 20, 20, 20, 10, 20, 20, '2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n",
+            "VALUES("+Integer.MAX_VALUE+", '"+ USER_NAME +"', '小丸子', '', NULL, NULL, 'phone', NULL, 20, 20, 20, 20, 10, 20, 20, '2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n",
     "INSERT INTO xunlu.tb_third_user\n" +
             "(user_id, `type`, nick_name, img, openid, create_time)\n" +
             "VALUES("+Integer.MAX_VALUE+", 3, '石沉海', 'http://test.com/test.jpg', 'D644049F4091B90CA941C5CAF3290C14', '2015-08-31 23:17:25.000');\n"})
-    public void testFindOneThirdUser() {
+    public void testFindByPhone() {
         Integer id = getIdUserNameEqual(USER_NAME);
 
-        User user = new User();
-        user.setId(id);
-        User findUser = userMapper.findOne(user);
+        User findUser = userMapper.findByPhone("phone");
 
         Assert.assertNotNull(findUser);
         Assert.assertEquals(id, findUser.getId());

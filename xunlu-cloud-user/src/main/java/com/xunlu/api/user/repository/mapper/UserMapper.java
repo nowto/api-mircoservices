@@ -35,6 +35,14 @@ public interface UserMapper {
      * @return 用户
      */
     User getById(Integer id);
+
+    /**
+     * 获取用户根据phone
+     * @param phone 用户手机号
+     * @return 用户
+     */
+    User findByPhone(String phone);
+
     /**
      * 查找一个用户.
      * 将使用example的每个不为null的属性做等值条件查询, 如果查找到多个,将只返回第一个
