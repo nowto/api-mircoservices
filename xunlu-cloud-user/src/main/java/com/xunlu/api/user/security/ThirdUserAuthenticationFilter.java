@@ -37,10 +37,8 @@ public class ThirdUserAuthenticationFilter extends AbstractAuthenticationProcess
      * principal
      */
     public static final String SECURITY_OPENID = "openid";
-    public static final String SECURITY_ACCESS_TOKEN = "access_token";
     public static final String SECURITY_USERNAME = "user_name";
     public static final String SECURITY_IMGURL = "img_url";
-    public static final String SECURITY_UNIONID = "unionid";
 
     public ThirdUserAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
         super(requiresAuthenticationRequestMatcher);
@@ -65,26 +63,26 @@ public class ThirdUserAuthenticationFilter extends AbstractAuthenticationProcess
     }
 
     private ThirdUserPrincipal obtainPrincipal(HttpServletRequest request) {
+        String type = obtainRequestParameter(request, SECURITY_TYPE);
+        ThirdUser.Type loginType = NumberUtils.isParsable(type) ?
+                CodeEnumUtil.codeOf(ThirdUser.Type.class, Integer.valueOf(type), ThirdUser.Type.WEIXIN) : ThirdUser.Type.WEIXIN;
+
         String openid = obtainRequestParameter(request, SECURITY_OPENID);
         openid = StringUtils.defaultString(openid, "");
         openid = openid.trim();
-        String accessToken = obtainRequestParameter(request, SECURITY_ACCESS_TOKEN);
+
         String userName = obtainRequestParameter(request, SECURITY_USERNAME);
         String imgUrl = obtainRequestParameter(request, SECURITY_IMGURL);
-        String unionid = obtainRequestParameter(request, SECURITY_UNIONID);
-        return new ThirdUserPrincipal(openid, accessToken, userName, imgUrl, unionid);
+
+        return new ThirdUserPrincipal(loginType, openid, userName, imgUrl);
     }
 
     private ThirdUserCredentials obtainCredentials(HttpServletRequest request) {
-        String type = obtainRequestParameter(request, SECURITY_TYPE);
         String signature = obtainRequestParameter(request, SECURITY_SIGNATURE);
         String key = obtainRequestParameter(request, SECURITY_KEY);
 
         ThirdUserCredentials credentials = new ThirdUserCredentials(signature);
         credentials.setSignatureKey(key);
-        ThirdUser.Type loginType = NumberUtils.isParsable(type) ?
-                CodeEnumUtil.codeOf(ThirdUser.Type.class, Integer.valueOf(type), ThirdUser.Type.WEIXIN) : ThirdUser.Type.WEIXIN;
-        credentials.setType(loginType);
         return credentials;
     }
 

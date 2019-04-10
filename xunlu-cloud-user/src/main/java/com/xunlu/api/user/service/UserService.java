@@ -1,5 +1,6 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import org.springframework.lang.NonNull;
 
@@ -29,6 +30,15 @@ public interface UserService {
      * @throws IllegalArgumentException 如果传参为null
      */
     User findByPhone(@NonNull String phone) throws IllegalArgumentException;
+
+    /**
+     * 根据登录类型和openid获取第三方登录用户
+     * @param type 登录类型， 不可以为null
+     * @param openid 第三方openid， 不可以为null
+     * @return 第三方用户， 如果该条件用户不存在， 返回null
+     * @throws IllegalArgumentException 如果传参为null
+     */
+    ThirdUser findThirdUserByTypeAndOpenid(ThirdUser.Type type, String openid);
 
     /**
      * 根据用户id获取用户密码
@@ -85,4 +95,5 @@ public interface UserService {
      * @return true 更新成功, false 更新失败
      */
     boolean updatePhoto(Integer id, String photo);
+
 }

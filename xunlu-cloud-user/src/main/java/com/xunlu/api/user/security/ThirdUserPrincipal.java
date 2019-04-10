@@ -1,30 +1,37 @@
 package com.xunlu.api.user.security;
 
+import com.xunlu.api.user.domain.ThirdUser;
+
 /**
  * 代表第三方用户身份
  * @author liweibo
  */
 public class ThirdUserPrincipal {
+    /**
+     * 第三方登录方式
+     */
+    private ThirdUser.Type type;
     private String openid;
-    private String accessToken;
     private String userName;
     private String imgUrl;
-    private String unionid;
 
-    public ThirdUserPrincipal(String openid, String accessToken, String userName, String imgUrl, String unionid) {
+    public ThirdUserPrincipal(ThirdUser.Type type, String openid, String userName, String imgUrl) {
+        this.type = type;
         this.openid = openid;
-        this.accessToken = accessToken;
         this.userName = userName;
         this.imgUrl = imgUrl;
-        this.unionid = unionid;
+    }
+
+    public ThirdUser.Type getType() {
+        return type;
+    }
+
+    public void setType(ThirdUser.Type type) {
+        this.type = type == null ? ThirdUser.Type.WEIXIN : type;
     }
 
     public String getOpenid() {
         return openid;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
     }
 
     public String getUserName() {
@@ -33,9 +40,5 @@ public class ThirdUserPrincipal {
 
     public String getImgUrl() {
         return imgUrl;
-    }
-
-    public String getUnionid() {
-        return unionid;
     }
 }

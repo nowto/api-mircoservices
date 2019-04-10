@@ -75,12 +75,26 @@ public class ThirdUserAuthenticationToken extends AbstractAuthenticationToken {
      */
     @Override
     public String getName() {
-        if (this.getPrincipal() instanceof User) {
+        if (this.getPrincipal() instanceof ThirdUser) {
             return ((ThirdUser) this.getPrincipal()).getOpenid();
         }
         if (this.getPrincipal() instanceof ThirdUserPrincipal) {
             return ((ThirdUserPrincipal) this.getPrincipal()).getOpenid();
         }
         return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
+    }
+
+    public ThirdUser.Type getLoginType() {
+        if (this.getPrincipal() instanceof ThirdUser) {
+            return ((ThirdUser) this.getPrincipal()).getType();
+        }
+        if (this.getPrincipal() instanceof ThirdUserPrincipal) {
+            return ((ThirdUserPrincipal) this.getPrincipal()).getType();
+        }
+        return ThirdUser.Type.WEIXIN;
+    }
+
+    public String getOpenid() {
+        return getName();
     }
 }

@@ -1,6 +1,7 @@
 package com.xunlu.api.user.domain;
 
 import com.xunlu.api.user.infrastructure.BaseCodeEnum;
+import com.xunlu.api.user.security.ThirdUserPrincipal;
 import com.xunlu.api.user.util.UserUtil;
 import org.springframework.util.DigestUtils;
 
@@ -94,11 +95,11 @@ public class User implements Serializable {
     }
 
     /**
-     * 创建一个第一次手机号登录时默认注册时的一个用户
+     * 创建一个第一次手机号登录时默认注册时的用户
      * @param phone 手机号
      * @param areaCode 区号 例如中国:86
      * @param password
-     * @return
+     * @return 用户
      */
     public static final User newPhoneRegisterUser(String phone, String areaCode, String password) {
         User user = new User();
@@ -106,6 +107,24 @@ public class User implements Serializable {
         user.setAreaCode(areaCode);
         user.setNickName(UserUtil.generateDefaultNickName());
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        user.setCreateTime(LocalDateTime.now());
+        return user;
+    }
+
+    /**
+     * 创建一个首次第三方登录时默认注册时的用户
+     * @return
+     */
+    public static final ThirdUser newThirdRegisterUser(ThirdUserPrincipal principal) {
+        ThirdUser user = new ThirdUser();
+
+        user.setType(principal.getType());
+        user.setNickName(principal.getUserName());
+        user.setPhoto(principal.getImgUrl());
+        user.setOpenid(principal.getOpenid());
+        user.setNickName(principal.getUserName());
+        user.setImgUrl(principal.getImgUrl());
+
         user.setCreateTime(LocalDateTime.now());
         return user;
     }

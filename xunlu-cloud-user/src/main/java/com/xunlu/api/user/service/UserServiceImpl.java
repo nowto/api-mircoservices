@@ -1,5 +1,6 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,6 +68,11 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setPhone(phone);
         return userMapper.findOne(user);
+    }
+
+    @Override
+    public ThirdUser findThirdUserByTypeAndOpenid(ThirdUser.Type type, String openid) {
+        return null;
     }
 
     @Override
