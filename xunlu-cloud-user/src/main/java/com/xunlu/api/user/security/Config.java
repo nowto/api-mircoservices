@@ -46,9 +46,6 @@ public class Config extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         AntPathRequestMatcher tokenRequestMatcher = new AntPathRequestMatcher("/token", HttpMethod.POST.name());
 
-
-
-
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -58,13 +55,17 @@ public class Config extends WebSecurityConfigurerAdapter {
                 .logout().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                    .anyRequest().permitAll();
+                    .anyRequest().permitAll();// 用户微服务只做认证，不做鉴权，鉴权交给网关
 
         SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter(tokenRequestMatcher);
         smsCodeAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(new ForwardAuthenticationFailureHandler(AUTHENTICATION_FAILURE_FORWARD_URL));
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(new ForwardAuthenticationSuccessHandler(AUTHENTICATION_SUCCESS_FORWARD_URL));
 
+        ThirdUserAuthenticationFilter thirdUserAuthenticationFilter = new ThirdUserAuthenticationFilter(tokenRequestMatcher);
+        thirdUserAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
+        thirdUserAuthenticationFilter.setAuthenticationFailureHandler(new ForwardAuthenticationFailureHandler(AUTHENTICATION_FAILURE_FORWARD_URL));
+        thirdUserAuthenticationFilter.setAuthenticationSuccessHandler(new ForwardAuthenticationSuccessHandler(AUTHENTICATION_SUCCESS_FORWARD_URL));
         http.addFilterAfter(smsCodeAuthenticationFilter, LogoutFilter.class);
     }
 
@@ -72,5 +73,8 @@ public class Config extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         SmsCodeAuthenticationProvider smsCodeAuthenticationProvider = new SmsCodeAuthenticationProvider(userService, smsService);
         auth.authenticationProvider(smsCodeAuthenticationProvider);
+
+        ThirdUserAuthenticationProvider thirdUserAuthenticationProvider = new ThirdUserAuthenticationProvider(userService);
+        auth.authenticationProvider(thirdUserAuthenticationProvider);
     }
 }
