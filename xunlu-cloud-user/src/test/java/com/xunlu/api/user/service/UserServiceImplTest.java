@@ -105,15 +105,17 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testFindByPhonNonException() {
+    public void testFindByPhoneNonException() {
         mockUserMapper = mock(UserMapper.class);
         doAnswer(invocation -> {
-            User u = invocation.getArgument(0);
-            if (Objects.equals("110", u.getPhone())) {
+            String phone = invocation.getArgument(0);
+            if (Objects.equals("110", phone)) {
+                User u = new User();
+                u.setPhone(phone);
                 return u;
             }
             return null;
-        }).when(mockUserMapper).findOne(any());
+        }).when(mockUserMapper).findByPhone(any());
 
         UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
         User exceptNonNull = userService.findByPhone("110");

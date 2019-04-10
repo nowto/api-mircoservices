@@ -65,9 +65,7 @@ public class UserServiceImpl implements UserService {
         if (phone == null) {
             throw new IllegalArgumentException("手机号不能是null");
         }
-        User user = new User();
-        user.setPhone(phone);
-        return userMapper.findOne(user);
+        return userMapper.findByPhone(phone);
     }
 
     @Override
