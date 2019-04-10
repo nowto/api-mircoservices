@@ -41,6 +41,9 @@ public class UserServiceImpl implements UserService {
         if (!userMapper.addUser(user)) {
             return;
         }
+        if (user instanceof ThirdUser) {
+            userMapper.addThirdUser((ThirdUser) user);
+        }
         String identifier = tencentIMService.makeIdentifier(timPrefix, user.getId());
         if (tencentIMService.accountImport(identifier, null, null)) {
             userMapper.updateTIMIdentifier(user.getId(), identifier);
@@ -53,10 +56,7 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
             return null;
         }
-
-        User user = new User();
-        user.setId(id);
-        return userMapper.findOne(user);
+        return userMapper.getById(id);
     }
 
     @Override
@@ -72,7 +72,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ThirdUser findThirdUserByTypeAndOpenid(ThirdUser.Type type, String openid) {
-        return null;
+        if (type == null) {
+            throw new IllegalArgumentException("登录类型ThirdUser.type不能为null");
+        }
+        if (openid == null) {
+            throw new IllegalArgumentException("openid不能为null");
+        }
+
+        ThirdUser condition = new ThirdUser();
+        condition.setType(type);
+        condition.setOpenid(openid);
+        User user = userMapper.findOne(condition);
+        if (user instanceof ThirdUser) {
+            return (ThirdUser) user;
+        } else {
+            throw new ServiceException("");
+        }
     }
 
     @Override
