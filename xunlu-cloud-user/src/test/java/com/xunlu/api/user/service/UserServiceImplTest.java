@@ -1,5 +1,6 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.mapper.UserMapper;
 import org.junit.Assert;
@@ -70,6 +71,24 @@ public class UserServiceImplTest {
 
         Assert.assertEquals(generatedKey, user.getId().intValue());
         verify(mockUserMapper, times(0)).updateTIMIdentifier(anyInt(), anyString());
+    }
+
+    @Test
+    public void testAddThirdUser() {
+        mockUserMapper = Mockito.mock(UserMapper.class);
+        doAnswer(invocationOnMock -> {
+            User user = invocationOnMock.getArgument(0);
+            user.setId(1111);
+            return true;
+        }).when(mockUserMapper).addUser(any());
+        mockTencentIMService = mock(TencentIMService.class);
+
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, mockTencentIMService);
+        userService.setTimPrefix("testtest");
+        ThirdUser user = User.newThirdRegisterUser(ThirdUser.Type.WEIBO, "openid", "userName", "http://test.com/test.jpg");
+        userService.addUser(user);
+        verify(mockUserMapper).addThirdUser(any());
     }
 
     @Test
