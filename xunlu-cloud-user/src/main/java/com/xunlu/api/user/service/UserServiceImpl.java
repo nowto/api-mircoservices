@@ -80,12 +80,9 @@ public class UserServiceImpl implements UserService {
         ThirdUser condition = new ThirdUser();
         condition.setType(type);
         condition.setOpenid(openid);
-        User user = userMapper.findOne(condition);
-        if (user instanceof ThirdUser) {
-            return (ThirdUser) user;
-        } else {
-            throw new ServiceException("");
-        }
+
+        ThirdUser user = userMapper.findThirdUser(type, openid);
+        return user;
     }
 
     @Override

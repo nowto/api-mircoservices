@@ -8,6 +8,12 @@
             <case value="1" resultType="ThirdUser"/>
         </discriminator>
     </resultMap>
+
+    <resultMap id="thirdUserResultMap" type="ThirdUser">
+        <id column="id" property="id"/>
+        <association property="prefer" resultMap="preferResultMap"/>
+    </resultMap>
+
     <resultMap id="preferResultMap" type="com.xunlu.api.user.domain.User$Prefer">
         <id column="id" property="userId"/>
     </resultMap>
@@ -88,112 +94,34 @@
         tu.openid as openid
         from
         tb_user as u
-        left join tb_third_user as tu on  tu.user_id = u.id
+        ${join_type} join tb_third_user as tu on  tu.user_id = u.id
+    </sql>
+
+    <sql id="leftJoinSelectUserSql">
+        <include refid="selectUserSql">
+            <property name="join_type" value="left"/>
+        </include>
+    </sql>
+
+    <sql id="innerJoinSelectUserSql">
+        <include refid="selectUserSql">
+            <property name="join_type" value="inner"/>
+        </include>
     </sql>
 
     <select id="getById" resultMap="userResultMap">
-        <include refid="selectUserSql"/>
+        <include refid="leftJoinSelectUserSql"/>
         WHERE u.id = #{id} limit 1
     </select>
 
     <select id="findByPhone" resultMap="userResultMap">
-        <include refid="selectUserSql"/>
+        <include refid="leftJoinSelectUserSql"/>
         WHERE u.phone = #{phone} limit 1
     </select>
 
-    <select id="findOne" resultMap="userResultMap">
-        select
-        u.id as id,
-        u.user_name as user_name,
-        ifnull(u.nick_name, tu.nick_name) as nick_name,
-        u.person_sign as person_sign,
-        ifnull(u.photo, tu.img) as photo,
-        u.email as email,
-        u.phone as phone,
-        u.password as password,
-        u.prefer_natural as prefer_natural,
-        u.prefer_human as prefer_human,
-        u.prefer_running as prefer_running,
-        u.prefer_play_time as prefer_play_time,
-        u.prefer_night_play as prefer_night_play,
-        u.prefer_pub_trans_first as prefer_pub_trans_first,
-        u.prefer_hotel_level as prefer_hotel_level,
-        u.create_time as create_time,
-        u.prefer_trip_number as prefer_trip_number,
-        u.prefer_flight as prefer_flight,
-        u.area_code as area_code,
-        u.tim_sync as tim_sync,
-        u.tim_identifier as tim_identifier,
-        u.is_spider as is_spider,
-
-        tu.user_id is not null as third_user_type,
-        tu.type as type,
-        tu.openid as openid
-        from
-        tb_user as u
-        left join tb_third_user as tu on  tu.user_id = u.id
-        <where>
-            <if test="id != null">
-                u.id = #{id}
-            </if>
-            <if test="userName != null">
-                and u.user_name = #{userName}
-            </if>
-            <if test="nickName != null">
-                and u.nick_name = #{nickName}
-            </if>
-            <if test="personSign != null">
-                and u.person_sign = #{personSign}
-            </if>
-            <if test="photo != null">
-                and u.photo = #{photo}
-            </if>
-            <if test="email != null">
-                and u.email = #{email}
-            </if>
-            <if test="phone != null">
-                and u.phone = #{phone}
-            </if>
-            <if test="password != null">
-                and u.password = #{password}
-            </if>
-            <if test="prefer != null">
-                <if test="prefer.preferNatural != null">
-                    and u.prefer_natural = #{preferNatural}
-                </if>
-                <if test="prefer.preferHuman != null">
-                    and u.prefer_human = #{preferHuman}
-                </if>
-                <if test="prefer.preferRunning != null">
-                    and u.prefer_running = #{preferRunning}
-                </if>
-                <if test="prefer.preferPlayTime != null">
-                    and u.prefer_play_time = #{preferPlayTime}
-                </if>
-                <if test="prefer.preferNightPlay != null">
-                    and u.prefer_night_play = #{preferNightPlay}
-                </if>
-                <if test="prefer.preferPubTransFirst != null">
-                    and u.prefer_pub_trans_first = #{preferPubTransFirst}
-                </if>
-                <if test="prefer.preferHotelLevel!= null">
-                    and u.prefer_hotel_level = #{preferHotelLevel}
-                </if>
-                <if test="prefer.preferTripNumber!= null">
-                    and u.prefer_trip_number = #{preferTripNumber}
-                </if>
-                <if test="prefer.preferFlight!= null">
-                    and u.prefer_flight = #{preferFlight}
-                </if>
-            </if>
-            <if test="areaCode!= null">
-                and u.area_code = #{areaCode}
-            </if>
-            <if test="timIdentifier!= null">
-                and u.tim_identifier = #{timIdentifier}
-            </if>
-        </where>
-        limit 1
+    <select id="findThirdUser" resultMap="thirdUserResultMap">
+        <include refid="innerJoinSelectUserSql"/>
+        WHERE type = #{type} AND openid = #{openid} limit 1
     </select>
 
     <select id="findPassword" resultType="string">

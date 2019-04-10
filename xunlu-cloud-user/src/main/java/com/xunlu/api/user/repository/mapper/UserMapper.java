@@ -44,12 +44,12 @@ public interface UserMapper {
     User findByPhone(String phone);
 
     /**
-     * 查找一个用户.
-     * 将使用example的每个不为null的属性做等值条件查询, 如果查找到多个,将只返回第一个
-     * @param example 条件
-     * @return
+     * 获取第三方登录用户
+     * @param type 登录类型
+     * @param openid openid
+     * @return 第三方登录用户
      */
-    User findOne(User example);
+    ThirdUser findThirdUser(ThirdUser.Type type, String openid);
 
     /**
      * 获取用户密码,根据id
@@ -125,5 +125,4 @@ public interface UserMapper {
      * @return ture 更新成功, false 更新失败
      */
     boolean updatePhoto(@Param("id") Integer id, @Param("photo") String photo);
-
 }
