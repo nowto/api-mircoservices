@@ -22,4 +22,10 @@ public class CodeEnumUtilTest {
         Assert.assertEquals(found, TestSexEnum.MAIL);
     }
 
+    @Test
+    public void codeOfShoudReturnDefaultWhenCodeNotFound() {
+        TestSexEnum found = CodeEnumUtil.codeOf(TestSexEnum.class, 99999, TestSexEnum.THIRD);
+        Assert.assertEquals(TestSexEnum.THIRD, found);
+    }
+
 }

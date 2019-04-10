@@ -13,6 +13,10 @@ public class ThirdUser extends User {
      */
     private Type type;
     private String openid;
+    /**
+     * 第三方用户头像
+     */
+    private String imgUrl;
 
     public ThirdUser() {}
 
@@ -57,5 +61,13 @@ public class ThirdUser extends User {
 
     public void setOpenid(String openid) {
         this.openid = openid;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
