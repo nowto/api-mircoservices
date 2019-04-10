@@ -76,12 +76,14 @@ public class UserServiceImplTest {
     public void testGetUser() {
         mockUserMapper = mock(UserMapper.class);
         doAnswer(invocation -> {
-            User u = invocation.getArgument(0);
-            if (Objects.equals(1111, u.getId())) {
+            Integer id = invocation.getArgument(0);
+            if (Objects.equals(1111, id)) {
+                User u = new User();
+                u.setId(id);
                 return u;
             }
             return null;
-        }).when(mockUserMapper).findOne(any());
+        }).when(mockUserMapper).getById(anyInt());
 
         UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
         User exceptNonNull = userService.getUser(1111);
