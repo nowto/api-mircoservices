@@ -43,7 +43,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         if (smsCode == null) {
             throw new BadCredentialsException("手机验证码为空");
         }
-//        checkSmsCode(appKey, zone, phone, smsCode);
+        checkSmsCode(appKey, zone, phone, smsCode);
 
         User user = userService.findByPhone(phone);
         if (user == null) {
@@ -51,7 +51,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
             user = userService.findByPhone(phone);
         }
         if (user == null) {
-            throw new InternalAuthenticationServiceException("指定手机号[" + phone + "]获取不到用户信息");
+            throw new InternalAuthenticationServiceException("手机号[" + phone + "]用户创建失败");
         }
 
         SmsCodeAuthenticationToken successToken = new SmsCodeAuthenticationToken(user, authentication.getCredentials(),

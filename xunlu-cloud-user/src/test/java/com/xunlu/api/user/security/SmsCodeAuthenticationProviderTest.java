@@ -1,5 +1,6 @@
 package com.xunlu.api.user.security;
 
+import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.service.ServiceException;
 import com.xunlu.api.user.service.SmsService;
@@ -109,7 +110,7 @@ public class SmsCodeAuthenticationProviderTest {
             fail("Should have returned instance of SmsCodeAuthenticationToken");
         }
 
-        // Now try to authenticate with the previous result (with its UserDetails)
+        // Now try to authenticate with the previous result
         Authentication result2 = provider.authenticate(result);
 
         if (!(result2 instanceof SmsCodeAuthenticationToken)) {
@@ -155,6 +156,11 @@ public class SmsCodeAuthenticationProviderTest {
                 user.setId(1);
                 return user;
             }
+            return null;
+        }
+
+        @Override
+        public ThirdUser findThirdUserByTypeAndOpenid(ThirdUser.Type type, String openid) {
             return null;
         }
 
