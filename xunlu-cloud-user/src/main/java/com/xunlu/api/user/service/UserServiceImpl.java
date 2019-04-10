@@ -77,10 +77,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("openid不能为null");
         }
 
-        ThirdUser condition = new ThirdUser();
-        condition.setType(type);
-        condition.setOpenid(openid);
-
         ThirdUser user = userMapper.findThirdUser(type, openid);
         return user;
     }

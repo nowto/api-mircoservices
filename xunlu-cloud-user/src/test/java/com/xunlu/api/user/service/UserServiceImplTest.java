@@ -171,6 +171,26 @@ public class UserServiceImplTest {
         Assert.assertNull(exceptNull);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindThirdUserByTypeAndOpenidShoudExceptionWhenTypeNull() {
+        UserServiceImpl userService = new UserServiceImpl(null, null);
+        userService.findThirdUserByTypeAndOpenid(null, "testtest");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindThirdUserByTypeAndOpenidShoudExceptionWhenOpenidNull() {
+        UserServiceImpl userService = new UserServiceImpl(null, null);
+        userService.findThirdUserByTypeAndOpenid(ThirdUser.Type.WEIBO, null);
+    }
+
+    @Test
+    public void testFindThirdUserByTypeAndOpenidShoudSuccess() {
+        mockUserMapper = mock(UserMapper.class);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        userService.findThirdUserByTypeAndOpenid(ThirdUser.Type.WEIBO, "testtest");
+        verify(mockUserMapper).findThirdUser(ThirdUser.Type.WEIBO, "testtest");
+    }
+
     @Test
     public void testFindPassword() {
         mockUserMapper = mock(UserMapper.class);
