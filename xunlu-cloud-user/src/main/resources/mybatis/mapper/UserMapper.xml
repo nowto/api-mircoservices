@@ -37,6 +37,26 @@
         )
     </insert>
 
+    <insert id="addThirdUser">
+        insert into
+            tb_third_user (
+                user_id,
+                type,
+                nick_name,
+                img,
+                openid,
+                create_time
+            )
+        values
+            (
+                #{id, jdbcType=INTEGER},
+                #{type, jdbcType=TINYINT},
+                #{nickName, jdbcType=VARCHAR},
+                #{imgUrl, jdbcType=VARCHAR},
+                #{openid, jdbcType=VARCHAR},
+                #{createTime, jdbcType=TIMESTAMP}
+            )
+    </insert>
 
 
     <select id="findOne" resultMap="userResultMap">

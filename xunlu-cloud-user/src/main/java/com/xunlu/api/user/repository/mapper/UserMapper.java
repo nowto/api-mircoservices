@@ -1,5 +1,6 @@
 package com.xunlu.api.user.repository.mapper;
 
+import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,11 +14,20 @@ import org.springframework.lang.Nullable;
 @Mapper
 public interface UserMapper {
     /**
-     * 添加用户
+     * 添加用户.
+     * 仅操作{@code tb_user}表
      * @param user
      * @return
      */
     boolean addUser(User user);
+
+    /**
+     * 添加用户.
+     * 仅操作{@code tb_third_user}表
+     * @param user
+     * @return
+     */
+    boolean addThirdUser(ThirdUser user);
 
     /**
      * 查找一个用户.
@@ -101,4 +111,5 @@ public interface UserMapper {
      * @return ture 更新成功, false 更新失败
      */
     boolean updatePhoto(@Param("id") Integer id, @Param("photo") String photo);
+
 }
