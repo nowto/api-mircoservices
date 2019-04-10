@@ -48,12 +48,9 @@ public class UserMapperTest {
 
     @Test
     public void testAddThirdUser() {
-        ThirdUser userHaveId = new ThirdUser();
-        userHaveId.setId(1);
-        userHaveId.setNickName("liweibor");
-        userHaveId.setOpenid("openid");
-        userHaveId.setType(ThirdUser.Type.WEIBO);
 
+        ThirdUser userHaveId = User.newThirdRegisterUser(ThirdUser.Type.WEIBO, "openid", "liweibo", "http://test.com/test.jpg");
+        userHaveId.setId(3);
         boolean ret = userMapper.addThirdUser(userHaveId);
         Assert.assertTrue(ret);
     }

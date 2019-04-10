@@ -50,7 +50,7 @@ public class ThirdUserAuthenticationProvider  implements AuthenticationProvider 
         ThirdUser user = userService.findThirdUserByTypeAndOpenid(authenticationToken.getLoginType(), authenticationToken.getOpenid());
         if (user == null && authenticationToken.getPrincipal() instanceof ThirdUserPrincipal) {
             ThirdUserPrincipal principal = (ThirdUserPrincipal) authenticationToken.getPrincipal();
-            userService.addUser(User.newThirdRegisterUser(principal));
+            userService.addUser(User.newThirdRegisterUser(principal.getType(), principal.getOpenid(), principal.getUserName(), principal.getImgUrl()));
             user = userService.findThirdUserByTypeAndOpenid(principal.getType(), principal.getOpenid());
         }
         if (user == null) {

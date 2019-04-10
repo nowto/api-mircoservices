@@ -147,9 +147,6 @@
             <if test="areaCode!= null">
                 and u.area_code = #{areaCode}
             </if>
-            <if test="createTime!= null">
-                and u.create_time = #{createTime}
-            </if>
             <if test="timIdentifier!= null">
                 and u.tim_identifier = #{timIdentifier}
             </if>

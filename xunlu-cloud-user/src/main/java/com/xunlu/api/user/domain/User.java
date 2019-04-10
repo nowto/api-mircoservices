@@ -58,7 +58,7 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime = LocalDateTime.now();
+    private LocalDateTime createTime;
     /**
      * 区域码  如:中国 86
      */
@@ -105,8 +105,9 @@ public class User implements Serializable {
         User user = new User();
         user.setPhone(phone);
         user.setAreaCode(areaCode);
-        user.setNickName(UserUtil.generateDefaultNickName());
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+
+        user.setNickName(UserUtil.generateDefaultNickName());
         user.setCreateTime(LocalDateTime.now());
         return user;
     }
@@ -115,15 +116,14 @@ public class User implements Serializable {
      * 创建一个首次第三方登录时默认注册时的用户
      * @return
      */
-    public static final ThirdUser newThirdRegisterUser(ThirdUserPrincipal principal) {
+    public static final ThirdUser newThirdRegisterUser(ThirdUser.Type type, String openid, String userName, String imgUrl) {
         ThirdUser user = new ThirdUser();
 
-        user.setType(principal.getType());
-        user.setNickName(principal.getUserName());
-        user.setPhoto(principal.getImgUrl());
-        user.setOpenid(principal.getOpenid());
-        user.setNickName(principal.getUserName());
-        user.setImgUrl(principal.getImgUrl());
+        user.setType(type);
+        user.setOpenid(openid);
+        user.setNickName(userName);
+        user.setPhoto(imgUrl);
+        user.setImgUrl(imgUrl);
 
         user.setCreateTime(LocalDateTime.now());
         return user;
