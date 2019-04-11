@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -44,8 +45,6 @@ public class Config extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AntPathRequestMatcher tokenRequestMatcher = new AntPathRequestMatcher("/token", HttpMethod.POST.name());
-
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -57,16 +56,21 @@ public class Config extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .anyRequest().permitAll();// 用户微服务只做认证，不做鉴权，鉴权交给网关
 
+        AntPathRequestMatcher tokenRequestMatcher = new AntPathRequestMatcher("/token", HttpMethod.POST.name());
+
         SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter(tokenRequestMatcher);
-        smsCodeAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
-        smsCodeAuthenticationFilter.setAuthenticationFailureHandler(new ForwardAuthenticationFailureHandler(AUTHENTICATION_FAILURE_FORWARD_URL));
-        smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(new ForwardAuthenticationSuccessHandler(AUTHENTICATION_SUCCESS_FORWARD_URL));
+        configureAuthenticationFilter(smsCodeAuthenticationFilter);
+        http.addFilterAfter(smsCodeAuthenticationFilter, LogoutFilter.class);
 
         ThirdUserAuthenticationFilter thirdUserAuthenticationFilter = new ThirdUserAuthenticationFilter(tokenRequestMatcher);
-        thirdUserAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
-        thirdUserAuthenticationFilter.setAuthenticationFailureHandler(new ForwardAuthenticationFailureHandler(AUTHENTICATION_FAILURE_FORWARD_URL));
-        thirdUserAuthenticationFilter.setAuthenticationSuccessHandler(new ForwardAuthenticationSuccessHandler(AUTHENTICATION_SUCCESS_FORWARD_URL));
-        http.addFilterAfter(smsCodeAuthenticationFilter, LogoutFilter.class);
+        configureAuthenticationFilter(thirdUserAuthenticationFilter);
+        http.addFilterAfter(thirdUserAuthenticationFilter, LogoutFilter.class);
+    }
+
+    private void configureAuthenticationFilter(AbstractAuthenticationProcessingFilter filter) throws Exception {
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationFailureHandler(new ForwardAuthenticationFailureHandler(AUTHENTICATION_FAILURE_FORWARD_URL));
+        filter.setAuthenticationSuccessHandler(new ForwardAuthenticationSuccessHandler(AUTHENTICATION_SUCCESS_FORWARD_URL));
     }
 
     @Override
