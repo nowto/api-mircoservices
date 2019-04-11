@@ -47,6 +47,8 @@ public class ThirdUserAuthenticationProvider  implements AuthenticationProvider 
             throw new InternalAuthenticationServiceException("第三方帐户信息缺少openid");
         }
 
+        checkSignature(authenticationToken.getOpenid(), credentials);
+
         ThirdUser user = userService.findThirdUserByTypeAndOpenid(authenticationToken.getLoginType(), authenticationToken.getOpenid());
         if (user == null && authenticationToken.getPrincipal() instanceof ThirdUserPrincipal) {
             ThirdUserPrincipal principal = (ThirdUserPrincipal) authenticationToken.getPrincipal();
@@ -57,7 +59,6 @@ public class ThirdUserAuthenticationProvider  implements AuthenticationProvider 
             throw new InternalAuthenticationServiceException("第三方帐户创建失败");
         }
         //check 签名
-        checkSignature(user.getOpenid(), credentials);
 
 
         ThirdUserAuthenticationToken successToken = new ThirdUserAuthenticationToken(user, authentication.getCredentials(),
