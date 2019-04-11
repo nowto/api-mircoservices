@@ -14,4 +14,4 @@ spring:
     config:
       server:
         git:
-uri: file:///${GIT_REPO}
+          uri: file:///${GIT_REPO}
