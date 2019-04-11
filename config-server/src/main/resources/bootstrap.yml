@@ -1,0 +1,17 @@
+server.port: 8888
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: http://git.in.mydeertrip.com/weibo.li/xunlu-api-config
+          password: HelloJava
+          username: weibo.li
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+      server:
+        git:
+uri: file:///${GIT_REPO}
