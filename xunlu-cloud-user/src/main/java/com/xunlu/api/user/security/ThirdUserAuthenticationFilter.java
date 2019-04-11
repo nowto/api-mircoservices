@@ -18,7 +18,7 @@ import java.io.IOException;
 
 /**
  * 处理第三方登录认证过滤器.例如 微信登录
- * 请求处理的URL{@code /token}, 仅支持POST请求.
+ * 默认请求处理的URL{@code /token}
  * 与{@link ThirdUserAuthenticationProvider}、{@link ThirdUserAuthenticationToken} 配套使用
  *
  * @author liweibo

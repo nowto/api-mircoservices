@@ -56,15 +56,13 @@ public class Config extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .anyRequest().permitAll();// 用户微服务只做认证，不做鉴权，鉴权交给网关
 
-        AntPathRequestMatcher tokenRequestMatcher = new AntPathRequestMatcher("/token", HttpMethod.POST.name());
-
-        SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter(tokenRequestMatcher);
+        SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter(new AntPathRequestMatcher("/token", HttpMethod.POST.name()));
         configureAuthenticationFilter(smsCodeAuthenticationFilter);
         http.addFilterAfter(smsCodeAuthenticationFilter, LogoutFilter.class);
 
-        ThirdUserAuthenticationFilter thirdUserAuthenticationFilter = new ThirdUserAuthenticationFilter(tokenRequestMatcher);
+        ThirdUserAuthenticationFilter thirdUserAuthenticationFilter = new ThirdUserAuthenticationFilter(new AntPathRequestMatcher("/token"));
         configureAuthenticationFilter(thirdUserAuthenticationFilter);
-        http.addFilterAfter(thirdUserAuthenticationFilter, LogoutFilter.class);
+        http.addFilterAfter(thirdUserAuthenticationFilter, SmsCodeAuthenticationFilter.class);
     }
 
     private void configureAuthenticationFilter(AbstractAuthenticationProcessingFilter filter) throws Exception {
