@@ -12,28 +12,24 @@
 	<groupId>com.xunlu.api</groupId>
 	<artifactId>user</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>user</name>
+	<name>user-service</name>
 	<description>user microservice for xunlu api</description>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<docker.image.exposed.port>8081</docker.image.exposed.port>
+		<docker.image.exposed.port>8091</docker.image.exposed.port>
 		<docker.image.dockerfile.dir>${basedir}/../docker</docker.image.dockerfile.dir>
 	</properties>
 
 	<dependencies>
+		<!-- Spring Boot -->
 		<dependency>
-			<groupId>com.github.tencentyun</groupId>
-			<artifactId>tls-sig-api</artifactId>
-			<version>1.2</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
@@ -41,17 +37,30 @@
 			<version>2.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- Spring Cloud -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
+		<!-- Other -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tencentyun</groupId>
+			<artifactId>tls-sig-api</artifactId>
+			<version>1.2</version>
 		</dependency>
 
 		<!-- for dev -->

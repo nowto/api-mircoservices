@@ -1,3 +1,12 @@
+server:
+  port: 8091
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+  client:
+    service-url:
+    default-zone: http://discovery-server:8081s/eureka/
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.xunlu.api.user.domain

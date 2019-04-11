@@ -16,8 +16,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>discovery-server</module>
         <module>gateway</module>
-        <module>user</module>
+        <module>user-service</module>
     </modules>
 
     <properties>
