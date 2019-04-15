@@ -25,8 +25,8 @@ public class CommonAutoConfiguration {
      * 向Mybatis注册TypeHandler：CodeEnumTypeHandler
      */
     @Configuration
+    @ConditionalOnClass({MybatisAutoConfiguration.class, org.apache.ibatis.session.SqlSession.class})
     @AutoConfigureBefore(MybatisAutoConfiguration.class)
-    @ConditionalOnSingleCandidate(org.apache.ibatis.session.Configuration.class)
     public static class MybatisConfiguration {
 
         @Bean
