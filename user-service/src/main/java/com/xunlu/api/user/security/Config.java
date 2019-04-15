@@ -19,7 +19,8 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
- * 配置Spring Security
+ * 配置Spring Security.
+ * 用户服务使用Spring Security只完成认证，不参与鉴权，鉴权交给网关服务.
  * @author liweibo
  */
 @Configuration

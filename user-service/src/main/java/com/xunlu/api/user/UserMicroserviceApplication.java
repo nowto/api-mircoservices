@@ -1,6 +1,8 @@
 package com.xunlu.api.user;
 
-import com.xunlu.api.user.infrastructure.StringToBaseCodeEnumConverterFactory;
+import com.xunlu.api.common.codeenum.StringToBaseCodeEnumConverterFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -13,10 +15,10 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * SpringBoot 启动类
@@ -30,6 +32,19 @@ public class UserMicroserviceApplication {
 		@Override
 		public void addFormatters(FormatterRegistry registry) {
 			registry.addConverterFactory(new StringToBaseCodeEnumConverterFactory<>());
+		}
+	}
+
+
+	@Component
+	public static class Xxx implements CommandLineRunner{
+
+		@Autowired
+		FormatterRegistry formatterRegistry;
+
+		@Override
+		public void run(String... args) throws Exception {
+			System.out.println(formatterRegistry);
 		}
 	}
 

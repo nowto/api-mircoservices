@@ -1,13 +1,11 @@
 package com.xunlu.api.user.domain;
 
-import com.xunlu.api.user.infrastructure.BaseCodeEnum;
-import com.xunlu.api.user.security.ThirdUserPrincipal;
+import com.xunlu.api.common.codeenum.BaseCodeEnum;
 import com.xunlu.api.user.util.UserUtil;
 import org.springframework.util.DigestUtils;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

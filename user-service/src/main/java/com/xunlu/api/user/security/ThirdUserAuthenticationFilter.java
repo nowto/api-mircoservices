@@ -1,7 +1,7 @@
 package com.xunlu.api.user.security;
 
+import com.xunlu.api.common.codeenum.CodeEnumUtil;
 import com.xunlu.api.user.domain.ThirdUser;
-import com.xunlu.api.user.infrastructure.CodeEnumUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.http.HttpMethod;
