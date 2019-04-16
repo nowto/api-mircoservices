@@ -1,6 +1,6 @@
 package com.xunlu.api.user.security;
 
-import com.xunlu.api.user.resource.RestfulError;
+import com.xunlu.api.common.restful.ApiError;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.AuthenticationException;
@@ -30,8 +30,8 @@ public class AuthenticationFailureController {
     @RequestMapping(Config.AUTHENTICATION_FAILURE_FORWARD_URL)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     @ResponseBody
-    RestfulError handleFailure(
+    ApiError handleFailure(
             @RequestAttribute(WebAttributes.AUTHENTICATION_EXCEPTION) AuthenticationException exception) {
-        return new RestfulError(exception.getMessage());
+        return new ApiError(exception.getMessage());
     }
 }
