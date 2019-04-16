@@ -127,15 +127,17 @@ public class ThirdUserAuthenticationProviderTest {
     }
 
     @Test
-    public void testNewRegisterUserWhenFindPhoneNotExist() {
+    public void testNewRegisterUserWhenUserNotExist() {
         ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIBO, "cannotfound", "weibo", "weibo");
-        ThirdUserCredentials credentials = new ThirdUserCredentials(rightSign, ThirdUserCredentials.DEFAULT_SIGNATURE_KEY);
+        ThirdUserCredentials credentials = new ThirdUserCredentials("9b2a33ea3199ba801ff8ec527dc8c99c", ThirdUserCredentials.DEFAULT_SIGNATURE_KEY);
         ThirdUserAuthenticationToken token = new ThirdUserAuthenticationToken(principal, credentials);
         token.setDetails("192.168.0.1");
 
         MockUserService mockUserService = new MockUserService();
         ThirdUserAuthenticationProvider provider = new ThirdUserAuthenticationProvider(mockUserService);
+
         Authentication t = provider.authenticate(token);
+
         assertTrue(mockUserService.addUserIncoked);
         assertTrue(t.getPrincipal() instanceof User);
     }
