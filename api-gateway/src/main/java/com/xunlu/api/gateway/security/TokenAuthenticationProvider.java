@@ -45,7 +45,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
     private User checkUser(String token) {
         User user = tokenService.getUser(token);
         if (user == null) {
-            throw new InternalAuthenticationServiceException("指定token获取不到用户");
+            throw new InternalAuthenticationServiceException("token无效");
         }
         return user;
     }

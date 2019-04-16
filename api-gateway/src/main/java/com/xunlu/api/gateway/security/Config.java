@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 /**
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
  */
 @EnableWebSecurity
 public class Config extends WebSecurityConfigurerAdapter {
+    public static final String AUTHENTICATION_FAILURE_FORWARD_URL = "/authentication_failure";
     @Autowired
     private TokenService tokenService;
 
@@ -131,6 +133,7 @@ public class Config extends WebSecurityConfigurerAdapter {
 
         TokenAuthenticationFilter tokenAuthenticationFilter = new TokenAuthenticationFilter("/user-service/token");
         tokenAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
+        tokenAuthenticationFilter.setAuthenticationFailureHandler(new ForwardAuthenticationFailureHandler(AUTHENTICATION_FAILURE_FORWARD_URL));
         http.addFilterAfter(tokenAuthenticationFilter, LogoutFilter.class);
 
     }

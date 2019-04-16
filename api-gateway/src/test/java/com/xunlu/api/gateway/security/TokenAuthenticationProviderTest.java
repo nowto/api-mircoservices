@@ -19,7 +19,7 @@ public class TokenAuthenticationProviderTest {
             fail("Should have thrown InternalAuthenticationServiceException");
         }
         catch (InternalAuthenticationServiceException expected) {
-            assertEquals("指定token获取不到用户", expected.getMessage());
+            assertEquals("token无效", expected.getMessage());
         }
     }
 
