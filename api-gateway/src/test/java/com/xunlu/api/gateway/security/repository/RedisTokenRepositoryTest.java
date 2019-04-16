@@ -1,12 +1,11 @@
 package com.xunlu.api.gateway.security.repository;
 
-import com.xunlu.api.gateway.security.domain.User;
+import com.xunlu.api.user.domain.User;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

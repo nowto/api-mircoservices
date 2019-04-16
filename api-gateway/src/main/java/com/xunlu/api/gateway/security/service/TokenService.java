@@ -1,6 +1,6 @@
 package com.xunlu.api.gateway.security.service;
 
-import com.xunlu.api.gateway.security.domain.User;
+import com.xunlu.api.user.domain.User;
 
 /**
  * token服务类

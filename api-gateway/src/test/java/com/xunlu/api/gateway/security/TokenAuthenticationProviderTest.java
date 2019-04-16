@@ -1,6 +1,6 @@
 package com.xunlu.api.gateway.security;
 
-import com.xunlu.api.gateway.security.domain.User;
+import com.xunlu.api.user.domain.User;
 import com.xunlu.api.gateway.security.service.TokenService;
 import org.junit.Test;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

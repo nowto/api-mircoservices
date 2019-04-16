@@ -126,10 +126,11 @@ public class Config extends WebSecurityConfigurerAdapter {
                             "/user/password/modify",
                             "/user/photo/uptoken"
                     )
-                        .hasRole("ROLE_USER")
+                        .hasRole("USER")
                     .anyRequest().permitAll();//剩余的都是不需要登录也能访问的请求
 
         TokenAuthenticationFilter tokenAuthenticationFilter = new TokenAuthenticationFilter("/user-service/token");
+        tokenAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
         http.addFilterAfter(tokenAuthenticationFilter, LogoutFilter.class);
 
     }

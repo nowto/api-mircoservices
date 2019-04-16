@@ -1,4 +1,4 @@
-package com.xunlu.api.gateway.security.domain;
+package com.xunlu.api.user.domain;
 
 /**
  * 代表了前端访问需要认证以及需要权限的api时，请求需要携带token.

@@ -1,4 +1,4 @@
-package com.xunlu.api.gateway.security.domain;
+package com.xunlu.api.user.domain;
 
 
 import com.xunlu.api.common.codeenum.BaseCodeEnum;

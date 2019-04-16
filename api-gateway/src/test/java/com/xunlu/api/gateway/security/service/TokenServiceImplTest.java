@@ -1,6 +1,6 @@
 package com.xunlu.api.gateway.security.service;
 
-import com.xunlu.api.gateway.security.domain.User;
+import com.xunlu.api.user.domain.User;
 import com.xunlu.api.gateway.security.repository.TokenRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

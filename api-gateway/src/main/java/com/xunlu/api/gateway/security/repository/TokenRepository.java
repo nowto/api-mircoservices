@@ -1,6 +1,6 @@
 package com.xunlu.api.gateway.security.repository;
 
-import com.xunlu.api.gateway.security.domain.User;
+import com.xunlu.api.user.domain.User;
 
 /**
  * token数据库操作相关接口
