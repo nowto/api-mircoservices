@@ -1,9 +1,11 @@
 package com.xunlu.api.gateway.security;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,13 +14,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TokenAuthenticationFilterTest {
 
@@ -37,13 +39,16 @@ public class TokenAuthenticationFilterTest {
     }
 
     @Test
-    public void testNullTokenHeaderHandledGracefully() throws Exception {
+    public void testNullTokenHeaderDoFilter() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("POST", "/foo/bar/url");
+        FilterChain filterChain = mock(FilterChain.class);
 
         TokenAuthenticationFilter filter = new TokenAuthenticationFilter("/token");
-        filter.setAuthenticationManager(createAuthenticationManager());
-        assertNotNull(filter
-                .attemptAuthentication(request, new MockHttpServletResponse()));
+        MockHttpServletResponse resp = new MockHttpServletResponse();
+        filter.doFilter(request, resp, filterChain);
+
+        verify(filterChain).doFilter(request, resp);
+
     }
 
 
