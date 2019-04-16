@@ -1,8 +1,6 @@
 package com.xunlu.api.gateway.security;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -23,6 +21,10 @@ import java.io.IOException;
  * @author liweibo
  */
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    {
+        //认证成功后继续执行请求
+        setContinueChainBeforeSuccessfulAuthentication(true);
+    }
     
     public TokenAuthenticationFilter(String userServiceAuthenticatinUrl) {
         super(new NegatedRequestMatcher(new AntPathRequestMatcher(userServiceAuthenticatinUrl)));
