@@ -59,8 +59,75 @@ public class Config extends WebSecurityConfigurerAdapter {
                 .cors().disable()
                 .logout().disable()
                 .httpBasic().disable()
-                .authorizeRequests()
-                .anyRequest().permitAll();// 网关负责鉴权
+                .authorizeRequests()// 网关负责鉴权
+                    .antMatchers(
+                            "/act/**",
+                            "/article/share",
+                            "/article/collect/option",
+                            "/article/collect/query",
+                            "/article/collect/status",
+                            "/chart/plans",
+                            "/chart/plan/del",
+                            "/feature/**",
+                            "/user/feedback/**",
+                            "/hotel/**",
+                            "/logout",
+                            "/merchant/addMerchantEntry",
+                            "/plan/delPlan",
+                            "/plan/renamePlan",
+                            "/plan/timeMeasure",
+                            "/plan/geneby",
+                            "/plan/smallTraffic/list",
+                            "/plan/smallTraffic",
+                            "/plan/train/list",
+                            "/plan/hotel/list",
+                            "/plan/hotel/list/filter",
+                            "/plan/hotel",
+                            "/plan/collect/add",
+                            "/plan/collect/cancel",
+                            "/plan/share",
+                            "/plan/listFlight",
+                            "/plan/changeFlight",
+                            "/plan/changeTrain",
+                            "/plan/listHotel",
+                            "/plan/changeHotel",
+                            "/plan/save",
+                            "/plan/be56e057f20f883e",
+                            "/plan/adjust/sight",
+                            "/plan/quote",
+                            "/plan/listRoute/filter",
+                            "/plan/listssNew",
+                            "/plan/listss/filter",
+                            "/plan/listss",
+                            "/plan/ssList/filter",
+                            "/plan/routeList",
+                            "/plan/routeList/filter",
+                            "/plan/listssByAdd",
+                            "/route/collect/add",
+                            "/route/collect/cancel",
+                            "/route/share",
+                            "/scenic_spots/editPlanSS",
+                            "/scenic_spots/collect/option",
+                            "/scenic_spots/share",
+                            "/system/*",
+                            "/topic/collect/add",
+                            "/topic/collect/cancel",
+                            "/topic/share",
+                            "/user/plan/list",
+                            "/user/collect/ss",
+                            "/user/collect/plan",
+                            "/user/collect/topic",
+                            "/user/collect/travels",
+                            "/user/collect/route",
+                            "/user/userCenter",
+                            "/user/prefer",
+                            "/user/nickname/modify",
+                            "/user/personsign/modify",
+                            "/user/password/modify",
+                            "/user/photo/uptoken"
+                    )
+                        .hasRole("ROLE_USER")
+                    .anyRequest().permitAll();//剩余的都是不需要登录也能访问的请求
 
         TokenAuthenticationFilter tokenAuthenticationFilter = new TokenAuthenticationFilter("/user-service/token");
         http.addFilterAfter(tokenAuthenticationFilter, LogoutFilter.class);
