@@ -101,7 +101,6 @@ public class MobSmsClient implements SmsClient {
         HttpEntity<MultiValueMap<String, String>> postEntity = new HttpEntity<>(params, headers);
         JsonNode a = restTemplate.postForObject(VERIFY_URL, postEntity, JsonNode.class);
         int status = a.get("status").asInt();
-        System.out.println(a);
         if (status == SUCCESS_CODE) {
             return true;
         }
