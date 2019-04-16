@@ -1,5 +1,9 @@
 package com.xunlu.api.user.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.xunlu.api.common.codeenum.BaseCodeEnum;
 import com.xunlu.api.user.util.UserUtil;
 import org.springframework.util.DigestUtils;
@@ -56,6 +60,8 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
     /**
      * 区域码  如:中国 86
