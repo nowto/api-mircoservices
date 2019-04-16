@@ -33,4 +33,4 @@ spring:
     database: 1
 # 将自有帐号导入云通信ＩＭ时生成Identifier时的前缀
 tencent-im-service:
-  make-identifier-prefix: ${spring.profiles}
+  make-identifier-prefix: 'test'
