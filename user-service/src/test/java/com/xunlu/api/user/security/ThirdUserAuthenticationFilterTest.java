@@ -64,7 +64,6 @@ public class ThirdUserAuthenticationFilterTest {
 
         Authentication result = filter.attemptAuthentication(request,
                 new MockHttpServletResponse());
-        assertEquals("hello", result.getName());
     }
 
     @Test
