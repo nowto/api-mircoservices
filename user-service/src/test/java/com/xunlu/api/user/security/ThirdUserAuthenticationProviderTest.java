@@ -2,7 +2,11 @@ package com.xunlu.api.user.security;
 
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
+import com.xunlu.api.user.repository.mapper.UserMapper;
+import com.xunlu.api.user.service.TencentIMService;
 import com.xunlu.api.user.service.UserService;
+import com.xunlu.api.user.service.UserServiceImpl;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -103,6 +107,30 @@ public class ThirdUserAuthenticationProviderTest {
     }
 
     @Test
+    public void testPlatamId() {
+
+        ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIBO, "weibo", "unionid", "weibo", "weibo");
+        ThirdUserCredentials credentials = new ThirdUserCredentials(rightSign, ThirdUserCredentials.DEFAULT_SIGNATURE_KEY);
+        ThirdUserAuthenticationToken token = new ThirdUserAuthenticationToken(principal, credentials);
+        token.setDetails("192.168.0.1");
+
+        ThirdUserAuthenticationProvider provider = new ThirdUserAuthenticationProvider(new ThirdUserAuthenticationProviderTest.MockUserService());
+
+        Authentication result = provider.authenticate(token);
+
+        if (!(result instanceof ThirdUserAuthenticationToken)) {
+            fail("Should have returned instance of ThirdUserAuthenticationToken");
+        }
+
+        ThirdUserAuthenticationToken castResult = (ThirdUserAuthenticationToken) result;
+
+
+        assertEquals(ThirdUser.class, castResult.getPrincipal().getClass());
+
+    }
+
+
+    @Test
     public void testAuthenticatesASecondTime() {
         ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIBO, "weibo", "weibo", "weibo");
         ThirdUserCredentials credentials = new ThirdUserCredentials(rightSign, ThirdUserCredentials.DEFAULT_SIGNATURE_KEY);
@@ -143,8 +171,40 @@ public class ThirdUserAuthenticationProviderTest {
     }
 
 
+    private class MockTestPlatamIdUserService extends UserServiceImpl {
+        private boolean addUserIncoked = false;
+        public MockTestPlatamIdUserService() {
+            super(null, null);
+        }
+
+        public MockTestPlatamIdUserService(UserMapper userMapper, TencentIMService tencentIMService) {
+            super(userMapper, tencentIMService);
+        }
+
+        @Override
+        public ThirdUser findThirdUserByTypeAndOpenid(ThirdUser.Type type, String openid) {
+            if (addUserIncoked) {
+                ThirdUser user = new ThirdUser();
+                user.setType(ThirdUser.Type.WEIBO);
+                user.setOpenid("unionid");
+                user.setId(1);
+                return user;
+            }
+            return null;
+        }
+
+        @Override
+        public void addUser(User user) {
+            if (user instanceof ThirdUser) {
+                addUserIncoked = true;
+                assertEquals(((ThirdUser) user).getOpenid(), "unionid");
+            }
+        }
+    }
+
     private class MockUserService implements UserService {
         private boolean addUserIncoked = false;
+
         @Override
         public void addUser(User user) {
             if (user instanceof ThirdUser) {

@@ -43,17 +43,20 @@ public class ThirdUserAuthenticationProvider  implements AuthenticationProvider 
         if (authenticationToken.getLoginType() == null) {
             throw new InternalAuthenticationServiceException("第三方帐户信息缺少登录类型");
         }
-        if (StringUtils.isEmpty(authenticationToken.getOpenid())) {
+        if (StringUtils.isEmpty(authenticationToken.getPlatformId())) {
             throw new InternalAuthenticationServiceException("第三方帐户信息缺少openid");
         }
 
         checkSignature(authenticationToken.getOpenid(), credentials);
 
-        ThirdUser user = userService.findThirdUserByTypeAndOpenid(authenticationToken.getLoginType(), authenticationToken.getOpenid());
+        ThirdUser user = userService.findThirdUserByTypeAndOpenid(authenticationToken.getLoginType(), authenticationToken.getPlatformId());
+        if (user == null) {
+            user = userService.findThirdUserByTypeAndOpenid(authenticationToken.getLoginType(), authenticationToken.getOpenid());
+        }
         if (user == null && authenticationToken.getPrincipal() instanceof ThirdUserPrincipal) {
             ThirdUserPrincipal principal = (ThirdUserPrincipal) authenticationToken.getPrincipal();
-            userService.addUser(User.newThirdRegisterUser(principal.getType(), principal.getOpenid(), principal.getUserName(), principal.getImgUrl()));
-            user = userService.findThirdUserByTypeAndOpenid(principal.getType(), principal.getOpenid());
+            userService.addUser(User.newThirdRegisterUser(principal.getType(), principal.getPlatformId(), principal.getUserName(), principal.getImgUrl()));
+            user = userService.findThirdUserByTypeAndOpenid(principal.getType(), principal.getPlatformId());
         }
         if (user == null) {
             throw new InternalAuthenticationServiceException("第三方帐户创建失败");

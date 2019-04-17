@@ -69,21 +69,6 @@ public class ThirdUserAuthenticationToken extends AbstractAuthenticationToken {
         credentials = null;
     }
 
-    /**
-     * 覆盖，使用自定义的{@link com.xunlu.api.user.domain.User}对象,获取手机号
-     * @return
-     */
-    @Override
-    public String getName() {
-        if (this.getPrincipal() instanceof ThirdUser) {
-            return ((ThirdUser) this.getPrincipal()).getOpenid();
-        }
-        if (this.getPrincipal() instanceof ThirdUserPrincipal) {
-            return ((ThirdUserPrincipal) this.getPrincipal()).getOpenid();
-        }
-        return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
-    }
-
     public ThirdUser.Type getLoginType() {
         if (this.getPrincipal() instanceof ThirdUser) {
             return ((ThirdUser) this.getPrincipal()).getType();
@@ -94,7 +79,32 @@ public class ThirdUserAuthenticationToken extends AbstractAuthenticationToken {
         return ThirdUser.Type.WEIXIN;
     }
 
+    /**
+     * 返回第三方用户平台id.
+     * 该平台该用户将只具有这个id， 不会出现多个平台id对应同一用户的情况
+     * @return
+     */
+    public String getPlatformId() {
+        if (this.getPrincipal() instanceof ThirdUser) {
+            return ((ThirdUser) this.getPrincipal()).getOpenid();
+        }
+        if (this.getPrincipal() instanceof ThirdUserPrincipal) {
+            return ((ThirdUserPrincipal) this.getPrincipal()).getPlatformId();
+        }
+        return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
+    }
+
+    /**
+     * 返回openid.
+     * @return
+     */
     public String getOpenid() {
-        return getName();
+        if (this.getPrincipal() instanceof ThirdUser) {
+            return ((ThirdUser) this.getPrincipal()).getOpenid();
+        }
+        if (this.getPrincipal() instanceof ThirdUserPrincipal) {
+            return ((ThirdUserPrincipal) this.getPrincipal()).getOpenid();
+        }
+        return (this.getPrincipal() == null) ? "" : this.getPrincipal().toString();
     }
 }
