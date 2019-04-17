@@ -224,5 +224,10 @@
         set photo = #{photo}
         where id = #{id}
     </update>
+    <update id="updateThirdUserOpenid">
+        update tb_third_user
+        set openid = #{openid}
+        where user_id = #{id}
+    </update>
 
 </mapper>

@@ -282,6 +282,33 @@ public class UserMapperTest {
         Assert.assertNull(exceptedPhoto );
     }
 
+    @Test
+    @Sql(statements = {"INSERT INTO xunlu.tb_user\n" +
+            "(id, user_name, nick_name, person_sign, photo, email, phone, password, prefer_natural, prefer_human, prefer_running, prefer_play_time, prefer_night_play, prefer_pub_trans_first, prefer_hotel_level, create_time, prefer_trip_number, prefer_flight, area_code, tim_sync, tim_identifier, is_spider)\n" +
+            "VALUES(-1, '"+ USER_NAME +"', '小丸子', '', NULL, NULL, 'phone', NULL, 20, 20, 20, 20, 10, 20, 20, '2016-09-26 20:17:15.000', 10, 10, NULL, 1, 'fc17719aa31c31875461eeb9cbea6777', 1);\n",
+            "INSERT INTO xunlu.tb_third_user\n" +
+                    "(id, user_id, `type`, nick_name, img, openid, create_time)\n" +
+                    "VALUES(-1, -1, 3, '石沉海', 'http://test.com/test.jpg', 'testFindThirdUser', '2015-08-31 23:17:25.000');\n"})
+    public void updateThirdUserOpenid() {
+
+        userMapper.updateThirdUserOpenid (insertId, "helloworld");
+
+        String exceptedOpenid = jdbcTemplate.queryForObject("select openid from tb_third_user where id = " + insertId, String.class);
+        Assert.assertEquals("helloworld", exceptedOpenid );
+
+        boolean ret = userMapper.updateThirdUserOpenid(null, "helloworld");
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updateThirdUserOpenid(null, null);
+        Assert.assertFalse(ret);
+
+        ret = userMapper.updateThirdUserOpenid(insertId, null);
+        exceptedOpenid  = jdbcTemplate.queryForObject("select openid from tb_third_user where id = " + insertId, String.class);
+        Assert.assertTrue(ret);
+        Assert.assertNull(exceptedOpenid );
+    }
+
+
     private  <T> T getColumnValueById(Integer id, String column, Class<T> columnClass) {
         return jdbcTemplate.queryForObject("select "+column+" from tb_user where id = " + id, columnClass);
     }

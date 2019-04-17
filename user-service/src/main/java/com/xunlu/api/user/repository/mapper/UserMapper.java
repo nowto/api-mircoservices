@@ -125,4 +125,12 @@ public interface UserMapper {
      * @return ture 更新成功, false 更新失败
      */
     boolean updatePhoto(@Param("id") Integer id, @Param("photo") String photo);
+
+    /**
+     * 更新第三方登录用户的openid
+     * @param id 欲更新用户的用户id
+     * @param openid 更新后头像. 注意, 如果传入null,会将openid更新为null
+     * @return ture  成功， false 失败
+     */
+    boolean updateThirdUserOpenid(@Param("id") Integer id, @Param("openid") String openid);
 }
