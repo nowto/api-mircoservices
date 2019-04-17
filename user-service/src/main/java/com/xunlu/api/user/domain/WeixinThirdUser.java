@@ -15,6 +15,9 @@ public class WeixinThirdUser extends ThirdUser {
      */
     private String originalOpenid;
 
+    /**
+     * 微信登录客户端
+     */
     private Client client = Client.APP;
 
     {
