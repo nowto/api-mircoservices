@@ -2,6 +2,7 @@ package com.xunlu.api.user.repository.mapper;
 
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
+import com.xunlu.api.user.domain.WeixinThirdUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.lang.NonNull;
@@ -24,10 +25,20 @@ public interface UserMapper {
     /**
      * 添加用户.
      * 仅操作{@code tb_third_user}表
+     * 需联合{@link #addUser(User)}完成添加一个普通第三方用户（非微信的第三方用户）
      * @param user
      * @return
      */
     boolean addThirdUser(ThirdUser user);
+
+    /**
+     * 添加用户
+     * 仅操作{@code tb_wx_user}表.
+     * 需联合{@link #addUser(User)}、{@link #addThirdUser(ThirdUser)}完成添加一个微信第三方用户
+     * @param user
+     * @return
+     */
+    boolean addWeixinThirdUser(WeixinThirdUser user);
 
     /**
      * 获取用户根据id
@@ -133,4 +144,5 @@ public interface UserMapper {
      * @return ture  成功， false 失败
      */
     boolean updateThirdUserOpenid(@Param("id") Integer id, @Param("openid") String openid);
+
 }

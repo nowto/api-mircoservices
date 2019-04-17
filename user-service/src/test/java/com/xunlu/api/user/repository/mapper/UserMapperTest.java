@@ -3,6 +3,8 @@ package com.xunlu.api.user.repository.mapper;
 import com.xunlu.api.common.CommonAutoConfiguration;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
+import com.xunlu.api.user.domain.WeixinThirdUser;
+import com.xunlu.api.user.security.ThirdUserPrincipal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,10 +56,20 @@ public class UserMapperTest {
 
     @Test
     public void testAddThirdUser() {
+        ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIBO, "openid", "liweibo", "http://test.com/test.jpg");
 
-        ThirdUser userHaveId = User.newThirdRegisterUser(ThirdUser.Type.WEIBO, "openid", "liweibo", "http://test.com/test.jpg");
+        ThirdUser userHaveId = User.newThirdRegisterUser(principal);
         userHaveId.setId(3);
         boolean ret = userMapper.addThirdUser(userHaveId);
+        Assert.assertTrue(ret);
+    }
+
+    @Test
+    public void testAddWeixinThirdUser() {
+        ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIXIN, "openid", "liweibo", "http://test.com/test.jpg");
+        WeixinThirdUser userHaveId = (WeixinThirdUser) User.newThirdRegisterUser(principal);
+        userHaveId.setId(3);
+        boolean ret = userMapper.addWeixinThirdUser(userHaveId);
         Assert.assertTrue(ret);
     }
 

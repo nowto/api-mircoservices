@@ -63,6 +63,21 @@
                 #{createTime, jdbcType=TIMESTAMP}
             )
     </insert>
+    <insert id="addWeixinThirdUser">
+        insert into
+            tb_wx_user (
+                user_id,
+                client,
+                openid,
+                created_at)
+            values
+                (
+                  #{id},
+                  #{client},
+                  #{originalOpenid},
+                  #{createTime, jdbcType=TIMESTAMP}
+                )
+    </insert>
 
     <sql id="selectUserSql" >
         select

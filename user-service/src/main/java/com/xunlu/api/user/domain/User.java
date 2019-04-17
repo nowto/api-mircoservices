@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.xunlu.api.common.codeenum.BaseCodeEnum;
+import com.xunlu.api.user.security.ThirdUserPrincipal;
 import com.xunlu.api.user.util.UserUtil;
 import org.springframework.util.DigestUtils;
 
@@ -120,14 +121,20 @@ public class User implements Serializable {
      * 创建一个首次第三方登录时默认注册时的用户
      * @return
      */
-    public static final ThirdUser newThirdRegisterUser(ThirdUser.Type type, String openid, String userName, String imgUrl) {
-        ThirdUser user = new ThirdUser();
+    public static final ThirdUser newThirdRegisterUser(ThirdUserPrincipal principal) {
+        ThirdUser user;
 
-        user.setType(type);
-        user.setOpenid(openid);
-        user.setNickName(userName);
-        user.setPhoto(imgUrl);
-        user.setImgUrl(imgUrl);
+        if (principal.getType() == ThirdUser.Type.WEIXIN) {
+            user = new WeixinThirdUser(principal.getOpenid());
+        } else {
+            user = new ThirdUser();
+            user.setType(principal.getType());
+        }
+
+        user.setOpenid(principal.getPlatformId());
+        user.setNickName(principal.getUserName());
+        user.setPhoto(principal.getImgUrl());
+        user.setImgUrl(principal.getImgUrl());
 
         user.setCreateTime(LocalDateTime.now());
         return user;
