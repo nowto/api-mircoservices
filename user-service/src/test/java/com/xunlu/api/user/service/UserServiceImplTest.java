@@ -346,4 +346,44 @@ public class UserServiceImplTest {
         ret = userService.updatePhoto(null, null);
         Assert.assertFalse(ret);
     }
+
+    @Test
+    public void testUpdateThirdUserOpenid() {
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.updateThirdUserOpenid(1, "hello")).thenReturn(true);
+        when(mockUserMapper.updateThirdUserOpenid(2, "hello")).thenReturn(false);
+        when(mockUserMapper.updateThirdUserOpenid(null, "hello")).thenReturn(false);
+        when(mockUserMapper.updateThirdUserOpenid(1, null)).thenReturn(true);
+        when(mockUserMapper.updateThirdUserOpenid(null, null)).thenReturn(false);
+        when(mockUserMapper.getById(1)).thenReturn(new ThirdUser());
+        when(mockUserMapper.getById(2)).thenReturn(new ThirdUser());
+        when(mockUserMapper.getById(3)).thenReturn(new User());
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+
+        boolean ret = userService.updateThirdUserOpenid(1, "hello");
+        Assert.assertTrue(ret);
+
+        ret = userService.updateThirdUserOpenid(2, "hello");
+        Assert.assertFalse(ret);
+
+        try {
+            ret = userService.updateThirdUserOpenid(null, "hello");
+            Assert.assertFalse(ret);
+        } catch (ServiceException e) {
+            Assert.assertEquals("用户id不能为null", e.getMessage());
+        }
+        try {
+            userService.updateThirdUserOpenid(1, null);
+            Assert.fail("应该抛出 ServiceException");
+        } catch (ServiceException e) {
+            Assert.assertEquals("openid不能为null", e.getMessage());
+        }
+        try {
+            userService.updateThirdUserOpenid(3, "hhhhhh");
+            Assert.fail("应该抛出 ServiceException");
+        } catch (ServiceException e) {
+            Assert.assertEquals("该用户不是第三方登录用户", e.getMessage());
+        }
+    }
 }

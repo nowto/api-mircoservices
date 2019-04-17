@@ -4,9 +4,7 @@ import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.mapper.UserMapper;
 import com.xunlu.api.user.service.TencentIMService;
-import com.xunlu.api.user.service.UserService;
 import com.xunlu.api.user.service.UserServiceImpl;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -202,7 +200,12 @@ public class ThirdUserAuthenticationProviderTest {
         }
     }
 
-    private class MockUserService implements UserService {
+    private class MockUserService extends UserServiceImpl {
+
+        public MockUserService() {
+            super(null, null);
+        }
+
         private boolean addUserIncoked = false;
 
         @Override

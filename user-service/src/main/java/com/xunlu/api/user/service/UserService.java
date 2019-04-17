@@ -96,4 +96,12 @@ public interface UserService {
      */
     boolean updatePhoto(Integer id, String photo);
 
+    /**
+     * 更新第三方登录用户的openid
+     * @param id 欲更新第三方登录用户的用户id, 不允许为null
+     * @param openid 更新后openid
+     * @return true 成功, false 失败
+     * @throws ServiceException 该id用户不是第三方登录用户
+     */
+    boolean updateThirdUserOpenid(Integer id, @NonNull String openid) throws ServiceException;
 }

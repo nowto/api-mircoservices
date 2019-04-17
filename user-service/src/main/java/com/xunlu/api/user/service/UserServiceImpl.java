@@ -140,6 +140,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean updateThirdUserOpenid(Integer id, String openid) throws ServiceException {
+        if (id == null) {
+            throw new ServiceException("用户id不能为null");
+        }
+        User user = getUser(id);
+        if (!(user instanceof ThirdUser)) {
+            throw new ServiceException("该用户不是第三方登录用户");
+        }
+        if (openid == null) {
+            throw new ServiceException("openid不能为null");
+        }
+        return userMapper.updateThirdUserOpenid(id, openid);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Integer checkLiked(Integer userId, Integer uid) {
         return null;

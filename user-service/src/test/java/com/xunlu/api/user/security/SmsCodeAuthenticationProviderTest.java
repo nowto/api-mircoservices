@@ -2,9 +2,8 @@ package com.xunlu.api.user.security;
 
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
-import com.xunlu.api.user.service.ServiceException;
-import com.xunlu.api.user.service.SmsService;
-import com.xunlu.api.user.service.UserService;
+import com.xunlu.api.user.repository.mapper.UserMapper;
+import com.xunlu.api.user.service.*;
 import org.junit.Test;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -130,7 +129,11 @@ public class SmsCodeAuthenticationProviderTest {
     }
 
 
-    private class MockUserService implements UserService {
+    private class MockUserService extends UserServiceImpl {
+        public MockUserService() {
+            super(null, null);
+        }
+
         private boolean addUserIncoked = false;
         @Override
         public void addUser(User user) {
