@@ -37,6 +37,7 @@ public class ThirdUserAuthenticationFilter extends AbstractAuthenticationProcess
      * principal
      */
     public static final String SECURITY_OPENID = "openid";
+    public static final String SECURITY_UNIONID = "unionid";
     public static final String SECURITY_USERNAME = "user_name";
     public static final String SECURITY_IMGURL = "img_url";
 
@@ -71,10 +72,14 @@ public class ThirdUserAuthenticationFilter extends AbstractAuthenticationProcess
         openid = StringUtils.defaultString(openid, "");
         openid = openid.trim();
 
+        String unionid = obtainRequestParameter(request, SECURITY_UNIONID);
+        unionid = StringUtils.defaultString(unionid, "");
+        unionid = unionid.trim();
+
         String userName = obtainRequestParameter(request, SECURITY_USERNAME);
         String imgUrl = obtainRequestParameter(request, SECURITY_IMGURL);
 
-        return new ThirdUserPrincipal(loginType, openid, userName, imgUrl);
+        return new ThirdUserPrincipal(loginType, openid, unionid, userName, imgUrl);
     }
 
     private ThirdUserCredentials obtainCredentials(HttpServletRequest request) {
