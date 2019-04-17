@@ -3,6 +3,7 @@ package com.xunlu.api.user.service;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.mapper.UserMapper;
+import com.xunlu.api.user.security.ThirdUserPrincipal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -86,9 +87,31 @@ public class UserServiceImplTest {
 
         UserServiceImpl userService = new UserServiceImpl(mockUserMapper, mockTencentIMService);
         userService.setTimPrefix("testtest");
-        ThirdUser user = User.newThirdRegisterUser(ThirdUser.Type.WEIBO, "openid", "userName", "http://test.com/test.jpg");
+
+        ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIBO, "openid", "userName", "http://test.com/test.jpg");
+        ThirdUser user = User.newThirdRegisterUser(principal);
         userService.addUser(user);
         verify(mockUserMapper).addThirdUser(any());
+    }
+
+    @Test
+    public void testAddWexinThirdUser() {
+        mockUserMapper = Mockito.mock(UserMapper.class);
+        doAnswer(invocationOnMock -> {
+            User user = invocationOnMock.getArgument(0);
+            user.setId(1111);
+            return true;
+        }).when(mockUserMapper).addUser(any());
+        mockTencentIMService = mock(TencentIMService.class);
+
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, mockTencentIMService);
+        userService.setTimPrefix("testtest");
+
+        ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIXIN, "openid", "userName", "http://test.com/test.jpg");
+        ThirdUser user = User.newThirdRegisterUser(principal);
+        userService.addUser(user);
+        verify(mockUserMapper).addWeixinThirdUser(any());
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.xunlu.api.user.service;
 
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
+import com.xunlu.api.user.domain.WeixinThirdUser;
 import com.xunlu.api.user.repository.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
@@ -43,6 +44,9 @@ public class UserServiceImpl implements UserService {
         }
         if (user instanceof ThirdUser) {
             userMapper.addThirdUser((ThirdUser) user);
+        }
+        if (user instanceof WeixinThirdUser) {
+            userMapper.addWeixinThirdUser((WeixinThirdUser) user);
         }
         String identifier = tencentIMService.makeIdentifier(timPrefix, user.getId());
         if (tencentIMService.accountImport(identifier, null, null)) {
