@@ -100,5 +100,10 @@ public class TokenAuthenticationProviderTest {
         public void invalidateTokenForUser(Integer id) {
 
         }
+
+        @Override
+        public void invalidateToken(String token) {
+
+        }
     }
 }
