@@ -52,7 +52,7 @@ public class Config extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .csrf().disable()
                 .cors().disable()
-                .logout().disable()
+                .logout().disable()// 退出登录功能 放在了api-gateway
                 .httpBasic().disable()
                 .authorizeRequests()
                     .anyRequest().permitAll();// 用户微服务只做认证，不做鉴权，鉴权交给网关
