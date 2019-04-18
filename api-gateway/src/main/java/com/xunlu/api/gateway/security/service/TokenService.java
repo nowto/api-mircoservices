@@ -14,4 +14,10 @@ public interface TokenService {
      * @return 用户， 如果获取不到将返回null
      */
     User getUser(String token);
+
+    /**
+     * 注销用户登录
+     * @param id 用户id
+     */
+    void invalidateTokenForUser(Integer id);
 }

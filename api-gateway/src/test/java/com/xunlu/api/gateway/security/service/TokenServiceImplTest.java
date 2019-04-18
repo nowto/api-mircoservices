@@ -33,4 +33,11 @@ public class TokenServiceImplTest {
 
         Assert.assertNull(tokenRepository.getUserByToken("bbbbb"));
     }
+
+    @Test
+    public void testInvalidateTokenForUser() {
+        tokenService.invalidateTokenForUser(56);
+
+        verify(tokenRepository).deleteToken(56);
+    }
 }
