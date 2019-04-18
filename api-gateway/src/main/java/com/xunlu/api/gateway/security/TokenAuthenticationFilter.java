@@ -1,6 +1,5 @@
 package com.xunlu.api.gateway.security;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -25,7 +24,9 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
         //认证成功后继续执行请求
         setContinueChainBeforeSuccessfulAuthentication(true);
     }
-    
+
+    private TokenObtainStrategy tokenObtainStrategy = new AuthorizationHeaderTokenObtainStrategy();
+
     public TokenAuthenticationFilter(String userServiceAuthenticatinUrl) {
         super(new NegatedRequestMatcher(new AntPathRequestMatcher(userServiceAuthenticatinUrl)));
     }
@@ -41,13 +42,13 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
      */
     @Override
     protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String token = obtainToken(request);
+        String token = tokenObtainStrategy.obtianToken(request);
         return super.requiresAuthentication(request, response) && token != null;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        String token = obtainToken(request);
+        String token = tokenObtainStrategy.obtianToken(request);
         TokenAuthenticationToken authRequest = new TokenAuthenticationToken(token);
         setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);
@@ -55,9 +56,5 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
     private void setDetails(HttpServletRequest request, TokenAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
-    }
-
-    private String obtainToken(HttpServletRequest request) {
-        return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 }
