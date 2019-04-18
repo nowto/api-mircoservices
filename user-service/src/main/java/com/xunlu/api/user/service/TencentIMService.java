@@ -12,7 +12,7 @@ import java.util.List;
  * @author liweibo
  */
 public interface TencentIMService {
-	//region 登录鉴权相关 <a hre="https://cloud.tencent.com/document/product/269/31999">腾讯云官网对登录鉴权的介绍</a>
+	//region 登录鉴权相关 <a href="https://cloud.tencent.com/document/product/269/31999">腾讯云官网对登录鉴权的介绍</a>
 
 	/**
 	 * 根据identifier生成userSig, 生成的userSig有效期为180天, 生成userSig不需要连网.
