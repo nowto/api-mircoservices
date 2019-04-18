@@ -1,35 +1,18 @@
 package com.xunlu.api.user.service;
 
-import com.xunlu.api.user.domain.User;
+import org.springframework.http.HttpStatus;
 
+/**
+ * 查找不到用户异常
+ * @author liweibo
+ */
 public class UserNotExistException extends ServiceException{
-    private User user;
-    private Integer userId;
-
-    public UserNotExistException() {
+    {
+        status = HttpStatus.NOT_FOUND;
     }
 
     public UserNotExistException(String message) {
         super(message);
     }
 
-    public UserNotExistException(Integer userId, String message) {
-        super(message);
-        this.userId = userId;
-    }
-    public UserNotExistException(User user, String message) {
-        super(message);
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Integer getUserId() {
-        if (userId == null) {
-            userId = user != null ? user.getId() : null;
-        }
-        return userId;
-    }
 }

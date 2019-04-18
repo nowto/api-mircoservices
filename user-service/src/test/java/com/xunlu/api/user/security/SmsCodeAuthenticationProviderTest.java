@@ -212,7 +212,7 @@ public class SmsCodeAuthenticationProviderTest {
         @Override
         public boolean verify(String appKey, String zone, String phone, String code) throws ServiceException {
             if ("INVALID_PHONE".equals(phone)) {
-                throw new ServiceException();
+                throw new ServiceException("");
             }
             if ("1111".equals(code)) {
                 return true;
