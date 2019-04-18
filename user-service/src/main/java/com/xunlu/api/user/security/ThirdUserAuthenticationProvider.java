@@ -50,16 +50,24 @@ public class ThirdUserAuthenticationProvider  implements AuthenticationProvider 
         checkSignature(authenticationToken.getOpenid(), credentials);
 
         ThirdUser user = userService.findThirdUserByTypeAndOpenid(authenticationToken.getLoginType(), authenticationToken.getPlatformId());
+
         if (user == null) {
             user = userService.findThirdUserByTypeAndOpenid(authenticationToken.getLoginType(), authenticationToken.getOpenid());
         }
+
+        // 默认注册
         if (user == null && authenticationToken.getPrincipal() instanceof ThirdUserPrincipal) {
             ThirdUserPrincipal principal = (ThirdUserPrincipal) authenticationToken.getPrincipal();
-            userService.addUser(User.newThirdRegisterUser(principal.getType(), principal.getPlatformId(), principal.getUserName(), principal.getImgUrl()));
+            userService.addUser(User.newThirdRegisterUser(principal));
             user = userService.findThirdUserByTypeAndOpenid(principal.getType(), principal.getPlatformId());
         }
+
         if (user == null) {
             throw new InternalAuthenticationServiceException("第三方帐户创建失败");
+        }
+
+        if (StringUtils.equals(user.getOpenid(), authenticationToken.getPlatformId())) {
+            userService.updateThirdUserOpenid(user.getId(), authenticationToken.getPlatformId());
         }
         //check 签名
 
