@@ -66,4 +66,19 @@ public class RedisTokenRepositoryTest {
         verify(redisTemplate).delete("token:userId:55555");
     }
 
+    @Test
+    public void deleteTokenByTokenWhenTokenNoCorrespondingUser() {
+
+        ValueOperations<String, Object> opsForValue = mock(ValueOperations.class);
+
+        RedisTemplate<String, Object> redisTemplate = mock(RedisTemplate.class);
+        when(redisTemplate.opsForValue()).thenReturn(opsForValue);
+
+        RedisTokenRepository tokenRepository = new RedisTokenRepository(redisTemplate);
+
+        tokenRepository.deleteToken("hello");
+
+        verify(redisTemplate, never()).delete(anyString());
+        verify(redisTemplate, never()).delete(anyString());
+    }
 }
