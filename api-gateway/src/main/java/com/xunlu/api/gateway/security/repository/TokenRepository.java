@@ -19,4 +19,10 @@ public interface TokenRepository {
      * @param userId
      */
     void deleteToken(Integer userId);
+
+    /**
+     * 删除token{@code token}
+     * @param token
+     */
+    void deleteToken(String token);
 }

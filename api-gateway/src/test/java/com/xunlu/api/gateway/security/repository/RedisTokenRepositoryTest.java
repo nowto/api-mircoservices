@@ -32,7 +32,7 @@ public class RedisTokenRepositoryTest {
     }
 
     @Test
-    public void deleteToken() {
+    public void deleteTokenByUserId() {
         ValueOperations<String, Object> opsForValue = mock(ValueOperations.class);
         when(opsForValue.get("token:userId:4")).thenReturn("hello");
 
@@ -46,4 +46,24 @@ public class RedisTokenRepositoryTest {
         verify(redisTemplate).delete("user:token:hello");
         verify(redisTemplate).delete("token:userId:4");
     }
+
+    @Test
+    public void deleteTokenByToken() {
+        User u = new User();
+        u.setId(55555);
+
+        ValueOperations<String, Object> opsForValue = mock(ValueOperations.class);
+        when(opsForValue.get("user:token:hello")).thenReturn(u);
+
+        RedisTemplate<String, Object> redisTemplate = mock(RedisTemplate.class);
+        when(redisTemplate.opsForValue()).thenReturn(opsForValue);
+
+        RedisTokenRepository tokenRepository = new RedisTokenRepository(redisTemplate);
+
+        tokenRepository.deleteToken("hello");
+
+        verify(redisTemplate).delete("user:token:hello");
+        verify(redisTemplate).delete("token:userId:55555");
+    }
+
 }
