@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 public class RedisTokenRepositoryTest {
 
@@ -29,5 +29,21 @@ public class RedisTokenRepositoryTest {
         Assert.assertTrue(user.getId().equals(5555));
 
         Assert.assertNull(tokenRepository.getUserByToken("88888"));
+    }
+
+    @Test
+    public void deleteToken() {
+        ValueOperations<String, Object> opsForValue = mock(ValueOperations.class);
+        when(opsForValue.get("token:userId:4")).thenReturn("hello");
+
+        RedisTemplate<String, Object> redisTemplate = mock(RedisTemplate.class);
+        when(redisTemplate.opsForValue()).thenReturn(opsForValue);
+
+        RedisTokenRepository tokenRepository = new RedisTokenRepository(redisTemplate);
+
+        tokenRepository.deleteToken(4);
+
+        verify(redisTemplate).delete("user:token:hello");
+        verify(redisTemplate).delete("token:userId:4");
     }
 }

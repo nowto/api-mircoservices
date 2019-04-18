@@ -26,7 +26,18 @@ public class RedisTokenRepository implements TokenRepository {
         return (User) redisTemplate.opsForValue().get(keyUserByToken(token));
     }
 
+    @Override
+    public void deleteToken(Integer userId) {
+        String token = (String) redisTemplate.opsForValue().get(keyTokenByUserId(userId));
+        redisTemplate.delete(keyUserByToken(token));
+        redisTemplate.delete(keyTokenByUserId(userId));
+    }
+
     private String keyUserByToken(String token) {
         return "user:token:" + token;
+    }
+
+    private String keyTokenByUserId(Integer userId) {
+        return "token:userId:" + String.valueOf(userId);
     }
 }

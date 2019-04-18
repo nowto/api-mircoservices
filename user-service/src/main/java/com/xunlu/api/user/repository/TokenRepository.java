@@ -1,6 +1,5 @@
 package com.xunlu.api.user.repository;
 
-import com.xunlu.api.user.domain.AccessToken;
 import com.xunlu.api.user.domain.User;
 import org.springframework.lang.Nullable;
 
@@ -22,10 +21,4 @@ public interface TokenRepository {
      * @param token token
      */
     void addToken(User user, String token);
-
-    /**
-     * 删除用户id为{@code userId}的token
-     * @param userId
-     */
-    void deleteToken(Integer userId);
 }

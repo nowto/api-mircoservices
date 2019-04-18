@@ -13,4 +13,10 @@ public interface TokenRepository {
      * @return 如果获取不到，返回null
      */
     User getUserByToken(String token);
+
+    /**
+     * 删除用户id为{@code userId}的token
+     * @param userId
+     */
+    void deleteToken(Integer userId);
 }
