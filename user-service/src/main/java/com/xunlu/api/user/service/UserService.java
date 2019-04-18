@@ -9,6 +9,7 @@ import org.springframework.lang.NonNull;
  * @author liweibo
  */
 public interface UserService {
+    //---- readonly method
     /**
      * 添加一个新用户.
      * 同时也会将这个帐号导入到腾讯云通信IM, 如果可以成功导入的话
@@ -56,6 +57,7 @@ public interface UserService {
      */
     User.Prefer getUserPrefer(Integer id);
 
+    //---- update method
     /**
      * 更新用户的偏好.
      * 只会更新prefer中不为null的属性
