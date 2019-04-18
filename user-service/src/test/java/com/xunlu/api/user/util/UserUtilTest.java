@@ -1,17 +1,7 @@
 package com.xunlu.api.user.util;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-import static org.junit.Assert.*;
 
 public class UserUtilTest {
 
