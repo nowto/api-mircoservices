@@ -95,5 +95,10 @@ public class TokenAuthenticationProviderTest {
             }
             return null;
         }
+
+        @Override
+        public void invalidateTokenForUser(Integer id) {
+
+        }
     }
 }
