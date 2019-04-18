@@ -20,4 +20,10 @@ public interface TokenService {
      * @param id 用户id
      */
     void invalidateTokenForUser(Integer id);
+
+    /**
+     * 置{@code token}为无效
+     * @param token token
+     */
+    void invalidateToken(String token);
 }

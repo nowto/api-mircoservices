@@ -26,6 +26,17 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void invalidateTokenForUser(Integer userId) {
+        if (userId == null) {
+            return;
+        }
         tokenRepository.deleteToken(userId);
+    }
+
+    @Override
+    public void invalidateToken(String token) {
+        if (token == null) {
+            return;
+        }
+        tokenRepository.deleteToken(token);
     }
 }

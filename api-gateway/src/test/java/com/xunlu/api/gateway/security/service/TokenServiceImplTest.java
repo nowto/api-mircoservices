@@ -40,4 +40,11 @@ public class TokenServiceImplTest {
 
         verify(tokenRepository).deleteToken(56);
     }
+
+    @Test
+    public void testInvalidateTokenForToken() {
+        tokenService.invalidateToken("hello");
+
+        verify(tokenRepository).deleteToken("hello");
+    }
 }
