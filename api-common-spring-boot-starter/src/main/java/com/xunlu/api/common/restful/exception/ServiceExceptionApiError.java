@@ -2,6 +2,7 @@ package com.xunlu.api.common.restful.exception;
 
 /**
  * 表示 restful api 业务异常 返回给前端的错误
+ * @author liweibo
  */
 public interface ServiceExceptionApiError extends ApiError {
     /**
