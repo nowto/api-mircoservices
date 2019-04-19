@@ -59,7 +59,6 @@
 		<dependency>
 			<groupId>com.xunlu.api</groupId>
 			<artifactId>api-common-spring-boot-starter</artifactId>
-			<version>0.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
