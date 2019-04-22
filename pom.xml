@@ -46,7 +46,7 @@
             <dependency>
                 <groupId>com.xunlu.api</groupId>
                 <artifactId>api-common-spring-boot-starter</artifactId>
-                <version>0.0.4</version>
+                <version>0.0.5</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

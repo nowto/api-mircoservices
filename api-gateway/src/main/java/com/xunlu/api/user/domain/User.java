@@ -96,6 +96,7 @@ public class User implements Serializable {
         this.extraInfo = extraInfo;
     }
 
+
     @Override
     public String toString() {
         return getUserName();

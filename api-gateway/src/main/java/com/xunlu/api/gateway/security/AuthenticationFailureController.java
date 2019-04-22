@@ -1,6 +1,6 @@
 package com.xunlu.api.gateway.security;
 
-import com.xunlu.api.common.restful.ApiError;
+import com.xunlu.api.common.restful.exception.ApiError;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.AuthenticationException;
@@ -32,6 +32,6 @@ public class AuthenticationFailureController {
     @ResponseBody
     ApiError handleFailure(
             @RequestAttribute(WebAttributes.AUTHENTICATION_EXCEPTION) AuthenticationException exception) {
-        return new ApiError(exception.getMessage());
+        return exception::getMessage;
     }
 }

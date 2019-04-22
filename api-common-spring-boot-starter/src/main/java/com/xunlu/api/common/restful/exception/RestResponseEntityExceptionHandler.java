@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,43 +66,21 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     /**
      * 处理参数异常
-     *
-     * @param ex
-     * @return
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        Optional<String> firstErrorMessage = ex.getBindingResult()
-                                                    .getAllErrors()
-                                                    .stream()
-                                                    .map(ObjectError::getDefaultMessage)
-                                                    .findFirst();
-
-        return handleExceptionInternal(
-                ex,
-                firstErrorMessage
-                        .map(message -> (ApiError)(() -> message))
-                        .orElse(ApiError.UNKNOWN_PARMETER_ERROR_API_ERROR),
-                headers,
-                status,
-                request);
+        Object body = body(ex.getBindingResult());
+        return handleExceptionInternal(ex, body, headers, status, request);
     }
+
 
     /**
      * 处理实体类校验
-     *
-     * @param e
-     * @return
      */
-    @ExceptionHandler(BindException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleValidationBeanException(BindException e) {
-
-        for (ObjectError s : e.getAllErrors()) {
-            return s::getDefaultMessage;
-        }
-        return ApiError.UNKNOWN_PARMETER_ERROR_API_ERROR;
+    @Override
+    protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Object body = body(ex.getBindingResult());
+        return handleExceptionInternal(ex, body, headers, status, request);
     }
 
     /**
@@ -114,5 +93,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             body = ApiError.NON_SERVICE_EXCEPTION_API_ERROR;
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private Object body(BindingResult bindingResult) {
+        Optional<String> firstErrorMessage = bindingResult
+                .getAllErrors().stream().findFirst().map(ObjectError::getDefaultMessage);
+
+        return firstErrorMessage.map(msg -> (ApiError)(() -> msg))
+                .orElse(ApiError.UNKNOWN_PARMETER_ERROR_API_ERROR);
     }
 }

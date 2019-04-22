@@ -5,23 +5,17 @@ import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
-import org.springframework.validation.BindException;
-import org.springframework.web.context.request.WebRequest;
-
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 public class RestResponseEntityExceptionHandlerTest {
 
@@ -54,32 +48,6 @@ public class RestResponseEntityExceptionHandlerTest {
         assertEquals("TestConstraintViolation", entity.getMessage());
     }
 
-    @Test
-    public void handleValidationBodyException() {
-        ObjectError error = mock(ObjectError.class);
-        when(error.getDefaultMessage()).thenReturn("handleValidationBodyException");
-
-        BindingResult result = mock(BindingResult.class);
-        when(result.getAllErrors()).thenReturn(Collections.singletonList(error));
-
-        MethodArgumentNotValidException e = mock(MethodArgumentNotValidException.class);
-        when(e.getBindingResult()).thenReturn(result);
-
-        ApiError entity = handler.handleValidationBodyException(e);
-        assertEquals("handleValidationBodyException", entity.getMessage());
-    }
-
-    @Test
-    public void handleValidationBeanException() {
-        ObjectError error = mock(ObjectError.class);
-        when(error.getDefaultMessage()).thenReturn("handleValidationBeanException");
-
-        BindException ex = mock(BindException.class);
-        when(ex.getAllErrors()).thenReturn(Collections.singletonList(error));
-
-        ApiError entity = handler.handleValidationBeanException(ex);
-        assertEquals("handleValidationBeanException", entity.getMessage());
-    }
 
     @Test
     public void handleExceptionInternal() {
