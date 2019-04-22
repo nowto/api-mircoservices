@@ -63,22 +63,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ApiError.UNKNOWN_PARMETER_ERROR_API_ERROR;
     }
 
-
-    /**
-     * 处理参数异常
-     *
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleValidationBodyException(MethodArgumentNotValidException e) {
-        for (ObjectError s : e.getBindingResult().getAllErrors()) {
-            return s::getDefaultMessage;
-        }
-        return ApiError.UNKNOWN_PARMETER_ERROR_API_ERROR;
-    }
     /**
      * 处理参数异常
      *
