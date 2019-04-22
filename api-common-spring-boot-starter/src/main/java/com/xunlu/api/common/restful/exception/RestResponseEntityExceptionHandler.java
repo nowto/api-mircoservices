@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.Optional;
 
 /**
  * 全局的Handler（主要是Spring Controller）异常处理器
@@ -77,6 +78,29 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             return s::getDefaultMessage;
         }
         return ApiError.UNKNOWN_PARMETER_ERROR_API_ERROR;
+    }
+    /**
+     * 处理参数异常
+     *
+     * @param ex
+     * @return
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Optional<String> firstErrorMessage = ex.getBindingResult()
+                                                    .getAllErrors()
+                                                    .stream()
+                                                    .map(ObjectError::getDefaultMessage)
+                                                    .findFirst();
+
+        return handleExceptionInternal(
+                ex,
+                firstErrorMessage
+                        .map(message -> (ApiError)(() -> message))
+                        .orElse(ApiError.UNKNOWN_PARMETER_ERROR_API_ERROR),
+                headers,
+                status,
+                request);
     }
 
     /**
