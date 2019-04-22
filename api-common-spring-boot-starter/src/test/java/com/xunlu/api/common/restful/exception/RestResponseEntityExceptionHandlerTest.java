@@ -48,7 +48,6 @@ public class RestResponseEntityExceptionHandlerTest {
         assertEquals("TestConstraintViolation", entity.getMessage());
     }
 
-
     @Test
     public void handleExceptionInternal() {
 
