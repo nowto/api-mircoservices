@@ -1,20 +1,13 @@
 package com.xunlu.api.user.resource;
 
-import com.xunlu.api.common.CommonAutoConfiguration;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.service.TencentIMService;
 import com.xunlu.api.user.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.data.redis.AutoConfigureDataRedis;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,15 +15,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@ActiveProfiles("test")
 @WebMvcTest(value = UserSigResource.class, secure = false)
-@AutoConfigureWebClient
-@AutoConfigureDataRedis
-@ImportAutoConfiguration(CommonAutoConfiguration.class)
-public class UserSigResourceTest {
+public class UserSigResourceTest extends BaseResouceTest{
     private static final Integer TEST_USERID = 1;
     private static final String TEST_IDENTIFIER = "indentifier";
     private static final String TEST_USERSIG = "usersig_usersig";
@@ -58,7 +47,8 @@ public class UserSigResourceTest {
     public void getUserSig() throws Exception {
         mockMvc.perform(get("/userSig/"+TEST_USERID))
             .andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(TEST_USERSIG))
+            .andExpect(content().contentType("application/json;charset=UTF-8"))
+            .andExpect(content().string(TEST_USERSIG))
             .andDo(MockMvcResultHandlers.print());
     }
 
@@ -67,7 +57,8 @@ public class UserSigResourceTest {
         given(userService.getUser(anyInt())).willReturn(null);
         mockMvc.perform(get("/userSig/"+TEST_USERID))
                 .andExpect(status().is4xxClientError())
-//                .andExpect(MockMvcResultMatchers.content().string(TEST_USERSIG))
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("查找不到该用户信息"))
                 .andDo(MockMvcResultHandlers.print());
     }
 }
