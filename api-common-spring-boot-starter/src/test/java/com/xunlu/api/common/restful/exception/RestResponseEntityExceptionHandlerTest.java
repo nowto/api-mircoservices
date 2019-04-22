@@ -54,20 +54,6 @@ public class RestResponseEntityExceptionHandlerTest {
         assertEquals("TestConstraintViolation", entity.getMessage());
     }
 
-    @Test
-    public void handleValidationBodyException() {
-        ObjectError error = mock(ObjectError.class);
-        when(error.getDefaultMessage()).thenReturn("handleValidationBodyException");
-
-        BindingResult result = mock(BindingResult.class);
-        when(result.getAllErrors()).thenReturn(Collections.singletonList(error));
-
-        MethodArgumentNotValidException e = mock(MethodArgumentNotValidException.class);
-        when(e.getBindingResult()).thenReturn(result);
-
-        ApiError entity = handler.handleValidationBodyException(e);
-        assertEquals("handleValidationBodyException", entity.getMessage());
-    }
 
     @Test
     public void handleValidationBeanException() {
