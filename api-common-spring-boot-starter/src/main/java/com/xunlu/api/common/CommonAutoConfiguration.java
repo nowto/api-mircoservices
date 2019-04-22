@@ -2,6 +2,7 @@ package com.xunlu.api.common;
 
 import com.xunlu.api.common.codeenum.CodeEnumTypeHandler;
 import com.xunlu.api.common.codeenum.StringToBaseCodeEnumConverterFactory;
+import com.xunlu.api.common.restful.exception.RestResponseEntityExceptionHandler;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -44,13 +45,20 @@ public class CommonAutoConfiguration {
 
 
     /**
-     * 向Spring MVC 注册Converter：StringToBaseCodeEnumConverterFactory
+     * Spring MVC自动注册.
+     * 注册Converter：{@link StringToBaseCodeEnumConverterFactory},
+     * 注册ExceptionHandler： {@link RestResponseEntityExceptionHandler}
      */
     @Configuration
     @ConditionalOnWebApplication
     @ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class, FormatterRegistry.class, WebMvcAutoConfiguration.class})
     @AutoConfigureBefore(WebMvcAutoConfiguration.class)
     public static class MvcConfiguration  implements WebMvcConfigurer {
+        @Bean
+        public RestResponseEntityExceptionHandler restExceptionHandler() {
+            return new RestResponseEntityExceptionHandler();
+        }
+
         @Override
         public void addFormatters(FormatterRegistry registry) {
             registry.addConverterFactory(new StringToBaseCodeEnumConverterFactory<>());
