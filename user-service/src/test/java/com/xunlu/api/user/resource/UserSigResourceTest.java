@@ -56,7 +56,7 @@ public class UserSigResourceTest extends BaseResouceTest{
     public void getUser404() throws Exception {
         given(userService.getUser(anyInt())).willReturn(null);
         mockMvc.perform(get("/userSig/"+TEST_USERID))
-                .andExpect(status().is4xxClientError())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("查找不到该用户信息"))
                 .andDo(MockMvcResultHandlers.print());
