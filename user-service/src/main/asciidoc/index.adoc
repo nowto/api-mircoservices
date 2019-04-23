@@ -1,6 +1,56 @@
 = 用户微服务Restful API文档
 李伟博
 
+== 认证
+用户服务负责对微服务整体的api进行认证, 包含两种认证方式
+
+
+认证时, 如用户不存在, 将为该认证请求创建出一个新用户.
+
+. 手机验证码认证
+. 第三方登录认证
+
+=== 请求
+==== 手机验证码认证
+
+.请求
+|===
+|方法 |路径 |Content-Type头|参数
+
+|POST
+|/api/user-service/token
+|application/x-www-form-urlencoded
+|zone(区号,例如中国(86)), +
+phone(手机号), +
+smsCode(验证码), +
+appKey(那个app端, 例:xunlu,xinjiang)
+|===
+
+
+==== 第三方登录认证
+.请求
+|===
+|方法 |路径 |Content-Type头|参数
+
+|GET
+|/api/user-service/token
+|application/x-www-form-urlencoded
+|type(第三方登录类型, 1:微信, 2:QQ, 3:微博) +
+signature (签名) +
+key(签名使用的key) +
+openid(第三方用户信息中的openid) +
+unionid(微信第三方用户信息中的unionid) +
+user_name(第三方用户信息中的用户名称) +
+img_url((第三方用户信息中的头像url)) +
+|===
+
+=== 响应
+
+```json
+{
+    "token": "hhhhhhhhhhhhhhhhhhhhhhhh"// 令牌
+}
+```
 == 资源
 
 === 用户
@@ -10,5 +60,8 @@
 https://cloud.tencent.com/document/product/269/31999[UserSig介绍看这里]
 
 ==== 获取UserSig
+使用`GET`请求获取用户的腾讯云通信的UserSig
 
-operation::UserSigResourceTest/getUserSig[snippets='curl-request,path-parameters,response-body,response-fields']
+operation::UserSigResourceTest/getUserSig[snippets='http-request,httpresposne']
+
+// operation::UserSigResourceTest/getUserSig[snippets='curl-request,path-parameters,response-body,response-fields']
