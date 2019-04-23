@@ -19,7 +19,24 @@ import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
 /**
- * 全局的Handler（主要是Spring Controller）异常处理器
+ * 全局的Handler（主要是Spring Controller）异常处理器.
+ * 处理业务异常, 及非业务异常, 转化为Restful 4xx/5xx 响应.
+ * 业务异常必须是{@link ServiceException}类或其子类对象
+ *
+ * 业务异常响应格式为:
+ * <code>
+ * {
+ *     "exception": "com.xunlu.api.**.*Exception",//异常类 全限定名, 用于前端条件判断
+ *     "message": "xxxxx" //异常消息
+ * }
+ * </code>
+ *
+ * 非业务异常响应格式为:
+ * <code>
+ * {
+ *      "message": "内部服务器错误"
+ * }
+ * </code>
  * @author liweibo
  */
 @RestControllerAdvice
