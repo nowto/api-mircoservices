@@ -5,19 +5,14 @@ import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.mapper.UserMapper;
 import com.xunlu.api.user.service.ServiceException;
 import com.xunlu.api.user.service.TencentIMService;
-import com.xunlu.api.user.service.UserService;
 import com.xunlu.api.user.service.UserServiceImpl;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Mockito;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class ThirdUserAuthenticationProviderTest {
     private static final String rightSign = "62a5d3aa156ec1d9d95110ccdc1ca6ff";
@@ -178,11 +173,11 @@ public class ThirdUserAuthenticationProviderTest {
     private class MockTestPlatamIdUserService extends UserServiceImpl {
         private boolean addUserIncoked = false;
         public MockTestPlatamIdUserService() {
-            super(null, null);
+            super(null, null, null);
         }
 
         public MockTestPlatamIdUserService(UserMapper userMapper, TencentIMService tencentIMService) {
-            super(userMapper, tencentIMService);
+            super(userMapper, null, tencentIMService);
         }
 
         @Override
@@ -209,7 +204,7 @@ public class ThirdUserAuthenticationProviderTest {
     private class MockUserService extends UserServiceImpl {
 
         public MockUserService() {
-            super(null, null);
+            super(null, null, null);
         }
 
         private boolean addUserIncoked = false;

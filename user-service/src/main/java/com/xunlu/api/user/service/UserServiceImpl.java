@@ -1,8 +1,10 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.domain.WeixinThirdUser;
+import com.xunlu.api.user.repository.mapper.FeedBackMapper;
 import com.xunlu.api.user.repository.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
@@ -14,17 +16,20 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
     /**
      * 将自有帐号导入云通信ＩＭ时生成Identifier时的前缀
      */
     @Value("${tencent-im-service.make-identifier-prefix}")
     private String timPrefix;
 
-    private TencentIMService tencentIMService;
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
+    private final FeedBackMapper feedBackMapper;
+    private final TencentIMService tencentIMService;
 
-    public UserServiceImpl(UserMapper userMapper, TencentIMService tencentIMService) {
+    public UserServiceImpl(UserMapper userMapper, FeedBackMapper feedBackMapper, TencentIMService tencentIMService) {
         this.userMapper = userMapper;
+        this.feedBackMapper = feedBackMapper;
         this.tencentIMService = tencentIMService;
     }
 
@@ -156,6 +161,21 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("openid不能为null");
         }
         return userMapper.updateThirdUserOpenid(id, openid);
+    }
+
+    @Override
+    @Transactional
+    public void addFeedBack(FeedBack feedBack) throws ServiceException {
+        Integer userId = feedBack.getUserId();
+        if (userId == null) {
+            throw new UserNotExistException();
+        }
+        User user = this.getUser(userId);
+        if (user == null) {
+            throw new UserNotExistException();
+        }
+
+        feedBackMapper.addFeedBack(feedBack);
     }
 
     @Override

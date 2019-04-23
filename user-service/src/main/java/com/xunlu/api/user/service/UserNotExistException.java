@@ -15,4 +15,11 @@ public class UserNotExistException extends ServiceException{
         super(message);
     }
 
+    public UserNotExistException() {
+        super("用户不存在");
+    }
+
+    public UserNotExistException(Integer userId) {
+        super("id为"+ userId + "的用户不存在");
+    }
 }

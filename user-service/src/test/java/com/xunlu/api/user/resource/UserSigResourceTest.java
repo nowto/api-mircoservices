@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -38,7 +39,10 @@ public class UserSigResourceTest extends BaseResouceTest{
     static class ResultHandlerConfiguration {
         @Bean
         public RestDocumentationResultHandler restDocumentation() {
-            return MockMvcRestDocumentation.document("{ClassName}/{methodName}");
+            return MockMvcRestDocumentation.document(
+                    "{ClassName}/{methodName}",
+                    preprocessRequest(prettyPrint()),
+                    preprocessResponse(prettyPrint()));
         }
 
     }

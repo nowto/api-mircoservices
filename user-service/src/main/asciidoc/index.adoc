@@ -62,6 +62,4 @@ https://cloud.tencent.com/document/product/269/31999[UserSig介绍看这里]
 ==== 获取UserSig
 使用`GET`请求获取用户的腾讯云通信的UserSig
 
-operation::UserSigResourceTest/getUserSig[snippets='http-request,httpresposne']
-
-// operation::UserSigResourceTest/getUserSig[snippets='curl-request,path-parameters,response-body,response-fields']
+operation::UserSigResourceTest/getUserSig[snippets='http-request,http-response,path-parameters,response-body,response-fields']

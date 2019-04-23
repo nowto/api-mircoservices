@@ -1,5 +1,6 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import org.springframework.lang.NonNull;
@@ -9,13 +10,8 @@ import org.springframework.lang.NonNull;
  * @author liweibo
  */
 public interface UserService {
+    //<<<< 用户
     //---- readonly method
-    /**
-     * 添加一个新用户.
-     * 同时也会将这个帐号导入到腾讯云通信IM, 如果可以成功导入的话
-     * @param user 新用户
-     */
-    void addUser(User user);
 
     /**
      * 根据用户id获取用户
@@ -58,6 +54,13 @@ public interface UserService {
     User.Prefer getUserPrefer(Integer id);
 
     //---- update method
+    /**
+     * 添加一个新用户.
+     * 同时也会将这个帐号导入到腾讯云通信IM, 如果可以成功导入的话
+     * @param user 新用户
+     */
+    void addUser(User user);
+
     /**
      * 更新用户的偏好.
      * 只会更新prefer中不为null的属性
@@ -106,4 +109,17 @@ public interface UserService {
      * @throws ServiceException 该id用户不是第三方登录用户
      */
     boolean updateThirdUserOpenid(Integer id, @NonNull String openid) throws ServiceException;
+
+    //<<<< 用户反馈
+    //---- readonly method
+    //---- update method
+
+    /**
+     * 添加一个用户反馈.
+     *
+     * @param feedBack
+     * @throws UserNotExistException 抛出该异常, 如果{@code feedBack}指定的用户并不存在
+     *
+     */
+    void addFeedBack(FeedBack feedBack) throws ServiceException;
 }

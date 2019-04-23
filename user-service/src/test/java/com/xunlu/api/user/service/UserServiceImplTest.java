@@ -1,7 +1,9 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
+import com.xunlu.api.user.repository.mapper.FeedBackMapper;
 import com.xunlu.api.user.repository.mapper.UserMapper;
 import com.xunlu.api.user.security.ThirdUserPrincipal;
 import org.junit.Assert;
@@ -13,8 +15,8 @@ import java.util.Objects;
 import static org.mockito.Mockito.*;
 
 public class UserServiceImplTest {
-    UserMapper mockUserMapper;
-    TencentIMService mockTencentIMService;
+    private UserMapper mockUserMapper;
+    private TencentIMService mockTencentIMService;
 
     @Test
     public void testAddUserShouldUpdateIdentiferWhenAccountImportSuccess() {
@@ -35,7 +37,7 @@ public class UserServiceImplTest {
         when(mockTencentIMService.accountImport(identifier, null, null)).thenReturn(true);
 
 
-        UserService userService = new UserServiceImpl(mockUserMapper, mockTencentIMService);
+        UserService userService = new UserServiceImpl(mockUserMapper, null, mockTencentIMService);
         ((UserServiceImpl) userService).setTimPrefix("testtest");
         User user = new User();
         user.setUserName("hello");
@@ -64,7 +66,7 @@ public class UserServiceImplTest {
         when(mockTencentIMService.accountImport(identifier, null, null)).thenReturn(false);
 
 
-        UserService userService = new UserServiceImpl(mockUserMapper, mockTencentIMService);
+        UserService userService = new UserServiceImpl(mockUserMapper, null,  mockTencentIMService);
         ((UserServiceImpl) userService).setTimPrefix("testtest");
         User user = new User();
         user.setUserName("hello");
@@ -85,7 +87,7 @@ public class UserServiceImplTest {
         mockTencentIMService = mock(TencentIMService.class);
 
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, mockTencentIMService);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, mockTencentIMService);
         userService.setTimPrefix("testtest");
 
         ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIBO, "openid", "userName", "http://test.com/test.jpg");
@@ -105,7 +107,7 @@ public class UserServiceImplTest {
         mockTencentIMService = mock(TencentIMService.class);
 
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, mockTencentIMService);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, mockTencentIMService);
         userService.setTimPrefix("testtest");
 
         ThirdUserPrincipal principal = new ThirdUserPrincipal(ThirdUser.Type.WEIXIN, "openid", "userName", "http://test.com/test.jpg");
@@ -127,7 +129,7 @@ public class UserServiceImplTest {
             return null;
         }).when(mockUserMapper).getById(anyInt());
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null,null);
         User exceptNonNull = userService.getUser(1111);
 
         Assert.assertNotNull(exceptNonNull);
@@ -142,7 +144,7 @@ public class UserServiceImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testFindByPhoneShoudThrowExceptionWhenParamNull() {
-        UserServiceImpl userService = new UserServiceImpl(null, null);
+        UserServiceImpl userService = new UserServiceImpl(null, null, null);
         userService.findByPhone(null);
     }
 
@@ -159,7 +161,7 @@ public class UserServiceImplTest {
             return null;
         }).when(mockUserMapper).findByPhone(any());
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper,null, null);
         User exceptNonNull = userService.findByPhone("110");
 
         Assert.assertNotNull(exceptNonNull);
@@ -178,7 +180,7 @@ public class UserServiceImplTest {
         when(mockUserMapper.getUserPrefer(1111)).thenReturn(prefer);
 
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null,null);
         User.Prefer exceptNonNull = userService.getUserPrefer(1111);
 
         Assert.assertNotNull(exceptNonNull);
@@ -196,20 +198,20 @@ public class UserServiceImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testFindThirdUserByTypeAndOpenidShoudExceptionWhenTypeNull() {
-        UserServiceImpl userService = new UserServiceImpl(null, null);
+        UserServiceImpl userService = new UserServiceImpl(null, null, null);
         userService.findThirdUserByTypeAndOpenid(null, "testtest");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testFindThirdUserByTypeAndOpenidShoudExceptionWhenOpenidNull() {
-        UserServiceImpl userService = new UserServiceImpl(null, null);
+        UserServiceImpl userService = new UserServiceImpl(null,null, null);
         userService.findThirdUserByTypeAndOpenid(ThirdUser.Type.WEIBO, null);
     }
 
     @Test
     public void testFindThirdUserByTypeAndOpenidShoudSuccess() {
         mockUserMapper = mock(UserMapper.class);
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, null);
         userService.findThirdUserByTypeAndOpenid(ThirdUser.Type.WEIBO, "testtest");
         verify(mockUserMapper).findThirdUser(ThirdUser.Type.WEIBO, "testtest");
     }
@@ -219,7 +221,7 @@ public class UserServiceImplTest {
         mockUserMapper = mock(UserMapper.class);
         when(mockUserMapper.findPassword(11)).thenReturn("testtest");
         when(mockUserMapper.findPassword(22)).thenReturn(null);
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, null);
 
         String findPassword = userService.findPassword(null);
         Assert.assertNull(findPassword);
@@ -243,7 +245,7 @@ public class UserServiceImplTest {
         when(mockUserMapper.updatePrefer(1, null)).thenReturn(false);
         when(mockUserMapper.updatePrefer(null, null)).thenReturn(false);
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, null);
 
         boolean ret = userService.updatePrefer(1, prefer);
         Assert.assertTrue(ret);
@@ -270,7 +272,7 @@ public class UserServiceImplTest {
         when(mockUserMapper.updatePassword(1, null)).thenReturn(true);
         when(mockUserMapper.updatePassword(null, null)).thenReturn(false);
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, null);
 
         boolean ret = userService.updatePassword(1, "password");
         Assert.assertTrue(ret);
@@ -297,7 +299,7 @@ public class UserServiceImplTest {
         when(mockUserMapper.updateNickName(1, null)).thenReturn(true);
         when(mockUserMapper.updateNickName(null, null)).thenReturn(false);
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, null);
 
         boolean ret = userService.updateNickName(1, "nickname");
         Assert.assertTrue(ret);
@@ -325,7 +327,7 @@ public class UserServiceImplTest {
         when(mockUserMapper.updatePersonSign(1, null)).thenReturn(true);
         when(mockUserMapper.updatePersonSign(null, null)).thenReturn(false);
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, null);
 
         boolean ret = userService.updatePersonSign(1, "personsign");
         Assert.assertTrue(ret);
@@ -352,7 +354,7 @@ public class UserServiceImplTest {
         when(mockUserMapper.updatePhoto(1, null)).thenReturn(true);
         when(mockUserMapper.updatePhoto(null, null)).thenReturn(false);
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null, null);
 
         boolean ret = userService.updatePhoto(1, "http://test.com/test.jpg");
         Assert.assertTrue(ret);
@@ -382,7 +384,7 @@ public class UserServiceImplTest {
         when(mockUserMapper.getById(2)).thenReturn(new ThirdUser());
         when(mockUserMapper.getById(3)).thenReturn(new User());
 
-        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null);
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, null,null);
 
         boolean ret = userService.updateThirdUserOpenid(1, "hello");
         Assert.assertTrue(ret);
@@ -409,4 +411,35 @@ public class UserServiceImplTest {
             Assert.assertEquals("该用户不是第三方登录用户", e.getMessage());
         }
     }
+
+    private FeedBackMapper mockFeedBackMapper;
+
+    @Test
+    public void testAddFeedBack() {
+        mockUserMapper = mock(UserMapper.class);
+        when(mockUserMapper.getById(1)).thenReturn(new User());
+
+        mockFeedBackMapper = mock(FeedBackMapper.class);
+
+        UserServiceImpl userService = new UserServiceImpl(mockUserMapper, mockFeedBackMapper, null);
+
+        FeedBack feedBack = new FeedBack();
+        try {
+            userService.addFeedBack(feedBack);
+            Assert.fail("应该抛出UserNotExistException");
+        } catch (UserNotExistException e) {
+        }
+
+        feedBack.setUserId(4);
+        try {
+            userService.addFeedBack(feedBack);
+            Assert.fail("应该抛出UserNotExistException");
+        } catch (UserNotExistException e) {
+        }
+
+        feedBack.setUserId(1);
+        userService.addFeedBack(feedBack);
+        verify(mockFeedBackMapper).addFeedBack(feedBack);
+    }
+
 }
