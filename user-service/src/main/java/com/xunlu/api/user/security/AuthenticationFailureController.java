@@ -32,6 +32,9 @@ public class AuthenticationFailureController {
     @ResponseBody
     ApiError handleFailure(
             @RequestAttribute(WebAttributes.AUTHENTICATION_EXCEPTION) AuthenticationException exception) {
-        return exception::getMessage;
+        ApiError e = (ApiError)(exception::getMessage);
+        System.out.println(e);
+        System.out.println(e.getMessage());
+        return e;
     }
 }

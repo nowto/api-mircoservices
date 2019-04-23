@@ -33,6 +33,6 @@ public class AuthenticationFailureControllerTest {
                     .requestAttr(WebAttributes.AUTHENTICATION_EXCEPTION, new BadCredentialsException(exMsg)))
                 .andExpect(handler().methodName("handleFailure"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.error").value(exMsg));
+                .andExpect(jsonPath("$.message").value(exMsg));
     }
 }
