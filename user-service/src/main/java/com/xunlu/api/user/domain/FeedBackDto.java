@@ -3,13 +3,15 @@ package com.xunlu.api.user.domain;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author liweibo
  */
 public class FeedBackDto {
-    private int userId;
-    @NotBlank
+    @NotNull(message = "用户主键不能为空")
+    private Integer userId;
+    @NotBlank(message = "用户反馈内容不能为空")
     private String content;
 
     public FeedBackDto() {
