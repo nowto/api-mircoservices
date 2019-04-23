@@ -55,6 +55,14 @@ img_url((第三方用户信息中的头像url)) +
 
 === 用户
 
+=== 用户反馈
+用户提交给后台反馈信息, 意见, 建议
+
+==== 添加用户反馈
+使用`POST`请求添加用户反馈
+
+operation::FeedBackResourceTest/addFeedback[snippets='http-request,http-response,request-body,request-fields']
+
 === UserSig
 代表腾讯云通信的UserSig, 可以使用用户id获取到.
 https://cloud.tencent.com/document/product/269/31999[UserSig介绍看这里]

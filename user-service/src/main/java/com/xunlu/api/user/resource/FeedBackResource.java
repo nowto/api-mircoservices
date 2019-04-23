@@ -26,13 +26,10 @@ public class FeedBackResource {
      * @param feedBackDto 用户反馈信息
      */
     @PostMapping
-    public void addFeedback(@Valid @RequestBody FeedBackDto feedBackDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return;
-        }
+    public void addFeedback(@Valid @RequestBody FeedBackDto feedBackDto) {
         FeedBack feedBack = new FeedBack();
         feedBack.setUserId(feedBackDto.getUserId());
-        feedBack.setContent(feedBack.getContent());
+        feedBack.setContent(feedBackDto.getContent());
         userService.addFeedBack(feedBack);
     }
 }

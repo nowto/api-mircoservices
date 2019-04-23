@@ -1,10 +1,12 @@
 package com.xunlu.api.user.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.FeedBackDto;
 import com.xunlu.api.user.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.junit.Assert.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = FeedBackResource.class, secure = false)
@@ -52,6 +53,8 @@ public class FeedBackResourceTest extends BaseResouceTest {
     @Test
     public void addFeedback() throws Exception {
         FeedBackDto feedback = new FeedBackDto();
+        feedback.setUserId(4444);
+        feedback.setContent("content");
 
         mockMvc.perform(
                 RestDocumentationRequestBuilders.post("/feedbacks")
@@ -62,5 +65,15 @@ public class FeedBackResourceTest extends BaseResouceTest {
                         fieldWithPath("userId").description("发送用户反馈的用户 的 用户主键"),
                         fieldWithPath("content").description("用户反馈内容")
                 )));
+
+        Mockito.verify(userService).addFeedBack(Mockito.argThat(new ArgumentMatcher<FeedBack>() {
+            @Override
+            public boolean matches(FeedBack argument) {
+                if (argument.getUserId().equals(feedback.getUserId()) && argument.getContent().equals(feedback.getContent())) {
+                    return true;
+                }
+                return false;
+            }
+        }));
     }
 }
