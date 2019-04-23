@@ -3,15 +3,21 @@ package com.xunlu.api.user.security;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.mapper.UserMapper;
+import com.xunlu.api.user.service.ServiceException;
 import com.xunlu.api.user.service.TencentIMService;
+import com.xunlu.api.user.service.UserService;
 import com.xunlu.api.user.service.UserServiceImpl;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mockito;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ThirdUserAuthenticationProviderTest {
     private static final String rightSign = "62a5d3aa156ec1d9d95110ccdc1ca6ff";
@@ -217,7 +223,9 @@ public class ThirdUserAuthenticationProviderTest {
 
         @Override
         public User getUser(Integer id) {
-            return null;
+            ThirdUser thirdUser = new ThirdUser();
+            thirdUser.setId(1);
+            return thirdUser;
         }
 
         @Override
@@ -282,6 +290,11 @@ public class ThirdUserAuthenticationProviderTest {
         @Override
         public boolean updatePhoto(Integer id, String photo) {
             return false;
+        }
+
+        @Override
+        public boolean updateThirdUserOpenid(Integer id, String openid) throws ServiceException {
+            return true;
         }
     }
 

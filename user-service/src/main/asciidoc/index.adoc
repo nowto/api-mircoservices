@@ -1,0 +1,14 @@
+= 用户微服务Restful API文档
+李伟博
+
+== 资源
+
+=== 用户
+
+=== UserSig
+代表腾讯云通信的UserSig, 可以使用用户id获取到.
+https://cloud.tencent.com/document/product/269/31999[UserSig介绍看这里]
+
+==== 获取UserSig
+
+operation::UserSigResourceTest/getUserSig[snippets='curl-request,path-parameters,response-body,response-fields']

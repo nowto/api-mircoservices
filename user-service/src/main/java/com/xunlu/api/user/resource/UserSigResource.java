@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Max;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * 腾讯云通信 UserSig资源 restful 资源类
@@ -30,13 +32,20 @@ public class UserSigResource {
         this.userService = userService;
     }
 
+    /**
+     * 获取用户的腾讯云通信的UserSig
+     * @param userId 用户主键id
+     * @return 单键值对map, 键为`userSig`, 值为获取到的UserSig
+     */
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String getUserSig(@Max(99) @Validated @PathVariable int userId) {
+    public Map<String, String> getUserSig(@PathVariable int userId) {
         User user = userService.getUser(userId);
         if (user == null) {
             throw new ResourceNotFoundServiceException("查找不到该用户信息");
         }
-        return tencentIMService.makeUserSig(user.getTimIdentifier());
+        return Collections.singletonMap("userSig",
+                tencentIMService.makeUserSig(user.getTimIdentifier())
+        );
     }
 
 }
