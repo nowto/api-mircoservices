@@ -1,5 +1,7 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.exception.ServiceException;
+
 /**
  * 短信验证服务类
  * @author liweibo

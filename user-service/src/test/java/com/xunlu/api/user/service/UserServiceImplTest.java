@@ -1,5 +1,6 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.exception.ServiceException;
 import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;

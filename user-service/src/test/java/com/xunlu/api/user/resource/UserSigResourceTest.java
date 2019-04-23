@@ -7,10 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.request.ParameterDescriptor;
@@ -19,7 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -34,18 +30,6 @@ public class UserSigResourceTest extends BaseResouceTest{
 
     @Autowired
     private MockMvc mockMvc;
-
-    @TestConfiguration
-    static class ResultHandlerConfiguration {
-        @Bean
-        public RestDocumentationResultHandler restDocumentation() {
-            return MockMvcRestDocumentation.document(
-                    "{ClassName}/{methodName}",
-                    preprocessRequest(prettyPrint()),
-                    preprocessResponse(prettyPrint()));
-        }
-
-    }
 
     @Autowired
     private RestDocumentationResultHandler restDocumentation;

@@ -12,6 +12,9 @@ public class FeedBackDto {
     @NotBlank
     private String content;
 
+    public FeedBackDto() {
+    }
+
     public FeedBackDto(int userId, String content) {
         this.userId = userId;
         this.content = content;

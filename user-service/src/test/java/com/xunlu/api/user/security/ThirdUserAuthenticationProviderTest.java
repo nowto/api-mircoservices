@@ -1,9 +1,9 @@
 package com.xunlu.api.user.security;
 
+import com.xunlu.api.common.restful.exception.ServiceException;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.repository.mapper.UserMapper;
-import com.xunlu.api.user.service.ServiceException;
 import com.xunlu.api.user.service.TencentIMService;
 import com.xunlu.api.user.service.UserServiceImpl;
 import org.junit.Test;

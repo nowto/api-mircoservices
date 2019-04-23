@@ -1,5 +1,6 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.exception.ServiceException;
 import com.xunlu.api.user.security.SmsClient;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,12 +1,13 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 
 /**
  * 查找不到用户异常
  * @author liweibo
  */
-public class UserNotExistException extends ServiceException{
+public class UserNotExistException extends ServiceException {
     {
         status = HttpStatus.NOT_FOUND;
     }

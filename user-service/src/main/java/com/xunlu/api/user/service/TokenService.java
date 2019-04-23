@@ -1,5 +1,6 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.exception.ServiceException;
 import com.xunlu.api.user.domain.AccessToken;
 import com.xunlu.api.user.domain.User;
 import org.springframework.lang.NonNull;

@@ -5,9 +5,10 @@ import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.FeedBackDto;
 import com.xunlu.api.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * 用户反馈restful资源类
@@ -25,7 +26,10 @@ public class FeedBackResource {
      * @param feedBackDto 用户反馈信息
      */
     @PostMapping
-    public void addFeedback(FeedBackDto feedBackDto) {
+    public void addFeedback(@Valid @RequestBody FeedBackDto feedBackDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return;
+        }
         FeedBack feedBack = new FeedBack();
         feedBack.setUserId(feedBackDto.getUserId());
         feedBack.setContent(feedBack.getContent());
