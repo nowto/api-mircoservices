@@ -9,7 +9,15 @@ import java.util.StringJoiner;
 public class OffsetPaginationCondition extends AbstractPaginationConditon {
     public static final int DEFAULT_OFFSET = 0;
 
-    private int offset;
+    private int offset = DEFAULT_OFFSET;
+
+    /**
+     * offset 默认为 {@link #DEFAULT_OFFSET 0}
+     * @param limit
+     */
+    public OffsetPaginationCondition(int limit) {
+        super(limit);
+    }
 
     public OffsetPaginationCondition(int limit, int offset) {
         super(limit);
