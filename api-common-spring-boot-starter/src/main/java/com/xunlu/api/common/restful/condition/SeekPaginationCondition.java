@@ -2,6 +2,7 @@ package com.xunlu.api.common.restful.condition;
 
 import org.springframework.lang.NonNull;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -11,6 +12,15 @@ import java.util.StringJoiner;
  */
 public class SeekPaginationCondition extends AbstractPaginationConditon {
     private Integer afterId;
+
+    /**
+     * limit 默认为 SeekPaginationCondition.DEFAULT_LIMIT
+     * @param afterId
+     */
+    public SeekPaginationCondition(Integer afterId) {
+        super(SeekPaginationCondition.DEFAULT_LIMIT);
+        this.afterId = afterId;
+    }
 
     public SeekPaginationCondition(int limit, Integer afterId) {
         super(limit);
@@ -66,5 +76,25 @@ public class SeekPaginationCondition extends AbstractPaginationConditon {
                 .add("isFirstPage=" + isFirstPage())
                 .add("afterId=" + afterId)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SeekPaginationCondition)) {
+            return false;
+        }
+        SeekPaginationCondition that = (SeekPaginationCondition) o;
+        if (limit != that.limit) {
+            return false;
+        }
+        return Objects.equals(afterId, that.afterId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(limit, afterId);
     }
 }
