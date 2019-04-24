@@ -1,5 +1,6 @@
 package com.xunlu.api.common.restful.condition;
 
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -10,6 +11,14 @@ public class OffsetPaginationCondition extends AbstractPaginationConditon {
     public static final int DEFAULT_OFFSET = 0;
 
     private int offset = DEFAULT_OFFSET;
+
+    /**
+     * limit 默认为 {@link #DEFAULT_LIMIT}
+     * offset 默认为 {@link #DEFAULT_OFFSET 0}
+     */
+    public OffsetPaginationCondition() {
+        super(OffsetPaginationCondition.DEFAULT_LIMIT);
+    }
 
     /**
      * offset 默认为 {@link #DEFAULT_OFFSET 0}
@@ -38,5 +47,22 @@ public class OffsetPaginationCondition extends AbstractPaginationConditon {
                 .add("limit=" + limit)
                 .add("offset=" + offset)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OffsetPaginationCondition)) {
+            return false;
+        }
+        OffsetPaginationCondition that = (OffsetPaginationCondition) o;
+        return limit == that.limit && offset == that.offset;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(limit, offset);
     }
 }
