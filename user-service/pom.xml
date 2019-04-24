@@ -116,6 +116,7 @@
 	<build>
 		<plugins>
 			<plugin>
+				<!--生成html文档-->
 				<groupId>org.asciidoctor</groupId>
 				<artifactId>asciidoctor-maven-plugin</artifactId>
 				<version>1.5.3</version>
@@ -141,6 +142,32 @@
 				</dependencies>
 			</plugin>
 			<plugin>
+				<!--重命名html文档为 .md markdown 后缀 以便于gogs显示-->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-plugin</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<!-- http://ant.apache.org/manual/tasksoverview.html -->
+							<tasks>
+								<move todir="${project.build.directory}/generated-docs" includeemptydirs="false">
+									<fileset dir="${project.build.directory}/generated-docs">
+										<exclude name="**/*.md"/>
+									</fileset>
+									<mapper type="glob" from="*.html" to="*.html.md"/>
+								</move>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!--复制文档到docs目录-->
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
 				<executions>
