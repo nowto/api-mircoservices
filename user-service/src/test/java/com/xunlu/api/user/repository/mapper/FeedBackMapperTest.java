@@ -46,4 +46,13 @@ public class FeedBackMapperTest extends BaseMapperTest{
         Assert.assertEquals("我不爱反馈", feedback.getContent());
         Assert.assertEquals(LocalDateTime.of(2016, 2, 25, 1, 14, 21), feedback.getCreateTime());
     }
+
+    @Test
+    @Sql(statements = {
+            "INSERT INTO xunlu.tb_user(id, create_time) values(-1, now());",
+            "INSERT INTO xunlu.tb_feedback (id, user_id, user_type, content, create_time) VALUES(-1, -1, 1, '我不爱反馈', '2016-02-25 01:14:21');"})
+    public void testGetFeedBackCount() {
+        int totalCount = feedBackMapper.getFeedBackCount(-1);
+        Assert.assertTrue(totalCount > 0);
+    }
 }

@@ -30,4 +30,11 @@ public interface FeedBackMapper {
      */
     @NonNull List<FeedBack> listFeedBack(@NonNull @Param("userId") int userId,
                                          @NonNull @Param("pageCondition") OffsetPaginationCondition pageCondition);
+
+    /**
+     * 获取用户id为{@code userId}的用户的用户反馈数量
+     * @param userId 获取该id用户的用户反馈数量
+     * @return 用户反馈数量
+     */
+    int getFeedBackCount(@NonNull @Param("userId") int userId);
 }
