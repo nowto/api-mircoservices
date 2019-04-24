@@ -13,14 +13,15 @@ import java.util.List;
 public class Page<T> extends ResponseEntity<List<T>> {
     public static final String TOTAL_COUNT_RESPONSE_HEADER_NAME = "X-TOTAL-COUNT";
 
+    private int totalCount;
     /**
      * 构造一个分页的响应实体.
-     * @param pageData 代表某查询条件下一页的资源,将作为{@link ResponseEntity#body}输出
+     * @param pageData 代表某查询条件下一页的资源,将作为{@link ResponseEntity#getBody()}输出
      * @param totalCount 代表某查询条件下该资源的总数目, 将使用自定义响应头{@link #TOTAL_COUNT_RESPONSE_HEADER_NAME X-TOTAL-COUNT}输出
      */
     public Page(List<T> pageData, int totalCount) {
         super(pageData, totalCountHeader(totalCount), HttpStatus.OK);
-
+        this.totalCount = totalCount;
     }
 
     private static HttpHeaders totalCountHeader(int totalCount) {
@@ -36,5 +37,17 @@ public class Page<T> extends ResponseEntity<List<T>> {
      */
     public Page(List<T> pageData) {
         super(pageData, HttpStatus.OK);
+    }
+
+    /**
+     *获取分页数据
+     * @return
+     */
+    public List<T> getPageData() {
+        return this.getBody();
+    }
+
+    public int getTotalCount() {
+        return this.totalCount;
     }
 }
