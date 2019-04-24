@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
- * Spring {@link Formatter} 实现. 用于将 restful 排序 请求参数 转换为 {@link Sort} 条件对象.
+ * Spring {@link Formatter} 实现. 用于将 restful 排序 请求参数 转换为 {@link SortCondition} 条件对象.
  *
  * text语法: 多个字段使用英文逗号','分隔, 字段前附加符号代表顺序: '+', 升序; '-', 降序. 默认为升序.
  *<br>
@@ -25,14 +25,14 @@ import java.util.StringTokenizer;
  * </code>
  * @author liweibo
  */
-public class SortFormatter implements Formatter<Sort> {
+public class SortConditionFormatter implements Formatter<SortCondition> {
     @Override
-    public Sort parse(String text, Locale locale) throws ParseException {
+    public SortCondition parse(String text, Locale locale) throws ParseException {
         if (text == null) {
-            return new Sort();
+            return new SortCondition();
         }
         StringTokenizer tokenizer = new StringTokenizer(text, ",");
-        Sort sort = new Sort();
+        SortCondition sort = new SortCondition();
         while (tokenizer.hasMoreTokens()) {
             String orderStr = tokenizer.nextToken();
             if (!StringUtils.hasText(orderStr)) {
@@ -67,7 +67,7 @@ public class SortFormatter implements Formatter<Sort> {
     }
 
     @Override
-    public String print(Sort object, Locale locale) {
+    public String print(SortCondition object, Locale locale) {
         throw new UnsupportedOperationException();
     }
 

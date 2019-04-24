@@ -7,26 +7,26 @@ import java.util.*;
 /**
  * 代表了排序查询条件.
  * 一个排序查询条件可能会包含多个字段, 每个字段也都可能会是降序或升序, 但不会有重复字段.
- * 每个字段以及它的升降序使用{@link Order}表示, 也就是说 一个{@link Sort}由多个不同的{@link Order}组成.
+ * 每个字段以及它的升降序使用{@link Order}表示, 也就是说 一个{@link SortCondition}由多个不同的{@link Order}组成.
  * {@link Order}是有顺序的, 排在前边的应该优先应用.
  *
  *
  * @author liweibo
  */
-public class Sort {
+public class SortCondition {
     private Set<Order> orders = new LinkedHashSet<>();
 
-    public Sort(Order... orders) {
+    public SortCondition(Order... orders) {
         requireBothAllNotNull(orders);
         this.orders.addAll(Arrays.asList(orders));
     }
 
-    public Sort() {
+    public SortCondition() {
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Sort.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", SortCondition.class.getSimpleName() + "[", "]")
                 .add("orders=" + orders)
                 .toString();
     }
@@ -39,7 +39,7 @@ public class Sort {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Sort sort = (Sort) o;
+        SortCondition sort = (SortCondition) o;
         return getOrders().equals(sort.getOrders());
     }
 

@@ -7,7 +7,7 @@ import java.util.StringJoiner;
 
 /**
  * 排序条件 中某个字段的排序条件.
- * 一般会包含进{@link Sort}中, 每个{@link Sort}对象代表一个完整的排序查询条件
+ * 一般会包含进{@link SortCondition}中, 每个{@link SortCondition}对象代表一个完整的排序查询条件
  * @author liweibo
  */
 public class Order {

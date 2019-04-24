@@ -2,7 +2,7 @@ package com.xunlu.api.common;
 
 import com.xunlu.api.common.codeenum.CodeEnumTypeHandler;
 import com.xunlu.api.common.codeenum.StringToBaseCodeEnumConverterFactory;
-import com.xunlu.api.common.restful.condition.SortFormatter;
+import com.xunlu.api.common.restful.condition.SortConditionFormatter;
 import com.xunlu.api.common.restful.exception.RestResponseEntityExceptionHandler;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
@@ -63,7 +63,7 @@ public class CommonAutoConfiguration {
         @Override
         public void addFormatters(FormatterRegistry registry) {
             registry.addConverterFactory(new StringToBaseCodeEnumConverterFactory<>());
-            registry.addFormatter(new SortFormatter());
+            registry.addFormatter(new SortConditionFormatter());
         }
     }
 }

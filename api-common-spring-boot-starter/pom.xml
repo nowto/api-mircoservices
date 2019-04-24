@@ -78,6 +78,15 @@
             <artifactId>validation-api</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- test  测试PaginationParameters使用-->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.16.Final</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
