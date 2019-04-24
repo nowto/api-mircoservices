@@ -18,5 +18,17 @@
          now()
          )
     </insert>
+    <select id="listFeedBack" resultType="com.xunlu.api.user.domain.FeedBack">
+        select
+        f.id,
+        f.user_id,
+        f.user_type,
+        f.content,
+        f.create_time
+        from tb_feedback f join tb_user u on f.user_id=u.id
+        where user_id=#{userId}
+        order by f.create_time
+        limit #{pageCondition.offset}, #{pageCondition.limit}
+    </select>
 
 </mapper>

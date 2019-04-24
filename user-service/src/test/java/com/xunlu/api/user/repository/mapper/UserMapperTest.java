@@ -1,31 +1,18 @@
 package com.xunlu.api.user.repository.mapper;
 
-import com.xunlu.api.common.CommonAutoConfiguration;
 import com.xunlu.api.user.domain.ThirdUser;
 import com.xunlu.api.user.domain.User;
 import com.xunlu.api.user.domain.WeixinThirdUser;
 import com.xunlu.api.user.security.ThirdUserPrincipal;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Map;
 
-@RunWith(SpringRunner.class)
-@ActiveProfiles("test")
-@MybatisTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ImportAutoConfiguration(CommonAutoConfiguration.class)
-public class UserMapperTest {
+public class UserMapperTest extends BaseMapperTest {
     private static final String USER_NAME = "UserMapperTest";
 
     private static final Integer insertId = -1;

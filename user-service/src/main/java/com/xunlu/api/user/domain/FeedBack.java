@@ -1,5 +1,8 @@
 package com.xunlu.api.user.domain;
 
+import java.time.LocalDateTime;
+import java.util.StringJoiner;
+
 /**
  * 用户反馈
  * @author liweibo
@@ -15,7 +18,21 @@ public class FeedBack {
      */
     private String content;
 
+    /**
+     * 创建日期
+     */
+    private LocalDateTime createTime;
+
     public FeedBack() {
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", FeedBack.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("userId=" + userId)
+                .add("content='" + content + "'")
+                .toString();
     }
 
     public Integer getId() {
@@ -40,5 +57,13 @@ public class FeedBack {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 }
