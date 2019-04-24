@@ -1,5 +1,7 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.condition.OffsetPaginationCondition;
+import com.xunlu.api.common.restful.condition.Page;
 import com.xunlu.api.common.restful.exception.ServiceException;
 import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.ThirdUser;
@@ -12,10 +14,13 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author liweibo
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     /**
@@ -43,7 +48,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void addUser(User user) {
         if (!userMapper.addUser(user)) {
             return;
@@ -110,7 +114,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public boolean updatePrefer(Integer id, User.Prefer prefer) {
         if (id == null) {
             return false;
@@ -126,25 +129,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public boolean updatePassword(Integer id, String password) {
         return userMapper.updatePassword(id, password);
     }
 
     @Override
-    @Transactional
     public boolean updateNickName(Integer id, String nickName) {
         return userMapper.updateNickName(id, nickName);
     }
 
     @Override
-    @Transactional
     public boolean updatePersonSign(Integer id, String personSign) {
         return userMapper.updatePersonSign(id, personSign);
     }
 
     @Override
-    @Transactional
     public boolean updatePhoto(Integer id, String photo) {
         return userMapper.updatePhoto(id, photo);
     }
@@ -152,11 +151,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateThirdUserOpenid(Integer id, String openid) throws ServiceException {
         if (id == null) {
-            throw new ServiceException("用户id不能为null");
+            throw new UserNotExistException();
         }
         User user = getUser(id);
         if (!(user instanceof ThirdUser)) {
-            throw new ServiceException("该用户不是第三方登录用户");
+            throw new IsNotThirdUserException();
         }
         if (openid == null) {
             throw new ServiceException("openid不能为null");
@@ -165,7 +164,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
+    public Page<FeedBack> listFeedBack(int userId, OffsetPaginationCondition paginationCondition) {
+        if (paginationCondition == null) {
+            throw new IllegalArgumentException("分页条件不能为空");
+        }
+        List<FeedBack> feedbacks = feedBackMapper.listFeedBack(userId, paginationCondition);
+        int totalCount = feedBackMapper.getFeedBackCount(userId);
+        return new Page<>(feedbacks, totalCount);
+    }
+
+    @Override
     public void addFeedBack(FeedBack feedBack) throws ServiceException {
         Integer userId = feedBack.getUserId();
         if (userId == null) {

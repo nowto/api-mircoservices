@@ -1,5 +1,7 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.condition.OffsetPaginationCondition;
+import com.xunlu.api.common.restful.condition.Page;
 import com.xunlu.api.common.restful.exception.ServiceException;
 import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.ThirdUser;
@@ -443,4 +445,23 @@ public class UserServiceImplTest {
         verify(mockFeedBackMapper).addFeedBack(feedBack);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testListFeedBackWhenPaginationConditionNullShouldException() {
+        UserServiceImpl userService = new UserServiceImpl(null, null, null);
+        userService.listFeedBack(1, null);
+    }
+
+    @Test
+    public void testListFeedBack() {
+        mockFeedBackMapper = mock(FeedBackMapper.class);
+        UserServiceImpl userService = new UserServiceImpl(null, mockFeedBackMapper, null);
+
+        OffsetPaginationCondition paginationCondition = new OffsetPaginationCondition(3, 3);
+        Page<FeedBack> page = userService.listFeedBack(2, paginationCondition);
+
+        verify(mockFeedBackMapper).listFeedBack(2, paginationCondition);
+        verify(mockFeedBackMapper).getFeedBackCount(2);
+        Assert.assertTrue(page.getBody() != null);
+        Assert.assertTrue(page.getHeaders().containsKey(Page.TOTAL_COUNT_RESPONSE_HEADER_NAME));
+    }
 }

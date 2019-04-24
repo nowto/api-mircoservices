@@ -1,5 +1,7 @@
 package com.xunlu.api.user.service;
 
+import com.xunlu.api.common.restful.condition.OffsetPaginationCondition;
+import com.xunlu.api.common.restful.condition.Page;
 import com.xunlu.api.common.restful.exception.ServiceException;
 import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.ThirdUser;
@@ -113,6 +115,15 @@ public interface UserService {
 
     //<<<< 用户反馈
     //---- readonly method
+
+    /**
+     * 翻页返回 一个用户的用户反馈
+     * @param userId 用户id
+     * @param paginationCondition 分页条件, 不能为null
+     * @return 反馈页
+     */
+    Page<FeedBack> listFeedBack(int userId, OffsetPaginationCondition paginationCondition);
+
     //---- update method
 
     /**
