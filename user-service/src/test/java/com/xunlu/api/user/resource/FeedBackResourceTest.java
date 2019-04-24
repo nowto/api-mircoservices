@@ -1,6 +1,8 @@
 package com.xunlu.api.user.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xunlu.api.common.restful.condition.OffsetPaginationCondition;
+import com.xunlu.api.common.restful.condition.Page;
 import com.xunlu.api.user.domain.FeedBack;
 import com.xunlu.api.user.domain.FeedBackDto;
 import com.xunlu.api.user.service.UserService;
@@ -23,13 +25,20 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = FeedBackResource.class, secure = false)
@@ -75,5 +84,23 @@ public class FeedBackResourceTest extends BaseResouceTest {
                 return false;
             }
         }));
+    }
+
+    @Test
+    public void getFeedbacks() throws Exception {
+        FeedBack o = new FeedBack();
+        o.setId(1);
+        o.setUserId(1);
+        o.setContent("hello");
+        o.setCreateTime(LocalDateTime.now());
+        Page<FeedBack> page = new Page<>(Collections.singletonList(o), 3);
+
+        when(userService.listFeedBack(1, new OffsetPaginationCondition(20, 0))).thenReturn(page);
+
+
+        mockMvc.perform(get("/feedbacks")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .param("userId", "1"))
+                .andDo(MockMvcResultHandlers.print());
     }
 }
