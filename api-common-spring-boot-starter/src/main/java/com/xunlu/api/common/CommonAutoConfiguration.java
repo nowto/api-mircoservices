@@ -1,5 +1,7 @@
 package com.xunlu.api.common;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xunlu.api.common.codeenum.CodeEnumTypeHandler;
 import com.xunlu.api.common.codeenum.StringToBaseCodeEnumConverterFactory;
 import com.xunlu.api.common.restful.condition.SortConditionFormatter;
@@ -12,10 +14,14 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Servlet;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * 自动配置类
@@ -49,6 +55,10 @@ public class CommonAutoConfiguration {
      * Spring MVC自动注册.
      * 注册Converter：{@link StringToBaseCodeEnumConverterFactory},
      * 注册ExceptionHandler： {@link RestResponseEntityExceptionHandler}
+     * 注册时期日期统一格式的:jackson2HttpMessageConverter
+     *      datetime: `yyyy-MM-dd HH-mm-ss`
+     *      date: `yyyy-MM-dd HH-mm-ss`
+     *      time: `HH-mm-ss`
      */
     @Configuration
     @ConditionalOnWebApplication
@@ -64,6 +74,32 @@ public class CommonAutoConfiguration {
         public void addFormatters(FormatterRegistry registry) {
             registry.addConverterFactory(new StringToBaseCodeEnumConverterFactory<>());
             registry.addFormatter(new SortConditionFormatter());
+        }
+
+        /**
+         * 定义时间格式转换器
+         * @return
+         */
+        @Bean
+        public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
+            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+            converter.setObjectMapper(mapper);
+            return converter;
+        }
+
+        /**
+         * 添加转换器
+         * @param converters
+         */
+        @Override
+        public void configureMessageConverters(
+                List<HttpMessageConverter<?>> converters) {
+            //将我们定义的时间格式转换器添加到转换器列表中,
+            // 这样jackson格式化时候但凡遇到Date类型就会转换成我们定义的格式
+            converters.add(jackson2HttpMessageConverter());
         }
     }
 }
