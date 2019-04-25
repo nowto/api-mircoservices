@@ -86,6 +86,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.9.8</version>
+        </dependency>
+
         <!-- test  测试PaginationParameters使用-->
         <dependency>
             <groupId>org.hibernate.validator</groupId>

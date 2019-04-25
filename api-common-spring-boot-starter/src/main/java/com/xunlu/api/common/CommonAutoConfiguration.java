@@ -1,7 +1,12 @@
 package com.xunlu.api.common;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.xunlu.api.common.codeenum.CodeEnumTypeHandler;
 import com.xunlu.api.common.codeenum.StringToBaseCodeEnumConverterFactory;
 import com.xunlu.api.common.restful.condition.SortConditionFormatter;
@@ -9,19 +14,23 @@ import com.xunlu.api.common.restful.exception.RestResponseEntityExceptionHandler
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Servlet;
-import java.text.SimpleDateFormat;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 自动配置类
@@ -55,16 +64,13 @@ public class CommonAutoConfiguration {
      * Spring MVC自动注册.
      * 注册Converter：{@link StringToBaseCodeEnumConverterFactory},
      * 注册ExceptionHandler： {@link RestResponseEntityExceptionHandler}
-     * 注册时期日期统一格式的:jackson2HttpMessageConverter
-     *      datetime: `yyyy-MM-dd HH-mm-ss`
-     *      date: `yyyy-MM-dd HH-mm-ss`
-     *      time: `HH-mm-ss`
      */
     @Configuration
     @ConditionalOnWebApplication
     @ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class, FormatterRegistry.class, WebMvcAutoConfiguration.class})
     @AutoConfigureBefore(WebMvcAutoConfiguration.class)
     public static class MvcConfiguration  implements WebMvcConfigurer {
+
         @Bean
         public RestResponseEntityExceptionHandler restExceptionHandler() {
             return new RestResponseEntityExceptionHandler();
@@ -75,31 +81,47 @@ public class CommonAutoConfiguration {
             registry.addConverterFactory(new StringToBaseCodeEnumConverterFactory<>());
             registry.addFormatter(new SortConditionFormatter());
         }
+    }
 
-        /**
-         * 定义时间格式转换器
-         * @return
-         */
-        @Bean
-        public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
-            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-            converter.setObjectMapper(mapper);
-            return converter;
+    /**
+     * 配置Jackson
+     *
+     * 注册时期日期统一格式的:jackson2HttpMessageConverter
+     *      datetime: `yyyy-MM-dd HH-mm-ss`
+     *      date: `yyyy-MM-dd HH-mm-ss`
+     *      time: `HH-mm-ss`
+     * @return
+     */
+    @Configuration
+    @ConditionalOnClass(ObjectMapper.class)
+    @AutoConfigureBefore(JacksonAutoConfiguration.class)
+    @EnableConfigurationProperties(CommonProperties.class)
+    public static class JacksonConfiguration {
+
+        private final CommonProperties properties;
+
+        public JacksonConfiguration(CommonProperties properties) {
+            this.properties = properties;
         }
 
-        /**
-         * 添加转换器
-         * @param converters
-         */
-        @Override
-        public void configureMessageConverters(
-                List<HttpMessageConverter<?>> converters) {
-            //将我们定义的时间格式转换器添加到转换器列表中,
-            // 这样jackson格式化时候但凡遇到Date类型就会转换成我们定义的格式
-            converters.add(jackson2HttpMessageConverter());
+        @Bean
+        public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+            return builder -> {
+                DateTimeFormatter dateTimePattren = DateTimeFormatter.ofPattern(properties.getDateTimePattern());
+                DateTimeFormatter datePattern = DateTimeFormatter.ofPattern(properties.getDatePattern());
+                DateTimeFormatter timePattern = DateTimeFormatter.ofPattern(properties.getTimePattern());
+
+                builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(dateTimePattren));
+                builder.serializerByType(LocalDate.class, new LocalDateSerializer(datePattern));
+                builder.serializerByType(LocalTime.class, new LocalTimeSerializer(timePattern));
+
+                builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimePattren));
+                builder.deserializerByType(LocalDate.class, new LocalDateDeserializer(datePattern));
+                builder.deserializerByType(LocalTime.class, new LocalTimeDeserializer(timePattern));
+
+
+                builder.simpleDateFormat(properties.getDateTimePattern());
+            };
         }
     }
 }
