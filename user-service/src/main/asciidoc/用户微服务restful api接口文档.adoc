@@ -70,6 +70,11 @@ img_url((第三方用户信息中的头像url)) +
 
 operation::FeedBackResourceTest/addFeedback[snippets='http-request,http-response,request-body,request-fields']
 
+==== 分页获取某个用户的反馈
+使用`GET`请求
+
+operation::FeedBackResourceTest/getFeedbacks[snippets='http-request,http-response,request-parameters,response-body,response-fields']
+
 === UserSig
 代表腾讯云通信的UserSig, 可以使用用户id获取到.
 https://cloud.tencent.com/document/product/269/31999[UserSig介绍看这里]

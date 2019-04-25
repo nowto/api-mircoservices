@@ -399,7 +399,7 @@ public class UserServiceImplTest {
             ret = userService.updateThirdUserOpenid(null, "hello");
             Assert.assertFalse(ret);
         } catch (ServiceException e) {
-            Assert.assertEquals("用户id不能为null", e.getMessage());
+            Assert.assertEquals("用户不存在", e.getMessage());
         }
         try {
             userService.updateThirdUserOpenid(1, null);
