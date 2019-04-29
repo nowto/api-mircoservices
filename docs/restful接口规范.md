@@ -1,0 +1,160 @@
+## restful api
+项目整体须遵循restful规范：
+### api接口文档
+
+**必须要有文档**:可以是手写的, 也可以是自动生成的, 可以是在线的, 也可以是离线, word/pdf/markdown格式不限. 但 【【一定要有】】
+
+接口文档存储在与本目录相同位置. 命名为 `服务名 + 服务restful api接口文档.后缀名`, 例如`用户微服务restful api接口文档.md`
+
+如果是在线文档, 也要在该目录存放一个文件, 文件内容为 在线文档的url
+### 请求
+1. url代表资源，统一使用名词复数
+2. HTTP METHOD代表操作：
+   1. POST： 增
+   2. DELETE： 删
+   3. GET: 查询
+   4. PUT: 全量更新
+   5. PATCH: 部分更新
+
+例如资源为user(用户)，包含属性{name(姓名), age(年龄)}
+#### 增：
+
+   `curl -X POST localhost:8080/users -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "age": 28}'`
+
+   添加一个新用户，姓名为`Samwise Gamgee`, 年龄为`28`
+
+#### 删
+
+   `curl -X DELETE localhost:8080/users/3`
+
+   删除id为3的用户
+
+#### 查询
+
+   `curl -v localhost:8080/users`
+   查询所有用户
+
+   `curl -v localhost:8080/users/3`
+   查询id为3的单个用户
+
+   ##### 复杂查询，分别说明：
+   1. **过滤**
+
+        统一使用查询参数，不得使用路径参数，按id过滤除外(例如： `/users/3` 其实是相当于使用路径参数按id对 `/users`的过滤, 这种情况是允许的, 且是规范)
+
+        举例：
+
+        1. 按字段过滤: `/users?age=23`、`/users?name=tom`、`/users?age=23&name=tom`
+        2. 不是等值过滤时，可自定义过滤字段，例如`/users?nameLike=tom`(姓名包含tom的用户)、`/users?ageGe=13&ageLt=18`(青少年用户(年满13不满18的用户))
+   2. **排序**
+
+        统一使用查询参数。如果结果只需要一种顺序，使用默认排序即可。如果需要多种排序，才需要传递查询参数。
+
+        举例：
+
+        `/users?sort=name` 按name升序排序： `order by name asc`
+
+        `/users?sort=+name` 按name升序排序: `order by name asc`
+
+        `/users?sort=-name` 按name降序排序: `order by name desc`
+
+        `/users?sort=name,-age` `/users?sort=name&sort=-age` 首先按name升序排序，name一样时按age降序排序：`oderby name asc, age desc`
+
+
+   1. **分页**
+
+        看api对页面飘移的容忍情况，分两种方式，两种方式都是允许的：
+
+        > p.s.  *页面飘移*：即翻页过程中，漏掉数据，或看到了重复数据的现象
+
+        1. 容忍，采用[Offset Pagination](https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/#offset-pagination)方式：limit(需要多少条), offset（从哪开始）
+
+            例如： `/users?limit=20&offset=67`
+
+        2. 不容忍, 采用[Seek Pagination](https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/#seek-pagination)方式：limit(需要多少条), afterId(从哪条id开始)
+
+            例如： `/users?limit=20&afterId=1248882`
+
+        注：两种方式中两个参数都不是必传的，但必须传递其中一个，那么另一个将采用默认值
+
+   1. 复杂定值查询标签化
+
+       例如 三好学生的api
+       尽量不要这样设计
+       `/users?type=student&virtue=good&wisdom=good&body=good`，
+
+       使用路径参数，标签化为
+       **`/users/tag_threeGoodStudents`**
+
+       标签以`tag_`为前缀，以便于与资源进行区分
+
+
+
+#### 全量更新
+
+    `curl -X PUT localhost:8080/users/3 -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee", "age": "ring bearer"}'`
+
+
+须传递所有字段(name和age)，如果不传，不传的字段相等于传递null，会被更新为null
+#### 部分更新
+
+   `curl -X PUT localhost:8080/users/3 -H 'Content-type:application/json' -d '{"name": "Samwise Gamgee"}'`
+
+   只更新传递的字段，比如这里只会更新id为3的用户的`name`为`Samwise Gamgee`， age还是跟原来一样
+
+
+#### url层级
+1. 例如虽然博客(post)属于用户(user)，但post有自己的id，不要设计成层级关系
+
+    例如：`/users/4/posts`，应该这样`/posts?userId=4`
+    例如：`/users/4/posts/6`，应该这样`/posts/4`
+
+2. 只有不具有自己id的，才设计为层级关系
+
+   例如：获取用户姓名`/users/name`，`/users/4/name`
+
+### 响应
+
+#### 成功响应
+
+1. 返回数据不要和客户端界面强耦合，不要在设计 API 时就考虑少查询一张关联表或是少查询 / 返回几个字段能带来多大的性能提升。并且一定要以资源为单位，即使客户端一个页面需要展示多个资源，也不要在一个接口中全部返回，而是让客户端分别请求多个接口。
+
+    实在需要一次请求多个资源时，在api-gateway做封装
+
+
+2. 响应体直接返回资源数据，不需要包装。单个资源，返回json对象，多个资源返回json数组。
+
+   不要返回以下形式:`{"code":xxx, "message": xxx, "data":{}}`
+
+    多个资源需要返回资源总数 以http响应头的方式返回，响应头名为`X-TOTAL-COUNT`
+
+    例如： `X-TOTAL-COUNT： 89999`
+
+    前端如果需要`页`概念的数据，例如当前处于第几页，有没有下页，总共有多少页，由前端根据`limit`、`offset`、`X-TOTAL-COUNT`自己计算
+
+3. 成功的响应 必须返回http状态码为`200`，
+
+   除GET方法请求外的其他方法的响应都不要具有响应体
+
+4. **时间**
+    - datetime: 统一使用 `yyyy-MM-dd HH:mm:ss`格式, 例如 `2019-04-23 12:33:21`
+    - date: 统一使用 `yyyy-MM-dd`格式, 例如 `2019-04-23`
+    - time: 统一使用 `HH:mm:ss`格式, 例如 `12:33:21`
+
+#### 失败响应
+应该将程序的异常转化为restful的失败响应。根据异常引起方的不同返回不通的失败http状态码.
+1. 非业务异常：所有框架，数据库等不受控的所有异常转化为 http状态码为`500`的异常。
+2. 业务异常：其他业务异常应根据异常情况，返回http状态码为`4xx`的异常。
+
+失败必须返回响应体，且格式为：
+```json
+{
+    "exception": ""// 业务异常需要具有该字段，为异常类的全限定名
+    "message": "" //非业务异常，统一为 "内部服务器错误"
+}
+```
+> 参考:
+>
+> http://novoland.github.io/%E8%AE%BE%E8%AE%A1/2015/08/17/Restful%20API%20%E7%9A%84%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html
+> http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html
+> http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html
